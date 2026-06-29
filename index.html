@@ -50,8 +50,10 @@
 
   /* day chips */
   .daybar{position:sticky; top:0; z-index:20; margin:-16px -16px 16px; padding:12px 16px;
-    background:linear-gradient(var(--parchment) 72%, transparent); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;}
+    background:var(--parchment); border-bottom:1px solid var(--hairline-a); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;}
   .daybar::-webkit-scrollbar{display:none;}
+  .day-sec{scroll-margin-top:var(--stick, 150px);}
+  .day-sec:not(:first-child) .dayhead{border-top:1px solid var(--hairline-a); margin:14px 2px 16px; padding-top:18px;}
   .chip{flex:0 0 auto; border:1px solid var(--hairline); background:var(--canvas); color:var(--ink-80);
     padding:8px 14px; border-radius:var(--r-pill); cursor:pointer; min-width:54px;
     display:flex; flex-direction:column; align-items:center; line-height:1.1; transition:transform .12s ease;}
@@ -655,13 +657,13 @@ outer: for(let i=0;i<DAYS.length;i++){ for(let j=0;j<dayMeta[i].length;j++){ if(
 if(!MARK){ const li=DAYS.length-1; MARK={d:li, j:DAYS[li].events.length}; }
 function nowLineHTML(){ return `<div class="nowline" id="nowmark"><span class="nl-label">지금 ${NOW_HHMM} 런던</span><span class="nl-bar"></span></div>`; }
 
-/* ===== PLAN ===== */
+/* ===== PLAN (전체 연속 스크롤) ===== */
 const daybar=document.getElementById("daybar"); const planBody=document.getElementById("plan-body");
-DAYS.forEach((d,i)=>{ const c=document.createElement("div"); c.className="chip"; c.innerHTML=`<b>${d.n}일</b><small>${d.date}</small>`; c.onclick=()=>selectDay(i); daybar.appendChild(c); });
-function selectDay(i, toNow){
-  [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===i));
-  const d=DAYS[i];
-  let h=`<div class="dayhead"><h2>${d.n}일차 · ${d.date} <span class="dow">(${d.dow})</span></h2><div class="theme">${d.theme}</div></div><div class="tl">`;
+const headerEl=document.querySelector("header");
+DAYS.forEach((d,i)=>{ const c=document.createElement("div"); c.className="chip"; c.innerHTML=`<b>${d.n}일</b><small>${d.date}</small>`; c.onclick=()=>gotoDay(i); daybar.appendChild(c); });
+
+function dayHTML(d,i){
+  let h=`<section class="day-sec" id="day-${i}"><div class="dayhead"><h2>${d.n}일차 · ${d.date} <span class="dow">(${d.dow})</span></h2><div class="theme">${d.theme}</div></div><div class="tl">`;
   d.events.forEach((e,j)=>{
     if(MARK.d===i && MARK.j===j) h+=nowLineHTML();
     const meta=dayMeta[i][j]; const ongoing=meta && NOW>=meta.s && NOW<meta.e;
@@ -680,11 +682,20 @@ function selectDay(i, toNow){
     h+='</div></div>';
   });
   if(MARK.d===i && MARK.j>=d.events.length) h+=nowLineHTML();
-  h+='</div>';
-  planBody.innerHTML=h;
-  if(toNow){ const nm=document.getElementById("nowmark"); if(nm) nm.scrollIntoView({block:"center"}); else window.scrollTo({top:0}); const chip=daybar.children[i]; if(chip) chip.scrollIntoView({inline:"center",block:"nearest"}); }
-  else window.scrollTo({top:0, behavior:"smooth"});
+  h+='</div></section>';
+  return h;
 }
+planBody.innerHTML = DAYS.map((d,i)=>dayHTML(d,i)).join('');
+
+function syncStick(){ const hh=headerEl.offsetHeight; daybar.style.top=hh+"px"; document.documentElement.style.setProperty('--stick',(hh+daybar.offsetHeight)+"px"); }
+function setActiveChip(i){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===i)); const ch=daybar.children[i]; if(ch) ch.scrollIntoView({inline:"center", block:"nearest"}); }
+function gotoDay(i){ setActiveChip(i); const el=document.getElementById("day-"+i); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
+let spyTick=false;
+function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stick'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); }); }
+window.addEventListener('scroll', spy, {passive:true});
+window.addEventListener('resize', syncStick);
+function gotoNow(){ syncStick(); const nm=document.getElementById("nowmark"); if(nm) nm.scrollIntoView({block:"center"}); else gotoDay(MARK.d); setActiveChip(MARK.d); }
+syncStick();
 
 /* ===== detail registry ===== */
 const DETAILS = {};
@@ -822,7 +833,7 @@ function showView(v, fromDetail){
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
   if(!fromDetail && v!=="detail") window.scrollTo({top:0});
 }
-document.querySelectorAll("#nav button").forEach(b=>{ b.onclick=()=>{ views.detail.classList.remove("active"); resetDV(); prevView=b.dataset.view; showView(b.dataset.view); if(b.dataset.view==="plan") selectDay(MARK.d, true); }; });
+document.querySelectorAll("#nav button").forEach(b=>{ b.onclick=()=>{ views.detail.classList.remove("active"); resetDV(); prevView=b.dataset.view; showView(b.dataset.view); if(b.dataset.view==="plan") gotoNow(); }; });
 
 /* 인터랙티브 백 스와이프: 왼쪽 가장자리에서 끌면 화면이 손가락을 따라 밀려나고, 충분히 밀면 뒤로 */
 const DV=views.detail;
@@ -853,7 +864,7 @@ document.addEventListener('touchend',e=>{
   else { DV.style.transform='translateX(0)'; DV.style.opacity='1'; setTimeout(resetDV,300); }
 },{passive:true});
 
-selectDay(MARK.d, true);
+gotoNow();
 </script>
 </body>
 </html>
