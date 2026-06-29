@@ -68,7 +68,6 @@
   .dayhead .dow{color:var(--ink-48); font-weight:400;}
   .dayhead .theme{font-size:13.5px; letter-spacing:-0.2px; color:var(--primary); font-weight:600; margin:0;}
   .dayhead.stuck{box-shadow:0 6px 8px -7px rgba(0,0,0,.10); border-bottom:1px solid var(--hairline-a);}
-  .dayhead.stuck .theme{display:none;}
 
   /* timeline */
   .tl{position:relative; padding-left:18px;}
@@ -691,10 +690,12 @@ planBody.innerHTML = DAYS.map((d,i)=>dayHTML(d,i)).join('');
 
 function syncStick(){ const hh=headerEl.offsetHeight; daybar.style.top=hh+"px"; document.documentElement.style.setProperty('--stick',(hh+daybar.offsetHeight)+"px"); }
 function setActiveChip(i){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===i)); const ch=daybar.children[i]; if(ch) ch.scrollIntoView({inline:"center", block:"nearest"}); }
-function gotoDay(i){ setActiveChip(i); const el=document.getElementById("day-"+i); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
+let navLock=false, navStop=null;
+function gotoDay(i){ navLock=true; setActiveChip(i); const el=document.getElementById("day-"+i); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
 let spyTick=false;
-function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stick'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); for(let i=0;i<DAYS.length;i++){ const sec=document.getElementById("day-"+i); if(sec){ const head=sec.querySelector(".dayhead"); if(head) head.classList.toggle("stuck", i===cur); } } }); }
-window.addEventListener('scroll', spy, {passive:true});
+function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stick'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } if(!navLock){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); } for(let i=0;i<DAYS.length;i++){ const sec=document.getElementById("day-"+i); if(sec){ const head=sec.querySelector(".dayhead"); if(head) head.classList.toggle("stuck", i===cur); } } }); }
+function onScroll(){ if(navLock){ clearTimeout(navStop); navStop=setTimeout(()=>{ navLock=false; spy(); }, 140); } spy(); }
+window.addEventListener('scroll', onScroll, {passive:true});
 window.addEventListener('resize', syncStick);
 function gotoNow(){ syncStick(); const nm=document.getElementById("nowmark"); if(nm) nm.scrollIntoView({block:"center"}); else gotoDay(MARK.d); setActiveChip(MARK.d); spy(); }
 syncStick();
