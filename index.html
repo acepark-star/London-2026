@@ -78,7 +78,7 @@
   @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.32;}}
   .ev.current .card{box-shadow:0 0 0 2px rgba(255,59,48,.5); border-color:transparent;}
 
-  .card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:13px 15px;}
+  .card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 16px;}
   .ev.move .card{background:transparent; border:none; padding:5px 15px;}
   .ev .time{font-size:13px; font-weight:600; letter-spacing:-0.08px; color:var(--ink-48); font-variant-numeric:tabular-nums;}
   .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:2px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
@@ -120,13 +120,13 @@
   .group{margin-bottom:24px;}
   .group-h{font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--ink-48); margin:0 4px 10px; display:flex; align-items:center; gap:8px;}
   .group-h .cnt{font-size:12px; color:var(--ink-48); font-weight:400;}
-  .row{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 15px; margin-bottom:9px; position:relative;}
+  .row{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:16px; margin-bottom:10px; position:relative;}
   .row.tap{cursor:pointer; transition:transform .12s ease;}
   .row.tap:active{transform:scale(.985);}
-  .row.tap::after{content:"›"; position:absolute; right:14px; top:14px; color:var(--ink-48); font-size:20px; line-height:1;}
+  .row.tap::after{content:"›"; position:absolute; right:16px; top:50%; transform:translateY(-50%); color:#c7c7cc; font-size:22px; line-height:1;}
   .row .r-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
-  .row .r-name{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; display:flex; gap:7px; align-items:center; flex-wrap:wrap; padding-right:18px;}
-  .row .r-meta{font-size:14px; letter-spacing:-0.224px; color:var(--ink-48); margin-top:5px; display:flex; flex-wrap:wrap; gap:5px 14px; line-height:1.43;}
+  .row .r-name{font-size:16.5px; font-weight:600; letter-spacing:-0.32px; line-height:1.3; display:flex; gap:7px; align-items:center; flex-wrap:wrap; padding-right:24px;}
+  .row .r-meta{font-size:14px; letter-spacing:-0.224px; color:var(--ink-48); margin-top:8px; display:flex; flex-wrap:wrap; gap:6px 14px; line-height:1.45;}
   .row .r-meta span{display:inline-flex; align-items:center; gap:5px;}
   .row .r-foot{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:11px;}
   .pill{font-size:12px; background:var(--pearl); color:var(--ink-48); padding:4px 11px; border-radius:var(--r-pill); font-weight:500; border:1px solid var(--hairline-a); letter-spacing:-0.08px;}
@@ -139,14 +139,15 @@
   .slot.alt{background:var(--pearl); color:var(--ink-48); border:1px solid var(--hairline-a);}
 
   /* accom / flight cards */
-  .info-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:16px; margin-bottom:12px;}
+  .info-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:18px; margin-bottom:12px;}
   .info-card .ic-h{display:flex; align-items:center; gap:9px; font-size:18px; font-weight:700; letter-spacing:-0.4px;}
-  .info-card .ic-sub{font-size:13px; color:var(--ink-48); margin-top:2px; font-weight:600;}
-  .kv{display:flex; gap:10px; padding:9px 0; border-top:1px solid var(--hairline-a); font-size:14.5px;}
-  .kv:first-of-type{margin-top:10px;}
+  .info-card .ic-sub{font-size:13px; color:var(--ink-48); margin-top:5px; font-weight:600;}
+  .kv{display:flex; gap:10px; padding:13px 0; border-top:1px solid var(--hairline-a); font-size:14.5px; line-height:1.5;}
+  .kv:first-of-type{margin-top:18px;}
   .kv .k{flex:0 0 76px; color:var(--ink-48); font-weight:600; letter-spacing:-0.2px;}
   .kv .v{flex:1; color:var(--ink); letter-spacing:-0.2px;}
-  .flight-leg{display:flex; align-items:center; gap:12px; padding:10px 0; border-top:1px solid var(--hairline-a);}
+  .flight-leg{display:flex; align-items:center; gap:12px; padding:20px 0; border-top:1px solid var(--hairline-a);}
+  .flight-leg:first-of-type{margin-top:18px;}
   .flight-leg .fl-end{text-align:center; min-width:54px;}
   .flight-leg .fl-time{font-size:18px; font-weight:700; letter-spacing:-0.4px; font-variant-numeric:tabular-nums;}
   .flight-leg .fl-code{font-size:11px; color:var(--ink-48); font-weight:600; margin-top:1px;}
@@ -156,7 +157,7 @@
 
   /* checklist */
   .acc{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); margin-bottom:10px; overflow:hidden;}
-  .acc-h{display:flex; align-items:center; justify-content:space-between; padding:15px 16px; cursor:pointer; user-select:none;}
+  .acc-h{display:flex; align-items:center; justify-content:space-between; padding:16px; cursor:pointer; user-select:none;}
   .acc-h .lt{font-size:17px; font-weight:600; letter-spacing:-0.374px; display:flex; align-items:center; gap:9px;}
   .acc-h .prog{font-size:13px; color:var(--ink-48); font-weight:400; font-variant-numeric:tabular-nums;}
   .acc-h .arr{transition:transform .22s ease; color:var(--ink-48); font-size:20px; line-height:1;}
@@ -175,6 +176,8 @@
 
   /* detail page */
   #view-detail{padding-top:4px;}
+  @keyframes slideIn{from{opacity:0; transform:translateX(44px);} to{opacity:1; transform:none;}}
+  #view-detail.active{animation:slideIn .26s ease;}
   .back{display:inline-flex; align-items:center; gap:3px; background:none; border:none; color:var(--primary); font-size:16px; font-weight:500; letter-spacing:-0.3px; padding:4px 0 12px; cursor:pointer;}
   .detail-hd .d-cat{font-size:12px; font-weight:700; letter-spacing:.02em; color:var(--ink-48); text-transform:uppercase;}
   .detail-hd h2{font-family:var(--font-display); font-size:25px; font-weight:600; letter-spacing:-0.5px; line-height:1.12; margin:4px 0 0;}
@@ -186,6 +189,9 @@
   .d-btn:active{transform:scale(.97);}
   .d-btn.primary{background:var(--primary); color:#fff;}
   .d-btn.ghost{background:var(--canvas); color:var(--primary); border:1px solid var(--hairline-a);}
+  .notion-embed{margin-top:20px;}
+  .notion-embed .ne-h{font-size:13px; font-weight:700; letter-spacing:.02em; color:var(--ink-48); text-transform:uppercase; margin:0 2px 9px;}
+  .notion-frame{width:100%; height:78vh; border:1px solid var(--hairline-a); border-radius:var(--r-lg); background:#fff; display:block;}
 
   /* bottom nav (5 tabs) */
   nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:rgba(255,255,255,.86);
@@ -196,6 +202,8 @@
   nav button.active{color:var(--primary);}
   nav button .lbl{font-size:10px; font-weight:600; letter-spacing:-0.2px;}
   nav button svg{width:23px; height:23px;}
+  nav button .emo{font-size:21px; line-height:23px; height:23px; display:flex; align-items:center; justify-content:center; filter:grayscale(1) opacity(.55);}
+  nav button.active .emo{filter:none;}
 </style>
 </head>
 <body>
@@ -220,7 +228,7 @@
     <span class="lbl">일정</span>
   </button>
   <button data-view="food">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M21 15v7"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v20"/><path d="M4 2v5a3 3 0 0 0 6 0V2"/><path d="M17 2c-1.6 1.4-2.4 3.8-2.4 6.5 0 2.2 0.9 3.5 2.4 3.5v10"/></svg>
     <span class="lbl">식당</span>
   </button>
   <button data-view="place">
@@ -408,6 +416,59 @@ const PLACES = [
   {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"자연사박물관 (Natural History Museum)", price:"무료 (무료예약 필요)", time:"12:30 입장", hour:"매일 10:00~17:50", resv:"ok", via:"공홈", note:"공룡뼈만 보고 나오기", map:"Natural History Museum London"},
   {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"내셔널 갤러리 (The National Gallery)", price:"무료 (무료예약 필요)", time:"15:00 입장", hour:"토~목 10:00~18:00 · 금 10:00~21:00", resv:"ok", via:"공홈", note:"", map:"The National Gallery London"},
 ];
+// 각 장소의 노션 세부페이지 (PLACES와 동일 순서) — 상세 화면에서 그대로 임베드
+const NB = "https://first-amusement-fba.notion.site/";
+const PLACE_PAGES = [
+  "316807d078df800f8b2ac5a455d2cc88",
+  "Westminster-Abbey-316807d078df80a5abd7f9055182b79d",
+  "357807d078df8125bd18d3447a76b234",
+  "Daunt-Books-Marylebone-357807d078df810f90ece952cd0be026",
+  "The-Wallace-Collection-357807d078df81bb85bad0643b48b394",
+  "Liberty-London-357807d078df81d2a4d7e9db54d8bdc2",
+  "Mariage-Freres-357807d078df817cbe00e3b41c353aa6",
+  "St-Paul-s-Cathedral-317807d078df80fea824c4be27589a9a",
+  "Tate-Modern-317807d078df806e8f29e2e0a68b7966",
+  "Regency-Tea-Room-38d807d078df80e695accb75b74240f6",
+  "The-Jane-Austen-Centre-38d807d078df8025a65bf6a9a704cc0f",
+  "Royal-Cres-38d807d078df80098c25cc5aabb76fc4",
+  "The-Holburne-Museum-38d807d078df807ab55fea69e18fe8f7",
+  "Pulteney-Bridge-38d807d078df80c883d1c5a71fe4b568",
+  "The-Pump-Room-Restaurant-38d807d078df802987a5e2406b4006f0",
+  "The-Abbey-Deli-38d807d078df800f9dc4c6b151be3a4e",
+  "V-A-Victoria-and-Albert-Museum-316807d078df8027a1efc0d32a49d400",
+  "Natural-History-Museum-316807d078df80d4a9b8cde67709c5be",
+  "The-National-Gallery-316807d078df809da37de70cf951da4b",
+];
+PLACES.forEach((p,i)=>{ if(PLACE_PAGES[i]) p.pg = NB + PLACE_PAGES[i]; });
+// 식당 노션 세부페이지 (FOOD와 동일 순서, 숙소·후보 등은 빈칸)
+const FOOD_PAGES = [
+  "",
+  "Dishoom-Permit-Room-317807d078df815ea97ee311869cacce",
+  "Hobson-s-Fish-Chips-soho-317807d078df81639fd2ecc07efb7059",
+  "Funky-Noodles-317807d078df81b5bac8ef2208ee86e9",
+  "Capilungo-All-Day-Dining-317807d078df8167860df484abdd1458",
+  "The-Ship-Tavern-317807d078df8181beaec729001627c6",
+  "Tower-Bridge-Collective-317807d078df80bb942afa83e57419e7",
+  "Nando-s-Covent-Garden-317807d078df80bea0c5dce650daa671",
+  "Vasiniko-317807d078df80c79030ec525989aed0",
+  "Relish-317807d078df80aca86ac1b561202ca9",
+  "Mr-Fogg-s-Tavern-317807d078df8097aacbf522717c3c60",
+  "",
+  "",
+  "White-Mulberries-317807d078df802a9ceff75b0a21066b",
+  "The-Promenade-The-Dorchester-317807d078df802d8604dd51aea432db",
+  "",
+  "The-Muffin-Man-Tea-Shop-317807d078df80029bbfdc4902414119",
+  "Five-Guys-Burgers-and-Fries-St-Paul-s-317807d078df8009b76ef1ac2e332b33",
+  "",
+  "",
+  "Sally-Lunn-s-The-Oldest-House-In-Bath-317807d078df80db8838f4d2ced867db",
+  "317807d078df80eda67fc22876b8f31d",
+  "317807d078df8015a6b7e7ce55245a17",
+  "Hyde-Park-Garden-317807d078df8096813ac7bdef24f326",
+  "317807d078df802580ecff1e3749f9fe",
+];
+FOOD.forEach((f,i)=>{ if(FOOD_PAGES[i]) f.pg = NB + FOOD_PAGES[i]; });
 
 const FLIGHT = {
   airline:"대한항공", status:"ok", cost:"802,000원 + 140,000마일",
@@ -583,8 +644,9 @@ function openDetail(id){
   h+=kvRow("비고", o.note);
   h+=`</div><div class="d-actions">`;
   if(o.map) h+=`<a class="d-btn primary" href="${mapUrl(o.map)}" target="_blank" rel="noopener">📍 지도에서 보기</a>`;
-  h+=`<a class="d-btn ghost" href="${NOTION_URL}" target="_blank" rel="noopener">노션에서 열기 ›</a>`;
+  h+=`<a class="d-btn ghost" href="${o.pg||NOTION_URL}" target="_blank" rel="noopener">노션에서 전체화면으로 열기 ›</a>`;
   h+=`</div>`;
+  if(o.pg) h+=`<div class="notion-embed"><div class="ne-h">노션 세부 페이지</div><iframe class="notion-frame" src="${o.pg}" loading="lazy" referrerpolicy="no-referrer"></iframe></div>`;
   document.getElementById("detail-body").innerHTML=h;
   showView("detail", true);
   window.scrollTo({top:0});
@@ -597,12 +659,11 @@ function closeDetail(){ showView(prevView); }
   FOOD.forEach(f=>{
     if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
     const title=f.name||f.area||"미정"; const ic=f.icon?f.icon+" ":"";
-    const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map});
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-top"><div>`;
-    h+=`<div class="r-name">${slotBadge(f.slot)} ${ic}${title} ${resvBadge(f.resv)}</div>`;
+    const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg});
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${slotBadge(f.slot)} ${ic}${title} ${resvBadge(f.resv)}</div>`;
     let meta=[]; if(f.name&&f.area) meta.push(`<span>📍 ${f.area}</span>`); if(f.menu) meta.push(`<span>🍴 ${f.menu}</span>`); if(f.hour) meta.push(`<span>${clockSvg} ${f.hour}</span>`);
     if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
-    h+=`</div></div></div>`;
+    h+=`</div>`;
   });
   h+="</div>";
   document.getElementById("food-body").innerHTML=h;
@@ -613,8 +674,8 @@ function closeDetail(){ showView(prevView); }
   let h=""; let cur=null;
   PLACES.forEach(p=>{
     if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
-    const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map});
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-top"><div class="r-name">${p.type} ${p.name}</div>${resvBadge(p.resv)}</div>`;
+    const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg});
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name} ${resvBadge(p.resv)}</div>`;
     let meta=[]; meta.push(`<span>${p.cat}</span>`); if(p.time) meta.push(`<span>⏰ ${p.time}</span>`); if(p.price) meta.push(`<span>💷 ${p.price}</span>`); if(p.hour) meta.push(`<span>${clockSvg} ${p.hour}</span>`);
     h+=`<div class="r-meta">${meta.join("")}</div></div>`;
   });
@@ -633,8 +694,7 @@ function closeDetail(){ showView(prevView); }
     h+=`<div class="fl-mid">${l.no}<div class="fl-line"></div>${l.date}</div>`;
     h+=`<div class="fl-end"><div class="fl-time">${l.arr}</div><div class="fl-code">${l.arrCode}</div></div></div>`;
   });
-  h+=kvRow("서류", FLIGHT.docs.join(" · "));
-  h+=`<div class="d-actions" style="margin-top:12px"><a class="d-btn ghost" href="${NOTION_URL}" target="_blank" rel="noopener">노션에서 예약내역 · 수화물 규정 보기 ›</a></div>`;
+  h+=`<div class="d-actions" style="margin-top:14px"><a class="d-btn ghost" href="${NOTION_URL}" target="_blank" rel="noopener">노션에서 예약내역 · 수화물 규정 보기 ›</a></div>`;
   h+=`</div></div>`;
   // hotels
   h+=`<div class="group"><div class="group-h">🏨 숙소</div>`;
@@ -677,6 +737,15 @@ function showView(v, fromDetail){
   if(!fromDetail && v!=="detail") window.scrollTo({top:0});
 }
 document.querySelectorAll("#nav button").forEach(b=>{ b.onclick=()=>{ prevView=b.dataset.view; showView(b.dataset.view); if(b.dataset.view==="plan") selectDay(MARK.d, true); }; });
+
+/* swipe-back: 디테일 화면에서 왼쪽 가장자리에서 오른쪽으로 슬라이드하면 뒤로 */
+let _sx=0,_sy=0,_st=0;
+document.addEventListener('touchstart',e=>{ if(e.touches.length!==1) return; _sx=e.touches[0].clientX; _sy=e.touches[0].clientY; _st=Date.now(); },{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!views.detail.classList.contains('active')) return;
+  const t=e.changedTouches[0]; const dx=t.clientX-_sx, dy=t.clientY-_sy, dt=Date.now()-_st;
+  if(_sx<=56 && dx>70 && Math.abs(dy)<55 && dt<700) closeDetail();
+},{passive:true});
 
 selectDay(MARK.d, true);
 </script>
