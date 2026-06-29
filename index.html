@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#1d1d1f">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>런던 여행 · 2026.07</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +29,8 @@
     padding-bottom:calc(66px + var(--safe-b));}
   button{font-family:inherit;}
   a{color:var(--primary); text-decoration:none;}
+  /* iOS standalone 상태바 영역을 #1d1d1f로 고정 */
+  .sb{position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); background:#1d1d1f; z-index:200; pointer-events:none;}
 
   header{position:sticky; top:0; z-index:30; overflow:hidden;
     background:#1d1d1f url('header.jpg') center/cover no-repeat;
@@ -145,7 +147,12 @@
   /* accom / flight cards */
   .info-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:18px; margin-bottom:12px;}
   .info-card .ic-h{display:flex; align-items:center; gap:9px; font-size:18px; font-weight:700; letter-spacing:-0.4px;}
-  .info-card .ic-sub{font-size:13px; color:var(--ink-48); margin-top:5px; padding-bottom:16px; font-weight:600;}
+  .info-card .ic-sub{font-size:13px; color:var(--ink-48); margin-top:5px; font-weight:600;}
+  .info-card .ic-meta{margin-top:6px; padding-bottom:16px; font-size:14px; color:var(--ink-80); font-weight:600; line-height:1.65; letter-spacing:-0.2px;}
+  .ai-sec{margin-bottom:24px;}
+  .ai-sec .ai-h{font-size:17px; font-weight:700; letter-spacing:-0.3px; margin:0 2px 10px;}
+  .ai-img{width:100%; border:1px solid var(--hairline-a); border-radius:var(--r-md); display:block; margin-bottom:8px; background:#fff;}
+  .ai-empty{color:var(--ink-48); font-size:14px; padding:10px 2px;}
   .kv{display:flex; gap:10px; padding:16px 0; border-top:1px solid var(--hairline-a); font-size:14.5px; line-height:1.5;}
   .kv:first-of-type{margin-top:0;}
   .kv .k{flex:0 0 76px; color:var(--ink-48); font-weight:600; letter-spacing:-0.2px;}
@@ -211,8 +218,7 @@
   .nb hr{border:none; border-top:1px solid var(--hairline-a); margin:15px 0;}
 
   /* bottom nav (5 tabs) */
-  nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:rgba(255,255,255,.86);
-    -webkit-backdrop-filter:saturate(180%) blur(20px); backdrop-filter:saturate(180%) blur(20px);
+  nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--canvas);
     border-top:1px solid var(--hairline-a); display:flex; padding-bottom:var(--safe-b);}
   nav button{flex:1; background:none; border:none; padding:8px 0 7px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--ink-48); cursor:pointer; transition:transform .12s ease;}
   nav button:active{transform:scale(.9);}
@@ -224,6 +230,7 @@
 </style>
 </head>
 <body>
+<div class="sb"></div>
 <header>
   <div class="eyebrow">LONDON TRIP</div>
   <h1>런던 여행 🇬🇧</h1>
@@ -512,17 +519,18 @@ const FOOD_PAGES = [
 FOOD.forEach((f,i)=>{ if(FOOD_PAGES[i]) f.pg = NB + FOOD_PAGES[i]; });
 
 const FLIGHT = {
-  airline:"대한항공", status:"ok", cost:"802,000원 + 140,000마일",
+  airline:"대한항공", status:"ok", resNo:"FURTGR / FUR6EW", cost:"802,000원 + 140,000마일",
   legs:[
     {dep:"10:55", depCode:"ICN 인천", arr:"17:20", arrCode:"LHR 런던", no:"KE907", date:"07.10 (금)"},
     {dep:"19:35", depCode:"LHR 런던", arr:"16:15", arrCode:"ICN 인천", no:"KE908", date:"07.18 (토) → 07.19 (일)"},
   ],
-  docs:["항공권", "호텔 바우처", "바스 기차 티켓"],
 };
 const ACCOM = [
-  {name:"Strand Palace Hotel", tag:"숙소 1 · 호텔", period:"7/10 ~ 7/14 (4박)", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London"},
-  {name:"에어비앤비", tag:"숙소 2 · Airbnb", period:"7/14 ~ 7/18 (4박)", area:"10 Stanford Rd, London W8 5QJ · Kensington", checkin:"5일차 (7/14) 저녁 · 체크인 방법 확인", checkout:"9일차 (7/18) 11:00", mapHref:"https://maps.app.goo.gl/B2FDDVwiYfemHRL49"},
+  {name:"Strand Palace Hotel", tag:"숙소 1 · 호텔 · 7/10 ~ 7/14 (4박)", resNo:"-", cost:"-", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London"},
+  {name:"에어비앤비", tag:"숙소 2 · Airbnb · 7/14 ~ 7/18 (4박)", resNo:"HMKCSB888Y", cost:"1,612,987원", area:"10 Stanford Rd, London W8 5QJ · Kensington", checkin:"5일차 (7/14) 저녁 · 체크인 방법 확인", checkout:"9일차 (7/18) 11:00", mapHref:"https://maps.app.goo.gl/B2FDDVwiYfemHRL49"},
 ];
+// 항공 예약 정보 페이지 이미지 (노션 항공 토글 이미지) — python으로 주입
+const AIR_IMGS={"reservation":["https://first-amusement-fba.notion.site/image/attachment%3A238ae1b3-2cc0-44ea-a9f9-7ee646f33536%3Aimage.png?table=block&id=298807d0-78df-80ca-ba44-ef8614813600&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=2000&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"],"cancel":["https://first-amusement-fba.notion.site/image/attachment%3A67214a55-a6ce-4308-90cc-e68d60aa129f%3Aimage.png?table=block&id=298807d0-78df-8007-97b1-c581062a0c7f&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=530&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl","https://first-amusement-fba.notion.site/image/attachment%3Ade6b627c-b3d2-452d-abee-1f46e138d9df%3Aimage.png?table=block&id=298807d0-78df-80b4-9b53-c765ae21aa12&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=2000&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"],"baggage":["https://first-amusement-fba.notion.site/image/attachment%3A52283c6c-ae1a-4a6f-b896-e4733bf3795f%3Aimage.png?table=block&id=298807d0-78df-80c1-92d8-c6bd5def5e9a&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=2000&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"]};
 
 const PREP = [
   {title:"할 일", icon:"📝", items:["항공 예약","숙소 예약","여행자보험 가입","공항–호텔 이동방법 확인","항공 마일리지 재확인","항공 위탁수하물 재확인","eSIM 구매","ETA 신청","예산 정리 (카드/현금)","환전","서류 출력","마지막날 짐 맡길 곳","마지막날 공항 가는 법·일정","더위 용품 체크 (쿨패치·선풍기 등)","만다린오리엔탈 예약","선데이로스트 예약","제인오스틴센터 예약","피쉬앤칩스 예약","소니 일정 — 엄마에게 물어보기"]},
@@ -695,6 +703,21 @@ function openDetail(id){
 }
 function curTab(){ for(const k of ['plan','food','place','book','prep']){ if(views[k].classList.contains('active')) return k; } return prevView||'place'; }
 function closeDetail(){ views.detail.classList.remove("active"); }
+function openAirInfo(){
+  const sec=[["예약내역 상세",AIR_IMGS.reservation||[]],["취소수수료",AIR_IMGS.cancel||[]],["수화물 규정",AIR_IMGS.baggage||[]]];
+  let h=`<button class="back" onclick="backDetail()">‹ 뒤로</button>`;
+  h+=`<div class="detail-hd"><div class="d-cat">대한항공 · 예약 정보</div><h2>예약내역 · 수화물 규정</h2></div>`;
+  h+=`<div style="margin-top:18px">`;
+  sec.forEach(([t,imgs])=>{
+    h+=`<div class="ai-sec"><div class="ai-h">${t}</div>`;
+    if(imgs&&imgs.length) imgs.forEach(u=>h+=`<img class="ai-img" src="${u}" alt="${t}" loading="lazy">`);
+    else h+=`<div class="ai-empty">이미지 준비 중 — 노션에서 확인하세요.</div>`;
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  document.getElementById("detail-body").innerHTML=h;
+  prevView=curTab(); views.detail.classList.add("active"); views.detail.scrollTop=0;
+}
 
 /* ===== FOOD ===== */
 (function(){
@@ -731,18 +754,20 @@ function closeDetail(){ views.detail.classList.remove("active"); }
   let h="";
   // flight
   h+=`<div class="group"><div class="group-h">✈️ 항공</div><div class="info-card">`;
-  h+=`<div class="ic-h">${FLIGHT.airline} ${resvBadge(FLIGHT.status)}</div><div class="ic-sub">${FLIGHT.cost}</div>`;
+  h+=`<div class="ic-h">${FLIGHT.airline} ${resvBadge(FLIGHT.status)}</div>`;
+  h+=`<div class="ic-meta"><div>예약번호: ${FLIGHT.resNo}</div><div>비용: ${FLIGHT.cost}</div></div>`;
   FLIGHT.legs.forEach(l=>{
     h+=`<div class="flight-leg"><div class="fl-end"><div class="fl-time">${l.dep}</div><div class="fl-code">${l.depCode}</div></div>`;
     h+=`<div class="fl-mid">${l.no}<div class="fl-line"></div>${l.date}</div>`;
     h+=`<div class="fl-end"><div class="fl-time">${l.arr}</div><div class="fl-code">${l.arrCode}</div></div></div>`;
   });
-  h+=`<div class="d-actions" style="margin-top:14px"><a class="d-btn ghost" href="${NOTION_URL}" target="_blank" rel="noopener">노션에서 예약내역 · 수화물 규정 보기 ›</a></div>`;
+  h+=`<div class="d-actions" style="margin-top:16px"><button class="d-btn ghost" onclick="openAirInfo()">예약내역 · 수화물 규정 보기 ›</button></div>`;
   h+=`</div></div>`;
   // hotels
   h+=`<div class="group"><div class="group-h">🏨 숙소</div>`;
   ACCOM.forEach(a=>{
-    h+=`<div class="info-card"><div class="ic-h">${a.name}</div><div class="ic-sub">${a.tag} · ${a.period}</div>`;
+    h+=`<div class="info-card"><div class="ic-h">${a.name}</div><div class="ic-sub">${a.tag}</div>`;
+    h+=`<div class="ic-meta"><div>예약번호: ${a.resNo||'-'}</div><div>비용: ${a.cost||'-'}</div></div>`;
     h+=kvRow("위치", a.area);
     h+=kvRow("체크인", a.checkin);
     h+=kvRow("체크아웃", a.checkout);
