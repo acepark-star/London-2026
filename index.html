@@ -11,93 +11,56 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ===== Apple design tokens (from awesome-design-md/apple) ===== */
   :root{
-    /* color */
-    --primary:#0066cc;          /* Action Blue */
-    --primary-focus:#0071e3;
-    --primary-on-dark:#2997ff;  /* Sky Link Blue */
-    --ink:#1d1d1f;
-    --ink-80:#333333;
-    --ink-48:#7a7a7a;
-    --divider-soft:#f0f0f0;
-    --hairline:#e0e0e0;
-    --hairline-a:rgba(0,0,0,.08);
-    --canvas:#ffffff;
-    --parchment:#f5f5f7;
-    --pearl:#fafafc;
-    --tile-dark:#272729;
-    /* iOS system colors for functional status only */
-    --sys-green:#34c759;
-    --sys-orange:#ff9500;
-    /* radius */
+    --primary:#0066cc; --primary-focus:#0071e3; --primary-on-dark:#2997ff;
+    --ink:#1d1d1f; --ink-80:#333; --ink-48:#7a7a7a;
+    --divider-soft:#f0f0f0; --hairline:#e0e0e0; --hairline-a:rgba(0,0,0,.08);
+    --canvas:#fff; --parchment:#f5f5f7; --pearl:#fafafc; --tile-dark:#272729;
+    --sys-green:#34c759; --sys-orange:#ff9500; --sys-red:#ff3b30;
     --r-sm:8px; --r-md:11px; --r-lg:18px; --r-pill:9999px;
-    /* spacing */
-    --s-xs:8px; --s-sm:12px; --s-md:17px; --s-lg:24px; --s-xl:32px;
     --safe-b:env(safe-area-inset-bottom,0px);
-    /* SF Pro on Apple platforms, Inter elsewhere */
     --font:-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Inter", "Apple SD Gothic Neo", sans-serif;
     --font-display:-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Display", "Inter", "Apple SD Gothic Neo", sans-serif;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0; padding:0;}
-  body{
-    font-family:var(--font);
-    background:var(--parchment); color:var(--ink);
-    font-size:17px; line-height:1.47; letter-spacing:-0.374px;
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    padding-bottom:calc(64px + var(--safe-b));
-  }
+  body{font-family:var(--font); background:var(--parchment); color:var(--ink);
+    font-size:17px; line-height:1.47; letter-spacing:-0.374px; -webkit-font-smoothing:antialiased;
+    padding-bottom:calc(66px + var(--safe-b));}
   button{font-family:inherit;}
   a{color:var(--primary); text-decoration:none;}
 
-  /* ===== Header (large-title, Apple "tight") ===== */
-  header{
-    position:sticky; top:0; z-index:30;
-    background:rgba(245,245,247,.82);
-    -webkit-backdrop-filter:saturate(180%) blur(20px);
-    backdrop-filter:saturate(180%) blur(20px);
-    border-bottom:1px solid var(--hairline-a);
-    padding:14px 20px 12px; padding-top:max(14px,env(safe-area-inset-top));
-  }
+  header{position:sticky; top:0; z-index:30; background:rgba(245,245,247,.82);
+    -webkit-backdrop-filter:saturate(180%) blur(20px); backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--hairline-a); padding:14px 20px 12px; padding-top:max(14px,env(safe-area-inset-top));}
   header .eyebrow{font-size:12px; line-height:1; letter-spacing:-0.12px; color:var(--ink-48); font-weight:600;}
-  header h1{
-    font-family:var(--font-display);
-    margin:5px 0 0; font-size:30px; font-weight:600; line-height:1.07; letter-spacing:-0.5px;
-  }
+  header h1{font-family:var(--font-display); margin:5px 0 0; font-size:30px; font-weight:600; line-height:1.07; letter-spacing:-0.5px;}
   header .dates{font-size:14px; line-height:1.43; letter-spacing:-0.224px; color:var(--ink-48); margin-top:3px;}
 
-  main{padding:16px 16px 28px; max-width:560px; margin:0 auto;}
+  main{padding:16px 16px 28px; max-width:100%; margin:0;}
   .view{display:none; animation:fade .28s ease;}
   .view.active{display:block;}
   @keyframes fade{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;}}
 
-  /* ===== Day selector — iOS segmented / pill chips ===== */
-  .daybar{
-    position:sticky; top:0; z-index:20; margin:-16px -16px 16px; padding:12px 16px 12px;
-    background:linear-gradient(var(--parchment) 72%, transparent);
-    display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;
-  }
+  /* day chips */
+  .daybar{position:sticky; top:0; z-index:20; margin:-16px -16px 16px; padding:12px 16px;
+    background:linear-gradient(var(--parchment) 72%, transparent); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;}
   .daybar::-webkit-scrollbar{display:none;}
-  .chip{
-    flex:0 0 auto; border:1px solid var(--hairline); background:var(--canvas); color:var(--ink-80);
+  .chip{flex:0 0 auto; border:1px solid var(--hairline); background:var(--canvas); color:var(--ink-80);
     padding:8px 14px; border-radius:var(--r-pill); cursor:pointer; min-width:54px;
-    display:flex; flex-direction:column; align-items:center; line-height:1.1;
-    transition:transform .12s ease;
-  }
-  .chip:active{transform:scale(0.95);}
+    display:flex; flex-direction:column; align-items:center; line-height:1.1; transition:transform .12s ease;}
+  .chip:active{transform:scale(.95);}
   .chip b{font-size:15px; font-weight:600; letter-spacing:-0.374px; color:var(--ink);}
   .chip small{font-size:11px; letter-spacing:-0.12px; color:var(--ink-48); font-weight:400; margin-top:1px;}
   .chip.active{background:var(--ink); border-color:var(--ink);}
-  .chip.active b, .chip.active small{color:#fff;}
+  .chip.active b,.chip.active small{color:#fff;}
 
-  /* ===== Day head ===== */
   .dayhead{margin:2px 2px 16px;}
   .dayhead h2{font-family:var(--font-display); font-size:22px; font-weight:600; letter-spacing:-0.4px; line-height:1.15; margin:0;}
   .dayhead .dow{color:var(--ink-48); font-weight:400;}
   .dayhead .theme{font-size:15px; letter-spacing:-0.224px; color:var(--primary); font-weight:600; margin-top:3px;}
 
-  /* ===== Timeline ===== */
+  /* timeline */
   .tl{position:relative; padding-left:18px;}
   .tl::before{content:""; position:absolute; left:5px; top:8px; bottom:8px; width:1.5px; background:var(--hairline);}
   .ev{position:relative; margin-bottom:10px;}
@@ -108,6 +71,12 @@
   .ev[data-kind="move"]::before{background:var(--ink-48); border-color:var(--ink-48);}
   .ev[data-kind="rest"]::before{border-color:var(--sys-green);}
   .ev[data-kind="flight"]::before{background:var(--ink); border-color:var(--ink);}
+  .nowline{position:relative; display:flex; align-items:center; gap:8px; margin:2px 0 12px;}
+  .nowline::before{content:""; position:absolute; left:-17px; top:50%; transform:translateY(-50%); width:11px; height:11px; border-radius:50%; background:var(--sys-red); box-shadow:0 0 0 3px rgba(255,59,48,.18); animation:pulse 1.6s ease-in-out infinite;}
+  .nowline .nl-label{font-size:12px; font-weight:700; letter-spacing:-0.08px; color:var(--sys-red); white-space:nowrap;}
+  .nowline .nl-bar{flex:1; height:2px; border-radius:2px; background:var(--sys-red); animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.32;}}
+  .ev.current .card{box-shadow:0 0 0 2px rgba(255,59,48,.5); border-color:transparent;}
 
   .card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:13px 15px;}
   .ev.move .card{background:transparent; border:none; padding:5px 15px;}
@@ -116,38 +85,76 @@
   .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:4px;}
   .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:2px;}
   .ev .move-line svg{flex:0 0 auto; opacity:.7;}
+  .card-foot{display:flex; justify-content:flex-end; margin-top:8px;}
+  .card-foot .maplink{margin-top:0;}
 
-  /* badges / chips */
+  /* badges */
   .badge{font-size:11px; font-weight:600; letter-spacing:-0.08px; padding:3px 9px; border-radius:var(--r-pill); white-space:nowrap; line-height:1.3;}
   .b-ok{background:rgba(52,199,89,.14); color:#1c7a3c;}
   .b-wait{background:rgba(255,149,0,.16); color:#9a5b00;}
   .b-free{background:var(--pearl); color:var(--ink-48); border:1px solid var(--hairline-a);}
   .b-hour{background:var(--pearl); color:var(--ink-80); border:1px solid var(--hairline-a);}
 
-  .maplink{
-    display:inline-flex; align-items:center; gap:5px; margin-top:10px;
-    font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--primary);
-    background:rgba(0,102,204,.08); padding:7px 13px; border-radius:var(--r-pill);
-    transition:transform .12s ease;
-  }
-  .maplink:active{transform:scale(0.95);}
+  .maplink{display:inline-flex; align-items:center; gap:5px; margin-top:10px; font-size:14px; font-weight:600;
+    letter-spacing:-0.224px; color:var(--primary); background:rgba(0,102,204,.08); padding:7px 13px; border-radius:var(--r-pill); transition:transform .12s ease;}
+  .maplink:active{transform:scale(.95);}
+  .maplink.mini{margin-top:0; padding:5px 11px; font-size:13px; flex:0 0 auto;}
   .sub-list{margin:8px 0 0; padding:0; list-style:none;}
   .sub-list li{font-size:14px; letter-spacing:-0.224px; color:var(--ink-48); padding:3px 0 3px 16px; position:relative; line-height:1.43;}
   .sub-list li::before{content:""; position:absolute; left:4px; top:11px; width:4px; height:4px; border-radius:50%; background:var(--hairline);}
 
-  /* ===== Sections (food / book) ===== */
+  /* route strip */
+  .route{margin-top:6px;}
+  .route-strip{display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
+  .leg{display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; letter-spacing:-0.1px; color:var(--ink);}
+  .leg .dur{color:var(--ink-48); font-weight:600;}
+  .rd{display:inline-flex; flex:0 0 auto;}
+  .busnum{background:#DC241F; color:#fff; font-size:12px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap;}
+  .modechip{display:inline-flex; align-items:center; gap:4px;}
+  .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
+  .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
+  .rt-path{font-size:13px; color:var(--ink-48); margin-top:6px; letter-spacing:-0.1px; line-height:1.4;}
+  .rt-foot{display:flex; align-items:center; justify-content:flex-end; margin-top:8px;}
+
+  /* sections (food / places / accom) */
   .group{margin-bottom:24px;}
   .group-h{font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--ink-48); margin:0 4px 10px; display:flex; align-items:center; gap:8px;}
   .group-h .cnt{font-size:12px; color:var(--ink-48); font-weight:400;}
-  .row{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 15px; margin-bottom:9px;}
+  .row{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 15px; margin-bottom:9px; position:relative;}
+  .row.tap{cursor:pointer; transition:transform .12s ease;}
+  .row.tap:active{transform:scale(.985);}
+  .row.tap::after{content:"›"; position:absolute; right:14px; top:14px; color:var(--ink-48); font-size:20px; line-height:1;}
   .row .r-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
-  .row .r-name{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; display:flex; gap:7px; align-items:center; flex-wrap:wrap;}
+  .row .r-name{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; display:flex; gap:7px; align-items:center; flex-wrap:wrap; padding-right:18px;}
   .row .r-meta{font-size:14px; letter-spacing:-0.224px; color:var(--ink-48); margin-top:5px; display:flex; flex-wrap:wrap; gap:5px 14px; line-height:1.43;}
   .row .r-meta span{display:inline-flex; align-items:center; gap:5px;}
   .row .r-foot{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:11px;}
   .pill{font-size:12px; background:var(--pearl); color:var(--ink-48); padding:4px 11px; border-radius:var(--r-pill); font-weight:500; border:1px solid var(--hairline-a); letter-spacing:-0.08px;}
+  .slot{font-size:11px; font-weight:700; letter-spacing:-0.08px; padding:3px 10px; border-radius:var(--r-pill); white-space:nowrap; line-height:1.3;}
+  .slot.am{background:rgba(255,149,0,.16); color:#9a5b00;}
+  .slot.lunch{background:rgba(0,102,204,.12); color:#0066cc;}
+  .slot.dinner{background:rgba(88,86,214,.16); color:#3c3a9e;}
+  .slot.night{background:rgba(175,82,222,.15); color:#7a3a9e;}
+  .slot.tea{background:rgba(48,176,199,.18); color:#0a7886;}
+  .slot.alt{background:var(--pearl); color:var(--ink-48); border:1px solid var(--hairline-a);}
 
-  /* ===== Checklist (iOS grouped list) ===== */
+  /* accom / flight cards */
+  .info-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:16px; margin-bottom:12px;}
+  .info-card .ic-h{display:flex; align-items:center; gap:9px; font-size:18px; font-weight:700; letter-spacing:-0.4px;}
+  .info-card .ic-sub{font-size:13px; color:var(--ink-48); margin-top:2px; font-weight:600;}
+  .kv{display:flex; gap:10px; padding:9px 0; border-top:1px solid var(--hairline-a); font-size:14.5px;}
+  .kv:first-of-type{margin-top:10px;}
+  .kv .k{flex:0 0 76px; color:var(--ink-48); font-weight:600; letter-spacing:-0.2px;}
+  .kv .v{flex:1; color:var(--ink); letter-spacing:-0.2px;}
+  .flight-leg{display:flex; align-items:center; gap:12px; padding:10px 0; border-top:1px solid var(--hairline-a);}
+  .flight-leg .fl-end{text-align:center; min-width:54px;}
+  .flight-leg .fl-time{font-size:18px; font-weight:700; letter-spacing:-0.4px; font-variant-numeric:tabular-nums;}
+  .flight-leg .fl-code{font-size:11px; color:var(--ink-48); font-weight:600; margin-top:1px;}
+  .flight-leg .fl-mid{flex:1; text-align:center; color:var(--ink-48); font-size:11px;}
+  .flight-leg .fl-line{height:1.5px; background:var(--hairline); position:relative; margin:5px 4px;}
+  .flight-leg .fl-line::after{content:"✈"; position:absolute; right:-2px; top:-8px; font-size:12px; color:var(--primary);}
+
+  /* checklist */
   .acc{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); margin-bottom:10px; overflow:hidden;}
   .acc-h{display:flex; align-items:center; justify-content:space-between; padding:15px 16px; cursor:pointer; user-select:none;}
   .acc-h .lt{font-size:17px; font-weight:600; letter-spacing:-0.374px; display:flex; align-items:center; gap:9px;}
@@ -163,24 +170,32 @@
   .chk input:checked::after{content:""; position:absolute; left:7px; top:3px; width:5px; height:10px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);}
   .chk span{font-size:16px; letter-spacing:-0.3px; line-height:1.4; padding-top:1px;}
   .chk input:checked + span{color:var(--ink-48); text-decoration:line-through;}
-  .reset{display:block; width:100%; margin-top:8px; padding:13px; background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-md); color:var(--primary); font-size:15px; font-weight:600; letter-spacing:-0.224px; cursor:pointer; transition:transform .12s ease;}
-  .reset:active{transform:scale(0.97);}
+  .reset{display:block; width:100%; margin-top:8px; padding:13px; background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-md); color:var(--primary); font-size:15px; font-weight:600; cursor:pointer; transition:transform .12s ease;}
+  .reset:active{transform:scale(.97);}
 
-  /* ===== Bottom nav — frosted ===== */
-  nav{
-    position:fixed; left:0; right:0; bottom:0; z-index:40;
-    background:rgba(255,255,255,.82);
-    -webkit-backdrop-filter:saturate(180%) blur(20px);
-    backdrop-filter:saturate(180%) blur(20px);
-    border-top:1px solid var(--hairline-a);
-    display:flex; padding-bottom:var(--safe-b);
-  }
+  /* detail page */
+  #view-detail{padding-top:4px;}
+  .back{display:inline-flex; align-items:center; gap:3px; background:none; border:none; color:var(--primary); font-size:16px; font-weight:500; letter-spacing:-0.3px; padding:4px 0 12px; cursor:pointer;}
+  .detail-hd .d-cat{font-size:12px; font-weight:700; letter-spacing:.02em; color:var(--ink-48); text-transform:uppercase;}
+  .detail-hd h2{font-family:var(--font-display); font-size:25px; font-weight:600; letter-spacing:-0.5px; line-height:1.12; margin:4px 0 0;}
+  .detail-hd .d-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+  .d-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:4px 16px; margin-top:16px;}
+  .d-card .kv .k{flex:0 0 70px;}
+  .d-actions{display:flex; flex-direction:column; gap:9px; margin-top:16px;}
+  .d-btn{display:flex; align-items:center; justify-content:center; gap:6px; padding:13px; border-radius:var(--r-md); font-size:15px; font-weight:600; letter-spacing:-0.2px; transition:transform .12s ease;}
+  .d-btn:active{transform:scale(.97);}
+  .d-btn.primary{background:var(--primary); color:#fff;}
+  .d-btn.ghost{background:var(--canvas); color:var(--primary); border:1px solid var(--hairline-a);}
+
+  /* bottom nav (5 tabs) */
+  nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:rgba(255,255,255,.86);
+    -webkit-backdrop-filter:saturate(180%) blur(20px); backdrop-filter:saturate(180%) blur(20px);
+    border-top:1px solid var(--hairline-a); display:flex; padding-bottom:var(--safe-b);}
   nav button{flex:1; background:none; border:none; padding:8px 0 7px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--ink-48); cursor:pointer; transition:transform .12s ease;}
-  nav button:active{transform:scale(0.92);}
+  nav button:active{transform:scale(.9);}
   nav button.active{color:var(--primary);}
-  nav button .lbl{font-size:11px; font-weight:500; letter-spacing:-0.08px;}
-  nav button svg{width:24px; height:24px;}
-  .empty{text-align:center; color:var(--ink-48); font-size:15px; padding:32px 0;}
+  nav button .lbl{font-size:10px; font-weight:600; letter-spacing:-0.2px;}
+  nav button svg{width:23px; height:23px;}
 </style>
 </head>
 <body>
@@ -191,23 +206,12 @@
 </header>
 
 <main>
-  <section id="view-plan" class="view active">
-    <div class="daybar" id="daybar"></div>
-    <div id="plan-body"></div>
-  </section>
-
-  <section id="view-food" class="view">
-    <div id="food-body"></div>
-  </section>
-
-  <section id="view-book" class="view">
-    <div id="book-body"></div>
-  </section>
-
-  <section id="view-prep" class="view">
-    <div id="prep-body"></div>
-    <button class="reset" id="resetChk">체크 전체 초기화</button>
-  </section>
+  <section id="view-plan" class="view active"><div class="daybar" id="daybar"></div><div id="plan-body"></div></section>
+  <section id="view-food" class="view"><div id="food-body"></div></section>
+  <section id="view-place" class="view"><div id="place-body"></div></section>
+  <section id="view-book" class="view"><div id="book-body"></div></section>
+  <section id="view-prep" class="view"><div id="prep-body"></div><button class="reset" id="resetChk">체크 전체 초기화</button></section>
+  <section id="view-detail" class="view"><div id="detail-body"></div></section>
 </main>
 
 <nav id="nav">
@@ -216,28 +220,34 @@
     <span class="lbl">일정</span>
   </button>
   <button data-view="food">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a2 2 0 0 0 2 2 2 2 0 0 0 2-2V3M6 3v18M18 3c-1.5 0-3 1.5-3 4s1.5 4 3 4v8"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/><path d="M21 15v7"/></svg>
     <span class="lbl">식당</span>
   </button>
-  <button data-view="book">
+  <button data-view="place">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l10-4 10 4-10 4z"/><path d="M6 9.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3V9.5"/></svg>
-    <span class="lbl">예약</span>
+    <span class="lbl">장소</span>
+  </button>
+  <button data-view="book">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+    <span class="lbl">항공·숙소</span>
   </button>
   <button data-view="prep">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-    <span class="lbl">체크리스트</span>
+    <span class="lbl">체크</span>
   </button>
 </nav>
 
 <script>
-/* ---------- DATA ---------- */
+const NOTION_URL = "https://first-amusement-fba.notion.site/2026-07-223807d078df802f8f20d296fd1e1142";
+
+/* ===== DATA ===== */
 const DAYS = [
   { n:1, date:"07.10", dow:"금", theme:"런던 입성", events:[
     {t:"10:55–17:20", k:"flight", ttl:"인천 → 런던 KE907", note:"대한항공"},
     {t:"17:20–18:30", k:"see", ttl:"입국 수속"},
-    {t:"18:30–20:00", k:"move", ttl:"런던 시내 이동", move:"튜브 · Heathrow Terminals → Paddington"},
-    {t:"20:00–20:30", k:"see", ttl:"호텔 체크인"},
-    {t:"20:30–21:30", k:"food", ttl:"장 보기 — Tesco Express", map:"Tesco Express Paddington London"},
+    {t:"18:30–20:00", k:"move", ttl:"런던 시내 이동", move:"튜브 46분 · Heathrow Terminals → Tottenham Court Road → Charing Cross"},
+    {t:"20:00–20:30", k:"see", ttl:"호텔 체크인 (Strand Palace Hotel)", map:"Strand Palace Hotel London"},
+    {t:"20:30–21:30", k:"food", ttl:"장 보기 — Tesco Express", map:"Tesco Express Strand London"},
     {t:"~", k:"rest", ttl:"숙소 휴식"},
   ]},
   { n:2, date:"07.11", dow:"토", theme:"노팅힐 · 소호", events:[
@@ -247,7 +257,7 @@ const DAYS = [
     {t:"09:00–10:00", k:"food", ttl:"아침 — Dishoom Permit Room", note:"포토벨로마켓 근처 · 인도 음식", hour:"토 09:00–24:00", map:"Dishoom Permit Room London"},
     {t:"10:00–14:00", k:"shop", ttl:"포토벨로 마켓", note:"서점·가게 구경", map:"Portobello Road Market London", subs:["Books for Cooks","Cheeky Scone","LoveShackFancy"]},
     {t:"14:00–15:00", k:"move", ttl:"런던 시내 이동", move:"튜브 20분 · Notting Hill Gate → Tottenham Court Rd"},
-    {t:"15:00–16:30", k:"food", ttl:"점심 — Hobson's Fish & Chips", note:"소호 · 피쉬앤칩스", hour:"토 12:00–23:00", resv:"wait", map:"Hobsons Fish and Chips Soho London"},
+    {t:"15:00–16:30", k:"food", ttl:"점심 — Hobson's Fish & Chips", note:"소호 · 피쉬앤칩스", hour:"토 12:00–23:00", resv:"ok", map:"Hobsons Fish and Chips Soho London"},
     {t:"17:00–21:00", k:"shop", ttl:"피카딜리 서커스 / 리젠트 스트리트", map:"Piccadilly Circus London", subs:["Hamleys 장난감가게 (토 10:00–20:00)","Ralph Lauren Flagship (토 10:00–19:00)","F1 카드샵 Fanatics Collectibles","M&M'S London","The LEGO Store (10:00–22:00)"]},
     {t:"21:00–22:00", k:"food", ttl:"저녁 — Funky Noodles", note:"차이나타운 · 중국 음식", hour:"토 12:00–23:00", map:"Funky Noodles Chinatown London"},
     {t:"22:00–22:20", k:"move", ttl:"숙소 이동", move:"도보 13분 · 950m"},
@@ -263,7 +273,7 @@ const DAYS = [
     {t:"14:30–15:30", k:"food", ttl:"점심 — The Ship Tavern", note:"선데이 로스트", hour:"일 11:00–24:00", resv:"ok", map:"The Ship Tavern Holborn London"},
     {t:"15:30–18:00", k:"see", ttl:"타워브릿지 / 포터스 필즈 공원", note:"돗자리·자켓 챙기기 · 윔블던 결승(16시 시작)?", move:"버스 37분 · 15번", map:"Tower Bridge London"},
     {t:"저녁", k:"food", ttl:"저녁 — Tower Bridge Collective", note:"버거", hour:"08:00–22:30", map:"Tower Bridge Collective London"},
-    {t:"18:30–19:00", k:"move", ttl:"빅벤 이동", move:"튜브 24분 또는 보트 29분 · → Westminster Pier"},
+    {t:"18:30–19:00", k:"move", ttl:"빅벤 이동", move:"튜브 24분 또는 보트 29분 · London Bridge → Westminster"},
     {t:"19:00", k:"see", ttl:"빅벤 노을 / 야경", note:"일몰 21:12 (작년 기준)", map:"Big Ben London"},
     {t:"야식", k:"food", ttl:"야식 (배고프면)", note:"Nando's Covent Garden / Vasiniko (피자)", map:"Nandos Covent Garden London"},
     {t:"~", k:"rest", ttl:"숙소 휴식", move:"도보 19분 · 1.3km"},
@@ -295,7 +305,7 @@ const DAYS = [
     {t:"17:20–18:00", k:"move", ttl:"코벤트가든 이동", move:"도보 15분 · 1.1km"},
     {t:"18:00–18:40", k:"shop", ttl:"마리아쥬 프레르 (Mariage Frères)", map:"Mariage Freres Covent Garden London"},
     {t:"19:00–19:30", k:"move", ttl:"짐 찾아 숙소 이동", note:"에어비앤비 체크인 방법 확인", move:"택시 23분 · 6km"},
-    {t:"~", k:"rest", ttl:"숙소 휴식"},
+    {t:"~", k:"rest", ttl:"숙소 휴식 (에어비앤비)"},
   ]},
   { n:6, date:"07.15", dow:"수", theme:"세인트폴 · 테이트 모던", events:[
     {t:"08:00–09:00", k:"rest", ttl:"기상 / 준비"},
@@ -312,14 +322,14 @@ const DAYS = [
   ]},
   { n:7, date:"07.16", dow:"목", theme:"바스 당일치기 🛁", events:[
     {t:"05:00–06:20", k:"rest", ttl:"기상 / 준비"},
-    {t:"06:20–07:00", k:"move", ttl:"패딩턴역 이동"},
+    {t:"06:20–07:00", k:"move", ttl:"패딩턴역 이동", move:"버스 17분 · High Street Kensington → Paddington Station"},
     {t:"07:29–08:42", k:"flight", ttl:"바스 이동 (기차)", note:"예약 완료", resv:"ok", map:"Bath Spa Railway Station"},
     {t:"08:42–10:00", k:"see", ttl:"메인 길 산책", map:"Bath city centre UK"},
     {t:"10:00–11:30", k:"see", ttl:"리젠시 티룸 / 제인오스틴 기념관", hour:"10:00–16:30", resv:"wait", map:"The Jane Austen Centre Bath"},
     {t:"11:30–12:30", k:"see", ttl:"로얄 크레스켄트 (Royal Crescent)", map:"Royal Crescent Bath"},
-    {t:"13:00–14:00", k:"food", ttl:"샐리 룬스 (Sally Lunn's)", map:"Sally Lunns Bath"},
+    {t:"13:00–14:00", k:"food", ttl:"점심 — Sally Lunn's (The Oldest House)", hour:"10:00–21:00", map:"Sally Lunns Bath"},
     {t:"14:00–16:00", k:"see", ttl:"홀번 뮤지엄 / 풀테니 다리", map:"Pulteney Bridge Bath"},
-    {t:"16:00–17:00", k:"food", ttl:"The Pump Room Restaurant", hour:"10:00–16:00", resv:"wait", map:"The Pump Room Bath"},
+    {t:"16:00–17:00", k:"see", ttl:"펌프룸 (The Pump Room) · 저녁식사", hour:"10:00–16:00", map:"The Pump Room Bath"},
     {t:"17:00–18:00", k:"see", ttl:"애비 델리 (The Abbey Deli)", note:"프라이어파크 랜드스케이프 가든", map:"The Abbey Deli Bath"},
     {t:"18:43–20:07", k:"flight", ttl:"패딩턴 이동 (기차)", note:"예약 완료", resv:"ok"},
     {t:"~", k:"rest", ttl:"숙소 휴식"},
@@ -332,14 +342,14 @@ const DAYS = [
     {t:"14:30–15:00", k:"move", ttl:"내셔널 갤러리 이동"},
     {t:"15:00–16:30", k:"see", ttl:"내셔널 갤러리", note:"15:00 입장", resv:"ok", map:"The National Gallery London"},
     {t:"16:30–17:30", k:"move", ttl:"만다린 오리엔탈 이동", move:"버스 20분 · 19번"},
-    {t:"17:30–19:00", k:"food", ttl:"저녁 — Hyde Park Garden", resv:"ok", map:"Mandarin Oriental Hyde Park London"},
+    {t:"17:30–19:00", k:"food", ttl:"저녁 — Hyde Park Garden", resv:"wait", map:"Mandarin Oriental Hyde Park London"},
     {t:"~", k:"rest", ttl:"숙소 휴식", move:"버스 16분 · 9·452번"},
   ]},
   { n:9, date:"07.18", dow:"토", theme:"마무리 · 귀국", events:[
     {t:"오전", k:"rest", ttl:"기상 / 준비"},
     {t:"11:00", k:"see", ttl:"체크아웃"},
     {t:"11:00", k:"see", ttl:"짐 맡기기 — Local Supermarket", note:"Bounce 앱 예약 · 도보 3분", map:"left luggage Kensington London"},
-    {t:"15:00", k:"food", ttl:"브런치"},
+    {t:"15:00", k:"food", ttl:"브런치", note:"숙소 근처", map:"brunch Kensington London"},
     {t:"15:30–16:30", k:"move", ttl:"짐 찾기 / 공항 이동", move:"튜브 50분 · High St Kensington → Paddington → Heathrow"},
     {t:"19:35", k:"flight", ttl:"런던 → 인천 KE908"},
   ]},
@@ -349,66 +359,78 @@ const DAYS = [
 ];
 
 const FOOD = [
-  {day:2, date:"07.11(토)", slot:"아침", area:"노팅힐", name:"Dishoom Permit Room", menu:"인도 음식점", hour:"09:00–24:00", resv:null, map:"Dishoom Permit Room London"},
-  {day:2, date:"07.11(토)", slot:"점심", area:"소호", name:"Hobson's Fish & Chips", menu:"피쉬앤칩스", hour:"12:00–23:00", resv:"wait", map:"Hobsons Fish and Chips Soho London"},
-  {day:2, date:"07.11(토)", slot:"저녁", area:"차이나타운", name:"Funky Noodles", menu:"중국 음식점", hour:"12:00–22:00", resv:null, map:"Funky Noodles Chinatown London"},
-  {day:3, date:"07.12(일)", slot:"아침", area:"코벤트가든", name:"Capilungo All Day Dining", menu:"이탈리안 카페", hour:"09:00–20:00", resv:null, map:"Capilungo All Day Dining London"},
-  {day:3, date:"07.12(일)", slot:"점심", area:"코벤트가든", name:"The Ship Tavern", menu:"선데이 로스트", hour:"11:00–24:00", resv:"ok", map:"The Ship Tavern Holborn London"},
-  {day:3, date:"07.12(일)", slot:"저녁", area:"타워브릿지", name:"Tower Bridge Collective", menu:"버거", hour:"08:00–22:30", resv:null, map:"Tower Bridge Collective London"},
-  {day:3, date:"07.12(일)", slot:"야식", area:"숙소 근처", name:"Nando's Covent Garden", menu:"타코·치킨", hour:"11:00–22:00", resv:null, map:"Nandos Covent Garden London"},
-  {day:3, date:"07.12(일)", slot:"야식", area:"숙소 근처", name:"Vasiniko", menu:"피자", hour:"12:00–22:30", resv:null, map:"Vasiniko London"},
-  {day:4, date:"07.13(월)", slot:"아침", area:"테이트브리튼", name:"Relish", menu:"샌드위치", hour:"07:00–15:30", resv:null, map:"Relish Westminster London"},
-  {day:4, date:"07.13(월)", slot:"점심", area:"코벤트가든", name:"Mr Fogg's Tavern", menu:"현지식", hour:"12:00–22:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
-  {day:4, date:"07.13(월)", slot:"후보", area:"코벤트가든", name:"Fatto a Mano (후보)", menu:"피자", hour:"12:00–22:00", resv:null, map:"Fatto a Mano Covent Garden London"},
-  {day:4, date:"07.13(월)", slot:"저녁", area:"호텔", name:"숙소 — 누룽지+반찬", menu:"", hour:"", resv:null, map:null},
-  {day:5, date:"07.14(화)", slot:"아침", area:"메릴본", name:"White Mulberries", menu:"카페", hour:"07:00–18:00", resv:null, map:"White Mulberries London"},
-  {day:5, date:"07.14(화)", slot:"애프터눈티", area:"메이페어", name:"The Promenade (The Dorchester)", menu:"애프터눈티", hour:"07:00–22:30", resv:null, map:"The Dorchester London"},
-  {day:5, date:"07.14(화)", slot:"저녁", area:"에어비앤비", name:"숙소 — 햇반+반찬", menu:"", hour:"", resv:null, map:null},
-  {day:6, date:"07.15(수)", slot:"아침", area:"숙소 근처", name:"The Muffin Man Tea Shop", menu:"카페", hour:"09:00–17:00", resv:null, map:"The Muffin Man Tea Shop Kensington London"},
-  {day:6, date:"07.15(수)", slot:"점심", area:"세인트폴", name:"Five Guys St. Paul's", menu:"버거", hour:"10:00–23:30", resv:null, map:"Five Guys St Pauls London"},
-  {day:6, date:"07.15(수)", slot:"저녁", area:"에어비앤비", name:"숙소 — 햇반+반찬", menu:"", hour:"", resv:null, map:null},
-  {day:7, date:"07.16(목)", slot:"점심", area:"바스", name:"Sally Lunn's", menu:"바스 명물 번", hour:"", resv:null, map:"Sally Lunns Bath"},
-  {day:7, date:"07.16(목)", slot:"저녁", area:"바스", name:"The Pump Room Restaurant", menu:"", hour:"10:00–16:00", resv:"wait", map:"The Pump Room Bath"},
-  {day:8, date:"07.17(금)", slot:"점심", area:"자연사박물관", name:"자연사박물관 근처", menu:"", hour:"", resv:null, map:"Natural History Museum London"},
-  {day:8, date:"07.17(금)", slot:"저녁", area:"하이드파크", name:"Hyde Park Garden", menu:"", hour:"", resv:"ok", map:"Mandarin Oriental Hyde Park London"},
-  {day:9, date:"07.18(토)", slot:"점심", area:"-", name:"브런치", menu:"", hour:"", resv:null, map:null},
+  {day:1, date:"07.10(금)", slot:"저녁", icon:"🍽️", area:"숙소", name:"숙소", menu:"", hour:"", resv:null, map:null},
+  {day:2, date:"07.11(토)", slot:"아침", icon:"🍽️", area:"노팅힐", name:"Dishoom Permit Room", menu:"인도 음식점", hour:"09:00~24:00 (토)", resv:null, map:"Dishoom Permit Room London"},
+  {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"소호", name:"Hobson`s Fish & Chips soho", menu:"피쉬앤칩스", hour:"12:00~23:00 (토)", resv:"ok", map:"Hobsons Fish and Chips Soho London"},
+  {day:2, date:"07.11(토)", slot:"저녁", icon:"🍽️", area:"차이나타운", name:"Funky Noodles", menu:"중국 음식점", hour:"12:00~22:00 (토)", resv:null, map:"Funky Noodles Chinatown London"},
+  {day:3, date:"07.12(일)", slot:"아침", icon:"🍽️", area:"코벤트가든", name:"Capilungo All Day Dining", menu:"이탈리안 카페", hour:"09:00~20:00 (일)", resv:null, map:"Capilungo All Day Dining London"},
+  {day:3, date:"07.12(일)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"The Ship Tavern", menu:"선데이로스트", hour:"11:00~24:00 (일)", resv:"ok", map:"The Ship Tavern Holborn London"},
+  {day:3, date:"07.12(일)", slot:"저녁", icon:"🍽️", area:"타워브릿지", name:"Tower Bridge Collective", menu:"버거", hour:"08:00~22:30", resv:null, map:"Tower Bridge Collective London"},
+  {day:3, date:"07.12(일)", slot:"야식", icon:"🍽️", area:"숙소 근처", name:"Nando's Covent Garden", menu:"타코", hour:"11:00~22:00", resv:null, map:"Nandos Covent Garden London"},
+  {day:3, date:"07.12(일)", slot:"야식", icon:"🍽️", area:"숙소 근처", name:"Vasiniko", menu:"피자", hour:"12:00~22:30 (일)", resv:null, map:"Vasiniko London"},
+  {day:4, date:"07.13(월)", slot:"아침", icon:"🍽️", area:"테이트브리튼", name:"Relish", menu:"샌드위치", hour:"07:00~15:30", resv:null, map:"Relish Westminster London"},
+  {day:4, date:"07.13(월)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"Mr Fogg's Tavern", menu:"현지식", hour:"12:00~22:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
+  {day:4, date:"07.13(월)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"Fatto a Mano Covent Garden (후보)", menu:"피자", hour:"12:00~22:00", resv:null, map:"Fatto a Mano Covent Garden London"},
+  {day:4, date:"07.13(월)", slot:"저녁", icon:"🏠", area:"숙소 (호텔)", name:"숙소 (호텔)", menu:"누룽지+반찬", hour:"", resv:null, map:null},
+  {day:5, date:"07.14(화)", slot:"아침", icon:"🍽️", area:"메릴본", name:"White Mulberries", menu:"카페", hour:"07:00~18:00", resv:null, map:"White Mulberries London"},
+  {day:5, date:"07.14(화)", slot:"점심", icon:"🫖", area:"애프터눈티", name:"The Promenade (The Dorchester)", menu:"애프터눈티", hour:"07:00~22:30", resv:null, map:"The Dorchester London"},
+  {day:5, date:"07.14(화)", slot:"저녁", icon:"🏠", area:"숙소 (에어비앤비)", name:"숙소 (에어비앤비)", menu:"햇반+반찬", hour:"", resv:null, map:null},
+  {day:6, date:"07.15(수)", slot:"아침", icon:"🍽️", area:"숙소 근처", name:"The Muffin Man Tea Shop", menu:"", hour:"09:00~17:00", resv:null, map:"The Muffin Man Tea Shop Kensington London"},
+  {day:6, date:"07.15(수)", slot:"점심", icon:"🍽️", area:"세인트 폴 대성당", name:"Five Guys Burgers and Fries St. Paul's", menu:"", hour:"10:00~23:30", resv:null, map:"Five Guys St Pauls London"},
+  {day:6, date:"07.15(수)", slot:"저녁", icon:"🏠", area:"숙소 (에어비앤비)", name:"숙소 (에어비앤비)", menu:"햇반+반찬", hour:"", resv:null, map:null},
+  {day:7, date:"07.16(목)", slot:"아침", icon:"🏠", area:"바스", name:"숙소 (에어비앤비)", menu:"누룽지+반찬", hour:"", resv:null, map:null},
+  {day:7, date:"07.16(목)", slot:"점심", icon:"🍽️", area:"바스", name:"Sally Lunn's The Oldest House In Bath", menu:"", hour:"10:00~21:00", resv:null, map:"Sally Lunns Bath"},
+  {day:7, date:"07.16(목)", slot:"저녁", icon:"🍽️", area:"바스", name:"저녁식사 (펌프룸)", menu:"", hour:"10:00~16:00", resv:null, map:"The Pump Room Bath"},
+  {day:8, date:"07.17(금)", slot:"점심", icon:"🍽️", area:"자연사 박물관", name:"자연사박물관 근처", menu:"", hour:"", resv:null, map:"Natural History Museum London"},
+  {day:8, date:"07.17(금)", slot:"저녁", icon:"🍽️", area:"하이드파크", name:"Hyde Park Garden", menu:"", hour:"", resv:"wait", map:"Mandarin Oriental Hyde Park London"},
+  {day:9, date:"07.18(토)", slot:"점심", icon:"🍽️", area:"숙소 근처", name:"브런치", menu:"브런치", hour:"", resv:null, map:null},
 ];
 
-const BOOK = [
-  {cat:"박물관 · 미술관", items:[
-    {name:"웨스트민스터 사원", date:"07.13(월)", price:"£31", time:"12:30 입장", hour:"월–금 09:30–15:30", resv:"ok", via:"마이리얼트립 · 7/12까지 취소가능", map:"Westminster Abbey London"},
-    {name:"세인트 폴 대성당", date:"07.15(수)", price:"£27", time:"11:00 입장", hour:"월–토 08:30–16:30", resv:"ok", via:"NOL · 7/12까지 취소가능", map:"St Pauls Cathedral London"},
-    {name:"테이트 모던", date:"07.15(수)", price:"상설 무료 / 특별전 £25", time:"12:30 입장", hour:"일–목 10:00–18:00", resv:"ok", via:"공홈 · 취소불가", map:"Tate Modern London"},
-    {name:"자연사 박물관", date:"07.17(금)", price:"무료(예약 필요)", time:"12:30 입장", hour:"매일 10:00–17:50", resv:"ok", via:"공홈", map:"Natural History Museum London"},
-    {name:"내셔널 갤러리", date:"07.17(금)", price:"무료(예약 필요)", time:"15:00 입장", hour:"토–목 10:00–18:00 · 금 ~21:00", resv:"ok", via:"공홈", map:"The National Gallery London"},
-    {name:"테이트 브리튼", date:"07.13(월)", price:"상설 무료", time:"", hour:"매일 10:00–18:00", resv:"free", via:"예약 불필요", map:"Tate Britain London"},
-    {name:"V&A 박물관", date:"07.17(금)", price:"상설 무료", time:"", hour:"금 10:00–22:00 · 그 외 ~17:45", resv:"free", via:"예약 불필요", map:"Victoria and Albert Museum London"},
-  ]},
-  {cat:"공연 · 투어", items:[
-    {name:"뮤지컬 패딩턴", date:"07.13(월)", price:"", time:"19:00 · 사보이 극장", hour:"", resv:"ok", via:"", map:"Savoy Theatre London"},
-    {name:"제인 오스틴 센터", date:"07.16(목)", price:"", time:"", hour:"매일 09:45–17:30", resv:"wait", via:"", map:"The Jane Austen Centre Bath"},
-  ]},
+// 박물관/미술관 + 공연 + 관광지(투어스팟), 날짜별
+const PLACES = [
+  {day:4, date:"07.13(월)", cat:"박물관·미술관", type:"🏛️", name:"테이트 브리튼", price:"상설 무료 / 특별전 유료", time:"", hour:"매일 10:00~18:00", resv:"free", via:"", note:"상설전시는 예약 불필요", map:"Tate Britain London"},
+  {day:4, date:"07.13(월)", cat:"박물관·미술관", type:"🏛️", name:"웨스트민스터 사원 (Westminster Abbey)", price:"£31", time:"12:30 입장", hour:"월~금 09:30~15:30 · 토 09:30~15:00", resv:"ok", via:"마이리얼트립", note:"7/12까지 취소 가능", map:"Westminster Abbey London"},
+  {day:4, date:"07.13(월)", cat:"공연", type:"🎩", name:"뮤지컬 패딩턴", price:"", time:"19:00", hour:"", resv:"ok", via:"", note:"사보이 극장", map:"Savoy Theatre London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"던트 북스 (Daunt Books Marylebone)", price:"", time:"", hour:"", resv:null, via:"", note:"메릴본 명물 서점", map:"Daunt Books Marylebone London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"월리스 컬렉션 (The Wallace Collection)", price:"무료", time:"", hour:"", resv:null, via:"", note:"", map:"The Wallace Collection London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"리버티 백화점 (Liberty London)", price:"", time:"", hour:"", resv:null, via:"", note:"튜더풍 백화점", map:"Liberty London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"마리아쥬 프레르 (Mariage Frères)", price:"", time:"", hour:"", resv:null, via:"", note:"프랑스 홍차 매장", map:"Mariage Freres Covent Garden London"},
+  {day:6, date:"07.15(수)", cat:"박물관·미술관", type:"🏛️", name:"세인트 폴 대성당 (St. Paul's Cathedral)", price:"£27", time:"11:00 입장", hour:"월~토 08:30~16:30 · 수 10:00~16:30", resv:"ok", via:"NOL", note:"7/12까지 취소 가능", map:"St Pauls Cathedral London"},
+  {day:6, date:"07.15(수)", cat:"박물관·미술관", type:"🏛️", name:"테이트 모던 (Tate Modern)", price:"상설 무료 / 특별전 £25", time:"12:30 입장", hour:"일~목 10:00~18:00 · 금~토 10:00~21:00", resv:"ok", via:"공홈", note:"취소 불가", map:"Tate Modern London"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"리젠시 티룸 (Regency Tea Room)", price:"", time:"", hour:"매일 10:00~16:30", resv:null, via:"", note:"제인오스틴 센터 내 티룸", map:"Regency Tea Room Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"제인오스틴 기념관 (The Jane Austen Centre)", price:"", time:"", hour:"매일 09:45~17:30", resv:"wait", via:"", note:"예약 필요 (예약 전)", map:"The Jane Austen Centre Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"로얄 크레스켄트 (Royal Crescent)", price:"", time:"", hour:"", resv:null, via:"", note:"", map:"Royal Crescent Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"홀번 뮤지엄 (The Holburne Museum)", price:"", time:"", hour:"", resv:null, via:"", note:"", map:"The Holburne Museum Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"풀테니 다리 (Pulteney Bridge)", price:"", time:"", hour:"", resv:null, via:"", note:"", map:"Pulteney Bridge Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"펌프룸 (The Pump Room Restaurant)", price:"", time:"", hour:"10:00~16:00", resv:null, via:"", note:"", map:"The Pump Room Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"애비 델리 (The Abbey Deli)", price:"", time:"", hour:"", resv:null, via:"", note:"프라이어파크 랜드스케이프 가든", map:"The Abbey Deli Bath"},
+  {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"V&A 박물관 (Victoria and Albert Museum)", price:"상설 무료 / 특별전 유료", time:"", hour:"금 10:00~22:00 · 토~목 10:00~17:45", resv:"free", via:"", note:"상설전시는 예약 불필요", map:"Victoria and Albert Museum London"},
+  {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"자연사박물관 (Natural History Museum)", price:"무료 (무료예약 필요)", time:"12:30 입장", hour:"매일 10:00~17:50", resv:"ok", via:"공홈", note:"공룡뼈만 보고 나오기", map:"Natural History Museum London"},
+  {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"내셔널 갤러리 (The National Gallery)", price:"무료 (무료예약 필요)", time:"15:00 입장", hour:"토~목 10:00~18:00 · 금 10:00~21:00", resv:"ok", via:"공홈", note:"", map:"The National Gallery London"},
+];
+
+const FLIGHT = {
+  airline:"대한항공", status:"ok", cost:"802,000원 + 140,000마일",
+  legs:[
+    {dep:"10:55", depCode:"ICN 인천", arr:"17:20", arrCode:"LHR 런던", no:"KE907", date:"07.10 (금)"},
+    {dep:"19:35", depCode:"LHR 런던", arr:"16:15", arrCode:"ICN 인천", no:"KE908", date:"07.18 (토) → 07.19 (일)"},
+  ],
+  docs:["항공권", "호텔 바우처", "바스 기차 티켓"],
+};
+const ACCOM = [
+  {name:"Strand Palace Hotel", tag:"숙소 1 · 호텔", period:"7/10 ~ 7/14 (4박)", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London"},
+  {name:"에어비앤비", tag:"숙소 2 · Airbnb", period:"7/14 ~ 7/18 (4박)", area:"10 Stanford Rd, London W8 5QJ · Kensington", checkin:"5일차 (7/14) 저녁 · 체크인 방법 확인", checkout:"9일차 (7/18) 11:00", mapHref:"https://maps.app.goo.gl/B2FDDVwiYfemHRL49"},
 ];
 
 const PREP = [
-  {title:"할 일", icon:"📝", groups:[
-    {sub:"", items:["항공 예약","숙소 예약","여행자보험 가입","공항–호텔 이동방법 확인","항공 마일리지 재확인","항공 위탁수하물 재확인","eSIM 구매","ETA 신청","예산 정리 (카드/현금)","환전","서류 출력","마지막날 짐 맡길 곳","마지막날 공항 가는 법·일정","더위 용품 체크 (쿨패치·선풍기 등)","만다린오리엔탈 예약","선데이로스트 예약","제인오스틴센터 예약","피쉬앤칩스 예약","소니 일정 — 엄마에게 물어보기"]},
-  ]},
-  {title:"서류 / 지갑", icon:"🛂", groups:[
-    {sub:"", items:["서류","지갑 (트래블카드)","여권","항공권","호텔 바우처","바스 기차 티켓"]},
-  ]},
-  {title:"전자기기", icon:"🔌", groups:[
-    {sub:"", items:["아이폰 Xs","오즈모","보조배터리 (큰거/작은거)","노트북 충전기","외장하드","헤드폰 (회사에서 가져오기)","3in1 충전기 (회사에서 가져오기)","손풍기 / 부채","휴대용 포트","스트랩"]},
-  ]},
-  {title:"기타 / 옷 / 화장품", icon:"🧴", groups:[
-    {sub:"", items:["옷","화장품","샤워기 필터 (음이온)","쿨링패드"]},
-  ]},
-  {title:"먹을거", icon:"🍱", groups:[
-    {sub:"", items:["햇반 작은거 4개","누룽지 2회분","참치캔 작은거 3개","닭가슴살 스팸 1캔","라면 2개"]},
-  ]},
+  {title:"할 일", icon:"📝", items:["항공 예약","숙소 예약","여행자보험 가입","공항–호텔 이동방법 확인","항공 마일리지 재확인","항공 위탁수하물 재확인","eSIM 구매","ETA 신청","예산 정리 (카드/현금)","환전","서류 출력","마지막날 짐 맡길 곳","마지막날 공항 가는 법·일정","더위 용품 체크 (쿨패치·선풍기 등)","만다린오리엔탈 예약","선데이로스트 예약","제인오스틴센터 예약","피쉬앤칩스 예약","소니 일정 — 엄마에게 물어보기"]},
+  {title:"서류 / 지갑", icon:"🛂", items:["서류","지갑 (트래블카드)","여권","항공권","호텔 바우처","바스 기차 티켓","여행자보험","eSIM","Bounce 짐보관 예약"]},
+  {title:"전자기기", icon:"🔌", items:["아이폰 Xs","오즈모","보조배터리 (큰거/작은거)","노트북 충전기","외장하드","헤드폰 (회사에서 가져오기)","3in1 충전기 (회사에서 가져오기)","손풍기 / 부채","휴대용 포트","스트랩"]},
+  {title:"기타 / 옷 / 화장품", icon:"🧴", items:["옷","화장품","샤워기 필터","쿨링패드","상비약"]},
+  {title:"먹을거", icon:"🍱", items:["햇반 작은거 4개","누룽지 2회분","참치캔 작은거 3개","닭가슴살 스팸 1캔","라면 2개"]},
 ];
 
-/* ---------- HELPERS ---------- */
+/* ===== HELPERS ===== */
 const KIND_EMOJI = {flight:"✈️", move:"", food:"🍽️", see:"📍", shop:"🛍️", rest:"🛌"};
 function mapUrl(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
 function resvBadge(r){
@@ -417,154 +439,246 @@ function resvBadge(r){
   if(r==="free") return '<span class="badge b-free">예약불필요</span>';
   return "";
 }
-const moveSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const SLOT_CLASS = {"아침":"am","점심":"lunch","저녁":"dinner","야식":"night","애프터눈티":"tea"};
+function slotBadge(s){ if(!s) return ""; return `<span class="slot ${SLOT_CLASS[s]||"alt"}">${s}</span>`; }
+function dash(s){ return (s||"").replace(/—/g,"-"); }
 const clockSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+const moveSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
-/* ---------- PLAN ---------- */
-const daybar = document.getElementById("daybar");
-const planBody = document.getElementById("plan-body");
-DAYS.forEach((d,i)=>{
-  const c = document.createElement("div");
-  c.className = "chip" + (i===0?" active":"");
-  c.innerHTML = `<b>${d.n}일</b><small>${d.date}</small>`;
-  c.onclick = ()=>selectDay(i);
-  daybar.appendChild(c);
-});
-function selectDay(i){
-  [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===i));
-  const d = DAYS[i];
-  let h = `<div class="dayhead"><h2>${d.n}일차 · ${d.date} <span class="dow">(${d.dow})</span></h2><div class="theme">${d.theme}</div></div>`;
-  h += '<div class="tl">';
-  d.events.forEach(e=>{
-    const cls = (e.k==="move")?"ev move":"ev";
-    h += `<div class="${cls}" data-kind="${e.k}"><div class="card">`;
-    if(e.k==="move"){
-      h += `<div class="time">${e.t}</div>`;
-      h += `<div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48);margin-top:1px">${e.ttl}</div>`;
-      if(e.move) h += `<div class="move-line">${moveSvg}${e.move}</div>`;
-    }else{
-      h += `<div class="time">${e.t}</div>`;
-      h += `<div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${e.ttl} ${resvBadge(e.resv)} ${e.hour?'<span class="badge b-hour">'+e.hour+'</span>':''}</div>`;
-      if(e.note) h += `<div class="note">${e.note}</div>`;
-      if(e.move) h += `<div class="move-line" style="margin-top:6px">${moveSvg}${e.move}</div>`;
-      if(e.subs){ h += '<ul class="sub-list">'; e.subs.forEach(s=>h+=`<li>${s}</li>`); h += '</ul>'; }
-      if(e.map) h += `<a class="maplink" href="${mapUrl(e.map)}" target="_blank" rel="noopener">지도에서 보기 ›</a>`;
-    }
-    h += '</div></div>';
-  });
-  h += '</div>';
-  planBody.innerHTML = h;
-  window.scrollTo({top:0, behavior:"smooth"});
+const MOVE_RAW = [
+  [1,"튜브 25분 · Embankment → Notting Hill Gate","LNKigi3sJKkKfNNM6"],
+  [1,"튜브 20분 · Notting Hill Gate → Tottenham Court Rd","ovzC4sgtQU7NRDji6"],
+  [1,"도보 13분 · 950m","4RnCgraDtrrzBAPa9"],
+  [2,"도보 8분 · 550m","aNfYCFcakfWhWdLW6"],
+  [2,"도보 13분 · 900m","a4iqYbGQffL8YW5a9"],
+  [2,"버스 37분 · 15번","T5KM3AY1rRBiG59s8"],
+  [2,"튜브 24분 또는 보트 29분 · London Bridge → Westminster","9ZPDWyGsqkfh9mCp8"],
+  [2,"도보 19분 · 1.3km","3b42p1Lfat3X3PNd9"],
+  [3,"도보 19분 · 1.3km","MenzY66T7WgYUwej6"],
+  [3,"도보 3분 · 220m","Uz824CkkUTAwPL7a8"],
+  [3,"도보 20분 · 1.4km","t71GLqWfLLNSFZMP6"],
+  [4,"튜브 26분 · Charing Cross → Edgware Road","vXW4UsMiHNqdMw186"],
+  [4,"도보 15분 · 1.1km","jS8SjuiCSR8oqHNBA"],
+  [5,"튜브 35분 · Mansion House → High Street Kensington","MuUwezJGXYTNW7Vz6"],
+  [5,"튜브 37분 · Mansion House → Gloucester Road","NxkBmDcEj2dh6mep7"],
+  [7,"버스 19분 · 49번","JURWPrp793prsyxh7"],
+  [7,"버스 20분 · 19번","WVKaq7WakvNrHiX8A"],
+  [7,"버스 16분 · 9·452번","ap77NXfgPpPRPtmbA"],
+  [8,"튜브 50분 · High St Kensington → Paddington → Heathrow","KxyxSdagvdwa9pvL7"],
+];
+const norm = s => (s||"").replace(/[\s·\/→]/g,"");
+const MOVE_LINKS = {};
+MOVE_RAW.forEach(([d,m,id])=>{ MOVE_LINKS[d+"|"+norm(m)] = "https://maps.app.goo.gl/"+id; });
+function moveLink(i,m){ return m ? (MOVE_LINKS[i+"|"+norm(m)]||null) : null; }
+
+const TUBE_RD = '<span class="rd" title="Underground"><svg width="22" height="16" viewBox="0 0 44 32" aria-hidden="true"><circle cx="22" cy="16" r="11" fill="none" stroke="#DC241F" stroke-width="6"/><rect x="3" y="12.5" width="38" height="7" fill="#10069F"/></svg></span>';
+const RAIL_RD = '<span class="rd" title="National Rail"><svg width="20" height="14" viewBox="0 0 40 28" aria-hidden="true"><rect width="40" height="28" rx="4" fill="#C00"/><path d="M6 14h22M24 14l-6-5M24 14l-6 5M34 14H14M16 14l6 5M16 14l6-5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span>';
+const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"} };
+function parseRoute(t){
+  if(!t) return null;
+  const parts = t.split(" · "); const head = parts[0]; const tail = parts.slice(1).join(" · ").trim();
+  const modeMap={"튜브":"tube","버스":"bus","도보":"walk","보트":"boat","기차":"rail","택시":"taxi"};
+  const alts = head.split("또는").map(s=>s.trim());
+  const legs = [];
+  alts.forEach(a=>{ const m=a.match(/(튜브|버스|도보|보트|기차|택시)\s*(\d+\s*분)?/); if(m) legs.push({type:modeMap[m[1]], dur:(m[2]||"").replace(/\s/g,"")}); });
+  if(!legs.length) return null;
+  let path=null, num=null, dist=null;
+  if(/→/.test(tail)) path=tail;
+  else { const bn=tail.match(/([\d·]+)\s*번/); if(bn) num=bn[1]; const dm=tail.match(/([\d.]+\s*(?:km|m))/); if(dm) dist=dm[1].replace(/\s/g,""); }
+  legs.forEach(l=>{ if(l.type==="bus"&&num) l.num=num; });
+  return {legs, path, num, dist, alt:alts.length>1};
 }
-selectDay(0);
+function legHTML(l){
+  if(l.type==="bus") return `<span class="leg"><span class="busnum">${l.num||"버스"}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
+  const mi = MODE_INFO[l.type]||{label:l.type, icon:""};
+  return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
+}
+function routeHTML(i, e){
+  const r = parseRoute(e.move);
+  if(!r) return `<div class="move-line">${moveSvg}${e.move}</div>`;
+  const sep = r.alt ? '<span class="rt-alt">또는</span>' : '<span class="rt-arrow">›</span>';
+  const strip = r.legs.map(legHTML).join(sep);
+  const detail = r.path || r.dist || "";
+  const url = moveLink(i, e.move);
+  let h = '<div class="route"><div class="route-strip">'+strip+'</div>';
+  if(detail) h += `<div class="rt-path">${detail}</div>`;
+  if(url) h += `<div class="rt-foot"><a class="maplink mini" href="${url}" target="_blank" rel="noopener">지도 ›</a></div>`;
+  h += '</div>';
+  return h;
+}
 
-/* ---------- FOOD ---------- */
-(function(){
-  let h = ""; let curDay = null;
-  FOOD.forEach(f=>{
-    if(f.day!==curDay){
-      if(curDay!==null) h += "</div>";
-      curDay = f.day;
-      h += `<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`;
+/* ===== TIME (London now-line) ===== */
+function londonParts(){
+  const f = new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  const p={}; f.formatToParts(new Date()).forEach(x=>{ if(x.type!=='literal') p[x.type]=x.value; });
+  if(p.hour==='24') p.hour='00'; return p;
+}
+function londonNowMs(){ const p=londonParts(); return Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute); }
+function londonHHMM(){ const p=londonParts(); return `${p.hour}:${p.minute}`; }
+function parseTimeRange(t){
+  if(!t) return null; const m=t.match(/(\d{1,2}):(\d{2})/g); if(!m) return null;
+  const toMin=x=>{const[h,mm]=x.split(':').map(Number);return h*60+mm;};
+  const s=toMin(m[0]); let e=m[1]?toMin(m[1]):s; if(e<s)e+=1440; return {s,e};
+}
+const dayMeta = DAYS.map(d=>{
+  const DD=parseInt(d.date.split('.')[1],10); const base=Date.UTC(2026,6,DD); let last=0;
+  return d.events.map(e=>{ const r=parseTimeRange(e.t); const s=r?r.s:last; const en=r?r.e:s; last=s; return {s:base+s*60000, e:base+en*60000}; });
+});
+const NOW = londonNowMs(); const NOW_HHMM = londonHHMM();
+let MARK=null;
+outer: for(let i=0;i<DAYS.length;i++){ for(let j=0;j<dayMeta[i].length;j++){ if(NOW<dayMeta[i][j].e){ MARK={d:i,j}; break outer; } } }
+if(!MARK){ const li=DAYS.length-1; MARK={d:li, j:DAYS[li].events.length}; }
+function nowLineHTML(){ return `<div class="nowline" id="nowmark"><span class="nl-label">지금 ${NOW_HHMM} 런던</span><span class="nl-bar"></span></div>`; }
+
+/* ===== PLAN ===== */
+const daybar=document.getElementById("daybar"); const planBody=document.getElementById("plan-body");
+DAYS.forEach((d,i)=>{ const c=document.createElement("div"); c.className="chip"; c.innerHTML=`<b>${d.n}일</b><small>${d.date}</small>`; c.onclick=()=>selectDay(i); daybar.appendChild(c); });
+function selectDay(i, toNow){
+  [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===i));
+  const d=DAYS[i];
+  let h=`<div class="dayhead"><h2>${d.n}일차 · ${d.date} <span class="dow">(${d.dow})</span></h2><div class="theme">${d.theme}</div></div><div class="tl">`;
+  d.events.forEach((e,j)=>{
+    if(MARK.d===i && MARK.j===j) h+=nowLineHTML();
+    const meta=dayMeta[i][j]; const ongoing=meta && NOW>=meta.s && NOW<meta.e;
+    let cls=(e.k==="move")?"ev move":"ev"; if(ongoing) cls+=" current";
+    h+=`<div class="${cls}" data-kind="${e.k}"><div class="card">`;
+    if(e.k==="move"){
+      h+=`<div class="time">${e.t}</div><div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48);margin-top:1px">${dash(e.ttl)}</div>`;
+      if(e.move) h+=routeHTML(i,e);
+    }else{
+      h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)} ${resvBadge(e.resv)} ${e.hour?'<span class="badge b-hour">'+e.hour+'</span>':''}</div>`;
+      if(e.note) h+=`<div class="note">${e.note}</div>`;
+      if(e.move) h+=routeHTML(i,e);
+      if(e.subs){ h+='<ul class="sub-list">'; e.subs.forEach(s=>h+=`<li>${s}</li>`); h+='</ul>'; }
+      if(e.map) h+=`<div class="card-foot"><a class="maplink" href="${mapUrl(e.map)}" target="_blank" rel="noopener">지도 ›</a></div>`;
     }
-    h += '<div class="row"><div class="r-top"><div>';
-    h += `<div class="r-name">${f.name} ${resvBadge(f.resv)}</div>`;
-    let meta = [];
-    if(f.slot) meta.push(`<span>🍴 ${f.slot}</span>`);
-    if(f.area && f.area!=="-") meta.push(`<span>📍 ${f.area}</span>`);
-    if(f.menu) meta.push(`<span>${f.menu}</span>`);
-    if(f.hour) meta.push(`<span>${clockSvg} ${f.hour}</span>`);
-    h += `<div class="r-meta">${meta.join("")}</div></div></div>`;
-    if(f.map) h += `<div class="r-foot"><span></span><a class="maplink" style="margin-top:0" href="${mapUrl(f.map)}" target="_blank" rel="noopener">지도 ›</a></div>`;
-    h += '</div>';
+    h+='</div></div>';
   });
-  h += "</div>";
-  document.getElementById("food-body").innerHTML = h;
-})();
+  if(MARK.d===i && MARK.j>=d.events.length) h+=nowLineHTML();
+  h+='</div>';
+  planBody.innerHTML=h;
+  if(toNow){ const nm=document.getElementById("nowmark"); if(nm) nm.scrollIntoView({block:"center"}); else window.scrollTo({top:0}); const chip=daybar.children[i]; if(chip) chip.scrollIntoView({inline:"center",block:"nearest"}); }
+  else window.scrollTo({top:0, behavior:"smooth"});
+}
 
-/* ---------- BOOK ---------- */
+/* ===== detail registry ===== */
+const DETAILS = {};
+function regDetail(obj){ const id="d"+(Object.keys(DETAILS).length); DETAILS[id]=obj; return id; }
+function kvRow(k,v){ return v ? `<div class="kv"><div class="k">${k}</div><div class="v">${v}</div></div>` : ""; }
+let prevView = "place";
+function openDetail(id){
+  const o=DETAILS[id]; if(!o) return;
+  let h=`<button class="back" onclick="closeDetail()">‹ 뒤로</button>`;
+  h+=`<div class="detail-hd"><div class="d-cat">${o.cat||""}</div><h2>${o.title}</h2><div class="d-badges">`;
+  if(o.dayLabel) h+=`<span class="badge b-free">${o.dayLabel}</span>`;
+  if(o.slot) h+=slotBadge(o.slot);
+  h+=resvBadge(o.resv)+`</div></div>`;
+  h+=`<div class="d-card">`;
+  h+=kvRow("위치", o.area);
+  h+=kvRow("입장", o.time);
+  h+=kvRow("운영시간", o.hour);
+  h+=kvRow("비용", o.price);
+  h+=kvRow("메뉴", o.menu);
+  h+=kvRow("예매처", o.via);
+  h+=kvRow("비고", o.note);
+  h+=`</div><div class="d-actions">`;
+  if(o.map) h+=`<a class="d-btn primary" href="${mapUrl(o.map)}" target="_blank" rel="noopener">📍 지도에서 보기</a>`;
+  h+=`<a class="d-btn ghost" href="${NOTION_URL}" target="_blank" rel="noopener">노션에서 열기 ›</a>`;
+  h+=`</div>`;
+  document.getElementById("detail-body").innerHTML=h;
+  showView("detail", true);
+  window.scrollTo({top:0});
+}
+function closeDetail(){ showView(prevView); }
+
+/* ===== FOOD ===== */
 (function(){
-  let h = "";
-  BOOK.forEach(g=>{
-    h += `<div class="group"><div class="group-h">${g.cat} <span class="cnt">${g.items.length}곳</span></div>`;
-    g.items.forEach(it=>{
-      h += '<div class="row"><div class="r-top">';
-      h += `<div class="r-name">${it.name}</div>${resvBadge(it.resv)}</div>`;
-      let meta = [];
-      meta.push(`<span>🗓️ ${it.date}</span>`);
-      if(it.time) meta.push(`<span>⏰ ${it.time}</span>`);
-      if(it.price) meta.push(`<span>💷 ${it.price}</span>`);
-      if(it.hour) meta.push(`<span>${clockSvg} ${it.hour}</span>`);
-      h += `<div class="r-meta">${meta.join("")}</div>`;
-      if(it.via || it.map){
-        h += '<div class="r-foot">';
-        h += it.via ? `<span class="pill">${it.via}</span>` : "<span></span>";
-        if(it.map) h += `<a class="maplink" style="margin-top:0" href="${mapUrl(it.map)}" target="_blank" rel="noopener">지도 ›</a>`;
-        h += '</div>';
-      }
-      h += '</div>';
-    });
-    h += "</div>";
+  let h=""; let cur=null;
+  FOOD.forEach(f=>{
+    if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
+    const title=f.name||f.area||"미정"; const ic=f.icon?f.icon+" ":"";
+    const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map});
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-top"><div>`;
+    h+=`<div class="r-name">${slotBadge(f.slot)} ${ic}${title} ${resvBadge(f.resv)}</div>`;
+    let meta=[]; if(f.name&&f.area) meta.push(`<span>📍 ${f.area}</span>`); if(f.menu) meta.push(`<span>🍴 ${f.menu}</span>`); if(f.hour) meta.push(`<span>${clockSvg} ${f.hour}</span>`);
+    if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
+    h+=`</div></div></div>`;
   });
-  document.getElementById("book-body").innerHTML = h;
+  h+="</div>";
+  document.getElementById("food-body").innerHTML=h;
 })();
 
-/* ---------- PREP (checklist, persisted) ---------- */
-const STORE_KEY = "london2026_checks";
+/* ===== PLACES (명소) ===== */
+(function(){
+  let h=""; let cur=null;
+  PLACES.forEach(p=>{
+    if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
+    const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map});
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-top"><div class="r-name">${p.type} ${p.name}</div>${resvBadge(p.resv)}</div>`;
+    let meta=[]; meta.push(`<span>${p.cat}</span>`); if(p.time) meta.push(`<span>⏰ ${p.time}</span>`); if(p.price) meta.push(`<span>💷 ${p.price}</span>`); if(p.hour) meta.push(`<span>${clockSvg} ${p.hour}</span>`);
+    h+=`<div class="r-meta">${meta.join("")}</div></div>`;
+  });
+  h+="</div>";
+  document.getElementById("place-body").innerHTML=h;
+})();
+
+/* ===== 항공·숙소 ===== */
+(function(){
+  let h="";
+  // flight
+  h+=`<div class="group"><div class="group-h">✈️ 항공</div><div class="info-card">`;
+  h+=`<div class="ic-h">${FLIGHT.airline} ${resvBadge(FLIGHT.status)}</div><div class="ic-sub">${FLIGHT.cost}</div>`;
+  FLIGHT.legs.forEach(l=>{
+    h+=`<div class="flight-leg"><div class="fl-end"><div class="fl-time">${l.dep}</div><div class="fl-code">${l.depCode}</div></div>`;
+    h+=`<div class="fl-mid">${l.no}<div class="fl-line"></div>${l.date}</div>`;
+    h+=`<div class="fl-end"><div class="fl-time">${l.arr}</div><div class="fl-code">${l.arrCode}</div></div></div>`;
+  });
+  h+=kvRow("서류", FLIGHT.docs.join(" · "));
+  h+=`<div class="d-actions" style="margin-top:12px"><a class="d-btn ghost" href="${NOTION_URL}" target="_blank" rel="noopener">노션에서 예약내역 · 수화물 규정 보기 ›</a></div>`;
+  h+=`</div></div>`;
+  // hotels
+  h+=`<div class="group"><div class="group-h">🏨 숙소</div>`;
+  ACCOM.forEach(a=>{
+    h+=`<div class="info-card"><div class="ic-h">${a.name}</div><div class="ic-sub">${a.tag} · ${a.period}</div>`;
+    h+=kvRow("위치", a.area);
+    h+=kvRow("체크인", a.checkin);
+    h+=kvRow("체크아웃", a.checkout);
+    h+=`<div class="d-actions" style="margin-top:12px"><a class="d-btn primary" href="${a.mapHref||mapUrl(a.map)}" target="_blank" rel="noopener">📍 지도에서 보기</a></div></div>`;
+  });
+  h+=`</div>`;
+  document.getElementById("book-body").innerHTML=h;
+})();
+
+/* ===== PREP ===== */
+const STORE_KEY="london2026_checks";
 function loadChecks(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||"{}"); }catch(e){ return {}; } }
 function saveChecks(o){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(o)); }catch(e){} }
-let checks = loadChecks();
-
+let checks=loadChecks();
 function renderPrep(){
-  const body = document.getElementById("prep-body");
-  let h = "";
+  const body=document.getElementById("prep-body"); let h="";
   PREP.forEach((sec,si)=>{
-    let all=0, done=0;
-    sec.groups.forEach(g=>g.items.forEach(it=>{ all++; if(checks[sec.title+"|"+it]) done++; }));
-    const open = si===0 ? " open" : "";
-    h += `<div class="acc${open}" data-sec="${si}">`;
-    h += `<div class="acc-h"><div class="lt">${sec.icon} ${sec.title}</div>`;
-    h += `<div style="display:flex;align-items:center;gap:10px"><span class="prog">${done}/${all}</span><span class="arr">›</span></div></div>`;
-    h += '<div class="acc-b">';
-    sec.groups.forEach(g=>{
-      g.items.forEach(it=>{
-        const key = sec.title+"|"+it;
-        const ck = checks[key] ? "checked" : "";
-        h += `<label class="chk"><input type="checkbox" data-key="${key.replace(/"/g,'&quot;')}" ${ck}><span>${it}</span></label>`;
-      });
-    });
-    h += '</div></div>';
+    let all=sec.items.length, done=sec.items.filter(it=>checks[sec.title+"|"+it]).length;
+    h+=`<div class="acc${si===0?" open":""}" data-sec="${si}"><div class="acc-h"><div class="lt">${sec.icon} ${sec.title}</div><div style="display:flex;align-items:center;gap:10px"><span class="prog">${done}/${all}</span><span class="arr">›</span></div></div><div class="acc-b">`;
+    sec.items.forEach(it=>{ const key=sec.title+"|"+it; h+=`<label class="chk"><input type="checkbox" data-key="${key.replace(/"/g,'&quot;')}" ${checks[key]?"checked":""}><span>${it}</span></label>`; });
+    h+=`</div></div>`;
   });
-  body.innerHTML = h;
-  body.querySelectorAll(".acc-h").forEach(hh=>{
-    hh.onclick = (e)=>{ if(e.target.tagName==="INPUT") return; hh.parentElement.classList.toggle("open"); };
-  });
-  body.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-    cb.onchange = ()=>{
-      checks[cb.dataset.key] = cb.checked;
-      saveChecks(checks);
-      const acc = cb.closest(".acc"); const si = +acc.dataset.sec;
-      let all=0, done=0;
-      PREP[si].groups.forEach(g=>g.items.forEach(it=>{ all++; if(checks[PREP[si].title+"|"+it]) done++; }));
-      acc.querySelector(".prog").textContent = done+"/"+all;
-    };
-  });
+  body.innerHTML=h;
+  body.querySelectorAll(".acc-h").forEach(hh=>{ hh.onclick=(e)=>{ if(e.target.tagName==="INPUT") return; hh.parentElement.classList.toggle("open"); }; });
+  body.querySelectorAll('input[type="checkbox"]').forEach(cb=>{ cb.onchange=()=>{ checks[cb.dataset.key]=cb.checked; saveChecks(checks); const acc=cb.closest(".acc"); const si=+acc.dataset.sec; const all=PREP[si].items.length; const done=PREP[si].items.filter(it=>checks[PREP[si].title+"|"+it]).length; acc.querySelector(".prog").textContent=done+"/"+all; }; });
 }
 renderPrep();
-document.getElementById("resetChk").onclick = ()=>{
-  if(confirm("체크 항목을 전부 초기화할까요?")){ checks={}; saveChecks(checks); renderPrep(); }
-};
+document.getElementById("resetChk").onclick=()=>{ if(confirm("체크 항목을 전부 초기화할까요?")){ checks={}; saveChecks(checks); renderPrep(); } };
 
-/* ---------- NAV ---------- */
-const views = {plan:document.getElementById("view-plan"), food:document.getElementById("view-food"), book:document.getElementById("view-book"), prep:document.getElementById("view-prep")};
-document.querySelectorAll("#nav button").forEach(b=>{
-  b.onclick = ()=>{
-    const v = b.dataset.view;
-    document.querySelectorAll("#nav button").forEach(x=>x.classList.toggle("active", x===b));
-    Object.entries(views).forEach(([k,el])=>el.classList.toggle("active", k===v));
-    window.scrollTo({top:0});
-  };
-});
+/* ===== NAV ===== */
+const views={plan:document.getElementById("view-plan"), food:document.getElementById("view-food"), place:document.getElementById("view-place"), book:document.getElementById("view-book"), prep:document.getElementById("view-prep"), detail:document.getElementById("view-detail")};
+function showView(v, fromDetail){
+  Object.entries(views).forEach(([k,el])=>el.classList.toggle("active", k===v));
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
+  if(!fromDetail && v!=="detail") window.scrollTo({top:0});
+}
+document.querySelectorAll("#nav button").forEach(b=>{ b.onclick=()=>{ prevView=b.dataset.view; showView(b.dataset.view); if(b.dataset.view==="plan") selectDay(MARK.d, true); }; });
+
+selectDay(MARK.d, true);
 </script>
 </body>
 </html>
