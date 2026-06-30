@@ -164,12 +164,6 @@
   .lb img{max-width:100%; height:auto; margin:auto; cursor:zoom-in; padding:env(safe-area-inset-top) 0 40px;}
   .lb img.zoom{max-width:none; width:200%; cursor:zoom-out; padding-top:env(safe-area-inset-top);}
   .lb-close{position:fixed; top:max(12px,calc(env(safe-area-inset-top) + 4px)); right:14px; z-index:301; color:#fff; font-size:22px; line-height:38px; text-align:center; background:rgba(0,0,0,.45); border:none; width:38px; height:38px; border-radius:50%; cursor:pointer;}
-  /* 바우처 뷰어: 전체화면 + 닫기 버튼 */
-  .vv{position:fixed; inset:0; z-index:250; background:#1d1d1f; display:none;}
-  .vv.open{display:block;}
-  #vv-body, .vv-frame{width:100%; height:100%; border:none; display:block; background:#1d1d1f;}
-  .vv-img{width:100%; height:100%; object-fit:contain; background:#1d1d1f;}
-  .vv-x{position:fixed; top:max(12px,calc(env(safe-area-inset-top) + 6px)); right:14px; z-index:252; width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; border:none; font-size:20px; line-height:38px; text-align:center; cursor:pointer;}
   .kv{display:flex; gap:10px; padding:16px 0; border-top:1px solid var(--hairline-a); font-size:14.5px; line-height:1.5;}
   .kv:first-of-type{margin-top:0;}
   .kv .k{flex:0 0 76px; color:var(--ink-48); font-weight:600; letter-spacing:-0.2px;}
@@ -289,10 +283,6 @@
 
 <div id="lb" class="lb" onclick="lbTap(event)"><button class="lb-close" aria-label="닫기">×</button><img id="lbimg" alt=""></div>
 
-<div id="vv" class="vv">
-  <div id="vv-body"></div>
-  <button class="vv-x" aria-label="닫기" onclick="closeVoucher()">✕</button>
-</div>
 
 <script>
 const NOTION_URL = "https://first-amusement-fba.notion.site/2026-07-223807d078df802f8f20d296fd1e1142";
@@ -793,13 +783,7 @@ function openDetail(id){
 function curTab(){ for(const k of ['plan','food','place','book','prep']){ if(views[k].classList.contains('active')) return k; } return prevView||'place'; }
 function openLB(src){ const lb=document.getElementById('lb'), im=document.getElementById('lbimg'); im.className=''; im.src=src; lb.classList.add('open'); lb.scrollTop=0; }
 function lbTap(e){ const im=document.getElementById('lbimg'); if(e.target===im){ im.classList.toggle('zoom'); document.getElementById('lb').scrollTop=0; return; } document.getElementById('lb').classList.remove('open'); }
-function openVoucher(url, label){
-  const vv=document.getElementById('vv'), body=document.getElementById('vv-body');
-  const isImg=/\.(png|jpe?g|gif|webp)(\?|$)/i.test(url);
-  body.innerHTML = isImg ? `<img class="vv-img" src="${url}" alt="">` : `<iframe class="vv-frame" src="${url}" title="voucher"></iframe>`;
-  vv.classList.add('open');
-}
-function closeVoucher(){ const vv=document.getElementById('vv'); vv.classList.remove('open'); document.getElementById('vv-body').innerHTML=''; }
+function openVoucher(url, label){ window.open(url, '_blank', 'noopener'); }
 function closeDetail(){ views.detail.classList.remove("active"); }
 function openAirInfo(){
   const sec=[["예약내역 상세",AIR_IMGS.reservation||[]],["취소수수료",AIR_IMGS.cancel||[]],["수화물 규정",AIR_IMGS.baggage||[]]];
