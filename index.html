@@ -703,7 +703,7 @@ function dayHTML(d,i){
       h+=`<div class="time">${e.t}</div><div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48);margin-top:1px">${dash(e.ttl)}</div>`;
       if(e.move) h+=routeHTML(i,e);
     }else{
-      h+=`<div class="time">${e.t}</div><div class="ttl">${kindIcon(e.k)?'<span class="kico">'+kindIcon(e.k)+'</span> ':''}${dash(e.ttl)} ${resvBadge(e.resv)}</div>`;
+      h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)} ${resvBadge(e.resv)}</div>`;
       if(e.note) h+=`<div class="note">${e.note}</div>`;
       if(e.hour) h+=`<div class="ev-hours"><span>${clockSvg} ${e.hour}</span></div>`;
       if(e.move) h+=routeHTML(i,e);
