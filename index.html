@@ -143,6 +143,7 @@
   .slot{font-size:11px; font-weight:700; letter-spacing:-0.08px; padding:3px 10px; border-radius:var(--r-pill); white-space:nowrap; line-height:1.3; background:#eceef1; color:var(--ink-48);}
   .slot.am,.slot.lunch,.slot.dinner,.slot.night,.slot.tea{background:#eceef1; color:var(--ink-48);}
   .slot.alt{background:var(--pearl); color:var(--ink-48); border:1px solid var(--hairline-a);}
+  .vch{display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; letter-spacing:-0.08px; padding:3px 9px; border-radius:var(--r-pill); background:rgba(0,102,204,.10); color:var(--primary); white-space:nowrap;}
 
   /* accom / flight cards */
   .info-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:18px; margin-bottom:12px;}
@@ -531,6 +532,20 @@ const FOOD_PAGES = [
   "317807d078df802580ecff1e3749f9fe",
 ];
 FOOD.forEach((f,i)=>{ if(FOOD_PAGES[i]) f.pg = NB + FOOD_PAGES[i]; });
+// 예약 바우처 PDF (레포 vouchers/ 폴더의 로컬 파일)
+const VOUCHERS={
+  "The Ship Tavern":"vouchers/voucher_ship_tavern.pdf",
+  "Mr Fogg's Tavern":"vouchers/voucher_mr_foggs.pdf",
+  "The Promenade (The Dorchester)":"vouchers/voucher_promenade.pdf",
+  "웨스트민스터 사원 (Westminster Abbey)":"vouchers/voucher_westminster.pdf",
+  "뮤지컬 패딩턴":"vouchers/voucher_paddington.pdf",
+  "세인트 폴 대성당 (St. Paul's Cathedral)":"vouchers/voucher_st_pauls.pdf",
+  "테이트 모던 (Tate Modern)":"vouchers/voucher_tate_modern.pdf",
+  "자연사박물관 (Natural History Museum)":"vouchers/voucher_natural_history.pdf",
+  "내셔널 갤러리 (The National Gallery)":"vouchers/voucher_national_gallery.pdf",
+};
+FOOD.forEach(f=>{ if(VOUCHERS[f.name]) f.voucher=VOUCHERS[f.name]; });
+PLACES.forEach(p=>{ if(VOUCHERS[p.name]) p.voucher=VOUCHERS[p.name]; });
 
 const FLIGHT = {
   airline:"대한항공", status:"ok", resNo:"FURTGR / FUR6EW", cost:"802,000원 + 140,000마일",
@@ -571,6 +586,8 @@ const pinSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stro
 const forkSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v20"/><path d="M4 2v5a3 3 0 0 0 6 0V2"/><path d="M17 2c-1.6 1.4-2.4 3.8-2.4 6.5 0 2.2 0.9 3.5 2.4 3.5v10"/></svg>';
 const ticketSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 1.6 1.6 0 0 0 0 3 1.6 1.6 0 0 0 0 3 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 1.6 1.6 0 0 0 0-3 1.6 1.6 0 0 0 0-3Z"/><path d="M15 7v10" stroke-dasharray="2 2"/></svg>';
 const tagSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V5a2 2 0 0 1 2-2h8l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>';
+const clipSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-8.49 8.49a5 5 0 0 1-7.07-7.07l8.49-8.49a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.41-1.41l7.78-7.78"/></svg>';
+function vchChip(v){ return v ? `<span class="vch">${clipSvg} 바우처</span>` : ""; }
 const moveSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
 const MOVE_RAW = [
@@ -721,7 +738,8 @@ function openDetail(id){
   h+=kvRow("예매처", o.via);
   h+=kvRow("비고", o.note);
   h+=`</div><div class="d-actions">`;
-  if(o.map) h+=`<a class="d-btn primary" href="${mapUrl(o.map)}" target="_blank" rel="noopener">지도에서 보기</a>`;
+  if(o.voucher) h+=`<a class="d-btn primary" href="${o.voucher}" target="_blank" rel="noopener">${clipSvg} 예약내역 확인하기</a>`;
+  if(o.map) h+=`<a class="d-btn ${o.voucher?'ghost':'primary'}" href="${mapUrl(o.map)}" target="_blank" rel="noopener">지도에서 보기</a>`;
   h+=`<a class="d-btn ghost" href="${o.pg||NOTION_URL}" target="_blank" rel="noopener">노션에서 전체화면으로 열기 ›</a>`;
   h+=`</div>`;
   if(o.pg) h+=nbContent(o.pg);
@@ -756,8 +774,8 @@ function openAirInfo(){
   FOOD.forEach(f=>{
     if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
     const title=f.name||f.area||"미정"; const ic=f.icon?f.icon+" ":"";
-    const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg});
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${slotBadge(f.slot)} ${ic}${title} ${resvBadge(f.resv)}</div>`;
+    const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg, voucher:f.voucher});
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${slotBadge(f.slot)} ${ic}${title} ${resvBadge(f.resv)} ${vchChip(f.voucher)}</div>`;
     let meta=[]; if(f.name&&f.area) meta.push(`<span>${pinSvg} ${f.area}</span>`); if(f.menu) meta.push(`<span>${forkSvg} ${f.menu}</span>`); if(f.hour) meta.push(`<span>${clockSvg} ${f.hour}</span>`);
     if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
     h+=`</div>`;
@@ -771,8 +789,8 @@ function openAirInfo(){
   let h=""; let cur=null;
   PLACES.forEach(p=>{
     if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
-    const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg});
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name} ${resvBadge(p.resv)}</div>`;
+    const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher});
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name} ${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
     let meta=[]; if(p.time) meta.push(`<span>${ticketSvg} ${p.time}</span>`); if(p.price) meta.push(`<span>${tagSvg} ${p.price}</span>`); if(p.hour) meta.push(`<span>${clockSvg} ${p.hour}</span>`);
     if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
     h+=`</div>`;
