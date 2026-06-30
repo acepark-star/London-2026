@@ -164,19 +164,12 @@
   .lb img{max-width:100%; height:auto; margin:auto; cursor:zoom-in; padding:env(safe-area-inset-top) 0 40px;}
   .lb img.zoom{max-width:none; width:200%; cursor:zoom-out; padding-top:env(safe-area-inset-top);}
   .lb-close{position:fixed; top:max(12px,calc(env(safe-area-inset-top) + 4px)); right:14px; z-index:301; color:#fff; font-size:22px; line-height:38px; text-align:center; background:rgba(0,0,0,.45); border:none; width:38px; height:38px; border-radius:50%; cursor:pointer;}
-  /* 바우처 인앱 뷰어 */
+  /* 바우처 뷰어: 전체화면 + 닫기 버튼 */
   .vv{position:fixed; inset:0; z-index:250; background:#1d1d1f; display:none;}
   .vv.open{display:block;}
   #vv-body, .vv-frame{width:100%; height:100%; border:none; display:block; background:#1d1d1f;}
   .vv-img{width:100%; height:100%; object-fit:contain; background:#1d1d1f;}
-  .vv-hot{position:fixed; top:0; left:0; right:0; height:max(64px, calc(env(safe-area-inset-top) + 48px)); z-index:251;}
-  .vv-top{position:fixed; top:0; left:0; right:0; z-index:252; display:flex; align-items:center; justify-content:space-between;
-    padding:max(10px,calc(env(safe-area-inset-top) + 6px)) 14px 10px; background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0));
-    transition:opacity .25s ease, transform .25s ease; pointer-events:none;}
-  .vv-top > *{pointer-events:auto;}
-  .vv.barhide .vv-top{opacity:0; transform:translateY(-10px); pointer-events:none;}
-  .vv-badge{background:rgba(0,0,0,.5); color:#fff; font-size:13px; font-weight:700; letter-spacing:-0.1px; padding:5px 12px; border-radius:999px;}
-  .vv-x{width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.5); color:#fff; border:none; font-size:20px; line-height:38px; text-align:center; cursor:pointer;}
+  .vv-x{position:fixed; top:max(12px,calc(env(safe-area-inset-top) + 6px)); right:14px; z-index:252; width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; border:none; font-size:20px; line-height:38px; text-align:center; cursor:pointer;}
   .kv{display:flex; gap:10px; padding:16px 0; border-top:1px solid var(--hairline-a); font-size:14.5px; line-height:1.5;}
   .kv:first-of-type{margin-top:0;}
   .kv .k{flex:0 0 76px; color:var(--ink-48); font-weight:600; letter-spacing:-0.2px;}
@@ -298,8 +291,7 @@
 
 <div id="vv" class="vv">
   <div id="vv-body"></div>
-  <div class="vv-hot" onclick="vvToggle()"></div>
-  <div class="vv-top"><span id="vv-badge" class="vv-badge">바우처</span><button class="vv-x" aria-label="닫기" onclick="closeVoucher()">✕</button></div>
+  <button class="vv-x" aria-label="닫기" onclick="closeVoucher()">✕</button>
 </div>
 
 <script>
@@ -801,16 +793,12 @@ function openDetail(id){
 function curTab(){ for(const k of ['plan','food','place','book','prep']){ if(views[k].classList.contains('active')) return k; } return prevView||'place'; }
 function openLB(src){ const lb=document.getElementById('lb'), im=document.getElementById('lbimg'); im.className=''; im.src=src; lb.classList.add('open'); lb.scrollTop=0; }
 function lbTap(e){ const im=document.getElementById('lbimg'); if(e.target===im){ im.classList.toggle('zoom'); document.getElementById('lb').scrollTop=0; return; } document.getElementById('lb').classList.remove('open'); }
-let vvTimer;
 function openVoucher(url, label){
   const vv=document.getElementById('vv'), body=document.getElementById('vv-body');
   const isImg=/\.(png|jpe?g|gif|webp)(\?|$)/i.test(url);
   body.innerHTML = isImg ? `<img class="vv-img" src="${url}" alt="">` : `<iframe class="vv-frame" src="${url}" title="voucher"></iframe>`;
-  document.getElementById('vv-badge').textContent = label || '바우처';
-  vv.classList.add('open'); vv.classList.remove('barhide');
-  clearTimeout(vvTimer); vvTimer=setTimeout(()=>vv.classList.add('barhide'), 3000);
+  vv.classList.add('open');
 }
-function vvToggle(){ const vv=document.getElementById('vv'); vv.classList.toggle('barhide'); if(!vv.classList.contains('barhide')){ clearTimeout(vvTimer); vvTimer=setTimeout(()=>vv.classList.add('barhide'),3000); } }
 function closeVoucher(){ const vv=document.getElementById('vv'); vv.classList.remove('open'); document.getElementById('vv-body').innerHTML=''; }
 function closeDetail(){ views.detail.classList.remove("active"); }
 function openAirInfo(){
@@ -969,11 +957,6 @@ document.addEventListener('touchend',e=>{
   if(go){ DV.style.transform='translateX(100%)'; DV.style.opacity='0.4'; setTimeout(()=>{ closeDetail(); resetDV(); },300); }
   else { DV.style.transform='translateX(0)'; DV.style.opacity='1'; setTimeout(resetDV,300); }
 },{passive:true});
-
-/* 바우처 뷰어: 왼쪽 가장자리에서 오른쪽으로 슬라이드하면 닫기 */
-let vX=0, vY=0, vEdge=false;
-document.addEventListener('touchstart',e=>{ const vv=document.getElementById('vv'); if(!vv.classList.contains('open')||e.touches.length!==1){vEdge=false;return;} vX=e.touches[0].clientX; vY=e.touches[0].clientY; vEdge=vX<=60; },{passive:true});
-document.addEventListener('touchend',e=>{ const vv=document.getElementById('vv'); if(!vv.classList.contains('open')||!vEdge){vEdge=false;return;} const t=e.changedTouches[0]; if(t.clientX-vX>70 && Math.abs(t.clientY-vY)<60) closeVoucher(); vEdge=false; },{passive:true});
 
 gotoNow();
 </script>
