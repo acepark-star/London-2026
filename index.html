@@ -92,7 +92,8 @@
   .card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 16px;}
   .ev.move .card{background:transparent; border:none; padding:5px 15px;}
   .ev.move::before{top:10px;}
-  .ev.move .move-title{margin-top:5px !important;}
+  .ev .move-head{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+  .ev .move-head .move-title{font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--ink-48);}
   .ev .time{font-size:13px; font-weight:600; letter-spacing:-0.08px; color:var(--ink-48); font-variant-numeric:tabular-nums;}
   .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:6px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
   .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:8px; display:flex; align-items:flex-start; gap:6px;}
@@ -155,6 +156,13 @@
   .slot.am,.slot.lunch,.slot.dinner,.slot.night,.slot.tea{background:#eceef1; color:var(--ink-48);}
   .slot.alt{background:var(--pearl); color:var(--ink-48); border:1px solid var(--hairline-a);}
   .vch{display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; letter-spacing:-0.08px; padding:3px 9px; border-radius:var(--r-pill); background:rgba(0,102,204,.10); color:var(--primary); white-space:nowrap;}
+  .docs-intro{font-size:13.5px; line-height:1.5; letter-spacing:-0.2px; color:var(--ink-48); margin:2px 4px 16px;}
+  .doc-row{display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--canvas); border:1px solid var(--hairline-a); border-radius:14px; padding:13px 15px; margin-bottom:8px;}
+  .doc-row .dl{font-size:15px; font-weight:500; letter-spacing:-0.3px; line-height:1.32;}
+  .doc-row .ds{font-size:12.5px; font-weight:400; color:var(--ink-48); margin-top:2px;}
+  .doc-open{flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; letter-spacing:-0.1px; color:var(--primary); background:rgba(0,102,204,.10); border:none; border-radius:var(--r-pill); padding:8px 14px; cursor:pointer;}
+  .doc-open:active{background:rgba(0,102,204,.2);}
+  .doc-todo{flex:0 0 auto; font-size:12px; font-weight:500; color:var(--ink-48); background:var(--pearl); border:1px solid var(--hairline-a); border-radius:var(--r-pill); padding:6px 11px; white-space:nowrap;}
 
   /* accom / flight cards */
   .info-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:18px; margin-bottom:12px;}
@@ -261,7 +269,7 @@
   <section id="view-food" class="view"><div id="food-body"></div></section>
   <section id="view-place" class="view"><div id="place-body"></div></section>
   <section id="view-book" class="view"><div id="book-body"></div></section>
-  <section id="view-prep" class="view"><div id="prep-body"></div><button class="reset" id="resetChk">체크 전체 초기화</button></section>
+  <section id="view-docs" class="view"><div id="docs-body"></div></section>
   <section id="view-detail" class="view"><div id="detail-body"></div></section>
 </main>
 
@@ -282,9 +290,9 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
     <span class="lbl">항공·숙소</span>
   </button>
-  <button data-view="prep">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-    <span class="lbl">체크</span>
+  <button data-view="docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg>
+    <span class="lbl">서류</span>
   </button>
 </nav>
 
@@ -369,7 +377,7 @@ const DAYS = [
     {t:"10:00–11:30", k:"see", ttl:"테이트 브리튼", note:"상설 무료", hour:"매일 10:00–18:00", resv:"free", map:"Tate Britain London"},
     {t:"11:30–12:00", k:"move", ttl:"웨스트민스터 사원 이동", move:"도보 3분 · 220m"},
     {t:"12:30–14:00", k:"see", ttl:"웨스트민스터 사원", note:"£31 · 12:30 입장", hour:"월–금 09:30–15:30", resv:"ok", map:"Westminster Abbey London"},
-    {t:"14:00–15:20", k:"food", ttl:"점심 — Mr Fogg's Tavern", note:"현지식", hour:"12:00–22:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
+    {t:"14:00–15:20", k:"food", ttl:"점심 — Mr Fogg's Tavern", note:"현지식", hour:"월 12:00–23:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
     {t:"15:40–17:10", k:"shop", ttl:"포트넘 앤 메이슨", note:"최소 16시 입장", hour:"10:00–20:00", map:"Fortnum and Mason Piccadilly London"},
     {t:"17:10–17:30", k:"move", ttl:"호텔 이동 (짐 놓기)", move:"도보 20분 · 1.4km"},
     {t:"19:00–22:00", k:"see", ttl:"뮤지컬 — 패딩턴", note:"사보이 극장 · 19:00", resv:"ok", map:"Savoy Theatre London"},
@@ -454,7 +462,7 @@ const FOOD = [
   {day:3, date:"07.12(일)", slot:"야식", icon:"🍽️", area:"숙소 근처", name:"Nando's Covent Garden", menu:"타코", hour:"11:00~22:00", resv:null, map:"Nandos Covent Garden London"},
   {day:3, date:"07.12(일)", slot:"야식", icon:"🍽️", area:"숙소 근처", name:"Vasiniko", menu:"피자", hour:"12:00~22:30 (일)", resv:null, map:"Vasiniko London"},
   {day:4, date:"07.13(월)", slot:"아침", icon:"🍽️", area:"테이트브리튼", name:"Relish", menu:"샌드위치", hour:"07:00~15:30", resv:null, map:"Relish Westminster London"},
-  {day:4, date:"07.13(월)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"Mr Fogg's Tavern", menu:"현지식", hour:"12:00~22:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
+  {day:4, date:"07.13(월)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"Mr Fogg's Tavern", menu:"현지식", hour:"12:00~23:30 (월)", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
   {day:4, date:"07.13(월)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"Fatto a Mano Covent Garden (후보)", menu:"피자", hour:"12:00~22:00", resv:null, map:"Fatto a Mano Covent Garden London"},
   {day:4, date:"07.13(월)", slot:"저녁", icon:"🏠", area:"숙소 (호텔)", name:"숙소 (호텔)", menu:"누룽지+반찬", hour:"", resv:null, map:null},
   {day:5, date:"07.14(화)", slot:"아침", icon:"🍽️", area:"메릴본", name:"White Mulberries", menu:"카페", hour:"07:00~18:00", resv:null, map:"White Mulberries London"},
@@ -714,7 +722,7 @@ function dayHTML(d,i){
     let cls=(e.k==="move")?"ev move":"ev"; if(ongoing) cls+=" current";
     h+=`<div class="${cls}" data-kind="${e.k}"><div class="card">`;
     if(e.k==="move"){
-      h+=`<div class="time">${e.t}</div><div class="move-title" style="font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48);margin-top:1px">${dash(e.ttl)}</div>`;
+      h+=`<div class="move-head"><span class="time">${e.t}</span><span class="move-title">${dash(e.ttl)}</span></div>`;
       if(e.move) h+=routeHTML(i,e);
     }else{
       h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)} ${resvBadge(e.resv)}</div>`;
@@ -788,7 +796,7 @@ function openDetail(id){
   views.detail.classList.add("active");
   views.detail.scrollTop=0;
 }
-function curTab(){ for(const k of ['plan','food','place','book','prep']){ if(views[k].classList.contains('active')) return k; } return prevView||'place'; }
+function curTab(){ for(const k of ['plan','food','place','book','docs']){ if(views[k].classList.contains('active')) return k; } return prevView||'place'; }
 function openLB(src){ const lb=document.getElementById('lb'), im=document.getElementById('lbimg'); im.className=''; im.src=src; lb.classList.add('open'); lb.scrollTop=0; }
 function lbTap(e){ const im=document.getElementById('lbimg'); if(e.target===im){ im.classList.toggle('zoom'); document.getElementById('lb').scrollTop=0; return; } document.getElementById('lb').classList.remove('open'); }
 function openVoucher(url, label){ window.open(url, '_blank', 'noopener'); }
@@ -897,28 +905,66 @@ function openHotelInfo(idx){
   document.getElementById("book-body").innerHTML=h;
 })();
 
-/* ===== PREP ===== */
-const STORE_KEY="london2026_checks";
-function loadChecks(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||"{}"); }catch(e){ return {}; } }
-function saveChecks(o){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(o)); }catch(e){} }
-let checks=loadChecks();
-function renderPrep(){
-  const body=document.getElementById("prep-body"); let h="";
-  PREP.forEach((sec,si)=>{
-    let all=sec.items.length, done=sec.items.filter(it=>checks[sec.title+"|"+it]).length;
-    h+=`<div class="acc${si===0?" open":""}" data-sec="${si}"><div class="acc-h"><div class="lt">${sec.icon} ${sec.title}</div><div style="display:flex;align-items:center;gap:10px"><span class="prog">${done}/${all}</span><span class="arr">›</span></div></div><div class="acc-b">`;
-    sec.items.forEach(it=>{ const key=sec.title+"|"+it; h+=`<label class="chk"><input type="checkbox" data-key="${key.replace(/"/g,'&quot;')}" ${checks[key]?"checked":""}><span>${it}</span></label>`; });
-    h+=`</div></div>`;
+/* ===== 서류 허브 (얇은 인덱스: 이름 + 열기) ===== */
+const DOCS = [
+  {group:"✈️ 항공", items:[
+    {label:"전자항공권 (김수진)", file:"ETKT_KIMSOOJINMS.pdf"},
+    {label:"전자항공권 (박용준)", file:"ETKT_PARKYONGJUNMR.pdf"},
+  ]},
+  {group:"🏨 숙소", items:[
+    {label:"숙소1 호텔 바우처 (Strand Palace)", file:"voucher_hotel_strand.pdf"},
+    {label:"숙소2 (Airbnb)", note:"예약번호 HMKCSB888Y"},
+  ]},
+  {group:"🚆 기차 · 바스 왕복", items:[
+    {label:"영수증 (E-receipt)", file:"E-receipt.pdf"},
+    {label:"가는 편 티켓 1", file:"GWR_1_LON-BTH_1.pdf"},
+    {label:"가는 편 티켓 2", file:"GWR_1_LON-BTH_2.pdf"},
+    {label:"오는 편 티켓 1", file:"GWR_2_BTH-LON_1.pdf"},
+    {label:"오는 편 티켓 2", file:"GWR_2_BTH-LON_2.pdf"},
+  ]},
+  {group:"🍽️ 식당", items:[
+    {label:"Hobson's Fish & Chips", file:"voucher_hobsons.png"},
+    {label:"The Ship Tavern", file:"voucher_ship_tavern.pdf"},
+    {label:"Mr Fogg's Tavern", file:"voucher_mr_foggs.pdf"},
+    {label:"The Promenade (애프터눈티)", file:"voucher_promenade.pdf"},
+    {label:"Hyde Park Garden", file:"voucher_hyde_park_garden.pdf"},
+  ]},
+  {group:"🎟️ 입장권 · 공연", items:[
+    {label:"웨스트민스터 사원", file:"voucher_westminster.pdf"},
+    {label:"세인트 폴 대성당", file:"voucher_st_pauls.pdf"},
+    {label:"테이트 모던", file:"voucher_tate_modern.pdf"},
+    {label:"자연사박물관 · 바우처", file:"voucher_natural_history.pdf"},
+    {label:"자연사박물관 · 입장 티켓", file:"ticket_natural_history.pdf"},
+    {label:"내셔널 갤러리 · 바우처", file:"voucher_national_gallery.pdf"},
+    {label:"내셔널 갤러리 · 입장 티켓", file:"ticket_national_gallery.pdf"},
+    {label:"뮤지컬 패딩턴", file:"ticket_paddington.pdf"},
+  ]},
+  {group:"📄 기타 서류", items:[
+    {label:"여행자보험 (카카오페이)", file:"kakaopayinscorp-20260603232946.pdf"},
+    {label:"ETA (전자여행허가)", todo:true},
+    {label:"Bounce (마지막날 짐 보관)", todo:true},
+    {label:"eSIM", todo:true},
+  ]},
+];
+function renderDocs(){
+  const body=document.getElementById("docs-body"); let h="";
+  h+=`<div class="docs-intro">여행에 필요한 모든 서류를 한 곳에 모았어요. 탭하면 새 탭에서 열립니다.</div>`;
+  DOCS.forEach(g=>{
+    h+=`<div class="group"><div class="group-h">${g.group}</div>`;
+    g.items.forEach(it=>{
+      h+=`<div class="doc-row"><div class="dl">${it.label}${it.note?`<div class="ds">${it.note}</div>`:""}</div>`;
+      if(it.file) h+=`<button class="doc-open" onclick="openVoucher('${vurl(it.file)}')">${clipSvg} 열기</button>`;
+      else h+=`<span class="doc-todo">추가 예정</span>`;
+      h+=`</div>`;
+    });
+    h+=`</div>`;
   });
   body.innerHTML=h;
-  body.querySelectorAll(".acc-h").forEach(hh=>{ hh.onclick=(e)=>{ if(e.target.tagName==="INPUT") return; hh.parentElement.classList.toggle("open"); }; });
-  body.querySelectorAll('input[type="checkbox"]').forEach(cb=>{ cb.onchange=()=>{ checks[cb.dataset.key]=cb.checked; saveChecks(checks); const acc=cb.closest(".acc"); const si=+acc.dataset.sec; const all=PREP[si].items.length; const done=PREP[si].items.filter(it=>checks[PREP[si].title+"|"+it]).length; acc.querySelector(".prog").textContent=done+"/"+all; }; });
 }
-renderPrep();
-document.getElementById("resetChk").onclick=()=>{ if(confirm("체크 항목을 전부 초기화할까요?")){ checks={}; saveChecks(checks); renderPrep(); } };
+renderDocs();
 
 /* ===== NAV ===== */
-const views={plan:document.getElementById("view-plan"), food:document.getElementById("view-food"), place:document.getElementById("view-place"), book:document.getElementById("view-book"), prep:document.getElementById("view-prep"), detail:document.getElementById("view-detail")};
+const views={plan:document.getElementById("view-plan"), food:document.getElementById("view-food"), place:document.getElementById("view-place"), book:document.getElementById("view-book"), docs:document.getElementById("view-docs"), detail:document.getElementById("view-detail")};
 function showView(v, fromDetail){
   Object.entries(views).forEach(([k,el])=>el.classList.toggle("active", k===v));
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
