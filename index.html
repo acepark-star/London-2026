@@ -532,30 +532,33 @@ const FOOD_PAGES = [
   "317807d078df802580ecff1e3749f9fe",
 ];
 FOOD.forEach((f,i)=>{ if(FOOD_PAGES[i]) f.pg = NB + FOOD_PAGES[i]; });
-// 예약 바우처 PDF (레포 vouchers/ 폴더의 로컬 파일)
+// 예약 바우처 (레포 vouchers/ 폴더의 로컬 파일) — [라벨, 파일명] 배열, 항목당 여러 개 가능
 const VOUCHERS={
-  "The Ship Tavern":"vouchers/voucher_ship_tavern.pdf",
-  "Mr Fogg's Tavern":"vouchers/voucher_mr_foggs.pdf",
-  "The Promenade (The Dorchester)":"vouchers/voucher_promenade.pdf",
-  "웨스트민스터 사원 (Westminster Abbey)":"vouchers/voucher_westminster.pdf",
-  "뮤지컬 패딩턴":"vouchers/voucher_paddington.pdf",
-  "세인트 폴 대성당 (St. Paul's Cathedral)":"vouchers/voucher_st_pauls.pdf",
-  "테이트 모던 (Tate Modern)":"vouchers/voucher_tate_modern.pdf",
-  "자연사박물관 (Natural History Museum)":"vouchers/voucher_natural_history.pdf",
-  "내셔널 갤러리 (The National Gallery)":"vouchers/voucher_national_gallery.pdf",
+  "Hobson`s Fish & Chips soho":[["예약 바우처","voucher_Hobson`s_Fish&Chips_soho.png"]],
+  "The Ship Tavern":[["예약 바우처","voucher_ship_tavern.pdf"]],
+  "Mr Fogg's Tavern":[["예약 바우처","voucher_mr_foggs.pdf"]],
+  "The Promenade (The Dorchester)":[["예약 바우처","voucher_promenade.pdf"]],
+  "웨스트민스터 사원 (Westminster Abbey)":[["입장권","voucher_westminster.pdf"]],
+  "뮤지컬 패딩턴":[["입장 티켓","ticket_paddington.pdf.pdf"]],
+  "세인트 폴 대성당 (St. Paul's Cathedral)":[["입장권","voucher_st_pauls.pdf"]],
+  "테이트 모던 (Tate Modern)":[["입장권","voucher_tate_modern.pdf"]],
+  "자연사박물관 (Natural History Museum)":[["예약 바우처","voucher_natural_history.pdf"],["입장 티켓","ticket_natural_history.pdf"]],
+  "내셔널 갤러리 (The National Gallery)":[["예약 바우처","voucher_national_gallery.pdf"],["입장 티켓","ticket_national_gallery.pdf"]],
 };
+function vurl(fn){ return "vouchers/"+encodeURIComponent(fn); }
 FOOD.forEach(f=>{ if(VOUCHERS[f.name]) f.voucher=VOUCHERS[f.name]; });
 PLACES.forEach(p=>{ if(VOUCHERS[p.name]) p.voucher=VOUCHERS[p.name]; });
 
 const FLIGHT = {
   airline:"대한항공", status:"ok", resNo:"FURTGR / FUR6EW", cost:"802,000원 + 140,000마일",
+  vouchers:[["항공권 (김수진)","ETKT_KIMSOOJINMS.pdf"],["항공권 (박용준)","ETKT_PARKYONGJUNMR.pdf"]],
   legs:[
     {dep:"10:55", depCode:"ICN 인천", arr:"17:20", arrCode:"LHR 런던", no:"KE907", date:"07.10 (금)"},
     {dep:"19:35", depCode:"LHR 런던", arr:"16:15", arrCode:"ICN 인천", no:"KE908", date:"07.18 (토) → 07.19 (일)"},
   ],
 };
 const ACCOM = [
-  {name:"Strand Palace Hotel", tag:"호텔 · 7/10 ~ 7/14 (4박)", resNo:"-", cost:"-", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London"},
+  {name:"Strand Palace Hotel", tag:"호텔 · 7/10 ~ 7/14 (4박)", resNo:"-", cost:"-", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London", vouchers:[["호텔 바우처","Confirmation_letter_hotelguarantee_sph.PDF"]]},
   {name:"에어비앤비", tag:"Airbnb · 7/14 ~ 7/18 (4박)", resNo:"HMKCSB888Y", cost:"1,612,987원", area:"10 Stanford Rd, London W8 5QJ · Kensington", checkin:"5일차 (7/14) 저녁 · 체크인 방법 확인", checkout:"9일차 (7/18) 11:00", mapHref:"https://maps.app.goo.gl/B2FDDVwiYfemHRL49"},
 ];
 // 항공 예약 정보 페이지 이미지 (노션 항공 토글 이미지) — python으로 주입
@@ -587,7 +590,7 @@ const forkSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" str
 const ticketSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 1.6 1.6 0 0 0 0 3 1.6 1.6 0 0 0 0 3 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 1.6 1.6 0 0 0 0-3 1.6 1.6 0 0 0 0-3Z"/><path d="M15 7v10" stroke-dasharray="2 2"/></svg>';
 const tagSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V5a2 2 0 0 1 2-2h8l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>';
 const clipSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-8.49 8.49a5 5 0 0 1-7.07-7.07l8.49-8.49a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.41-1.41l7.78-7.78"/></svg>';
-function vchChip(v){ return v ? `<span class="vch">${clipSvg} 바우처</span>` : ""; }
+function vchChip(v){ return (v&&v.length) ? `<span class="vch">${clipSvg} 바우처</span>` : ""; }
 const moveSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
 const MOVE_RAW = [
@@ -738,8 +741,9 @@ function openDetail(id){
   h+=kvRow("예매처", o.via);
   h+=kvRow("비고", o.note);
   h+=`</div><div class="d-actions">`;
-  if(o.voucher) h+=`<a class="d-btn primary" href="${o.voucher}" target="_blank" rel="noopener">${clipSvg} 예약내역 확인하기</a>`;
-  if(o.map) h+=`<a class="d-btn ${o.voucher?'ghost':'primary'}" href="${mapUrl(o.map)}" target="_blank" rel="noopener">지도에서 보기</a>`;
+  const hasV = o.voucher && o.voucher.length;
+  if(hasV) o.voucher.forEach(vc=>{ h+=`<a class="d-btn primary" href="${vurl(vc[1])}" target="_blank" rel="noopener">${clipSvg} ${vc[0]||'예약내역 확인하기'}</a>`; });
+  if(o.map) h+=`<a class="d-btn ${hasV?'ghost':'primary'}" href="${mapUrl(o.map)}" target="_blank" rel="noopener">지도에서 보기</a>`;
   h+=`<a class="d-btn ghost" href="${o.pg||NOTION_URL}" target="_blank" rel="noopener">노션에서 전체화면으로 열기 ›</a>`;
   h+=`</div>`;
   if(o.pg) h+=nbContent(o.pg);
@@ -811,7 +815,9 @@ function openAirInfo(){
     h+=`<div class="fl-mid">${l.no}<div class="fl-line"></div>${l.date}</div>`;
     h+=`<div class="fl-end"><div class="fl-time">${l.arr}</div><div class="fl-code">${l.arrCode}</div></div></div>`;
   });
-  h+=`<div class="d-actions" style="margin-top:16px"><button class="d-btn ghost" onclick="openAirInfo()">예약내역 · 수화물 규정 보기 ›</button></div>`;
+  h+=`<div class="d-actions" style="margin-top:16px">`;
+  (FLIGHT.vouchers||[]).forEach(vc=>{ h+=`<a class="d-btn primary" href="${vurl(vc[1])}" target="_blank" rel="noopener">${clipSvg} ${vc[0]}</a>`; });
+  h+=`<button class="d-btn ghost" onclick="openAirInfo()">예약내역 · 수화물 규정 보기 ›</button></div>`;
   h+=`</div></div>`;
   // hotels — 숙소1 / 숙소2 각각 대구분
   ACCOM.forEach((a,i)=>{
@@ -821,7 +827,9 @@ function openAirInfo(){
     h+=kvRow("위치", a.area);
     h+=kvRow("체크인", a.checkin);
     h+=kvRow("체크아웃", a.checkout);
-    h+=`<div class="d-actions" style="margin-top:12px"><a class="d-btn primary" href="${a.mapHref||mapUrl(a.map)}" target="_blank" rel="noopener">지도에서 보기</a></div></div>`;
+    h+=`<div class="d-actions" style="margin-top:12px">`;
+    (a.vouchers||[]).forEach(vc=>{ h+=`<a class="d-btn primary" href="${vurl(vc[1])}" target="_blank" rel="noopener">${clipSvg} ${vc[0]}</a>`; });
+    h+=`<a class="d-btn ${(a.vouchers&&a.vouchers.length)?'ghost':'primary'}" href="${a.mapHref||mapUrl(a.map)}" target="_blank" rel="noopener">지도에서 보기</a></div></div>`;
     h+=`</div>`;
   });
   document.getElementById("book-body").innerHTML=h;
