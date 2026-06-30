@@ -91,13 +91,16 @@
 
   .card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 16px;}
   .ev.move .card{background:transparent; border:none; padding:5px 15px;}
+  .ev.move::before{top:10px;}
+  .ev.move .move-title{margin-top:5px !important;}
   .ev .time{font-size:13px; font-weight:600; letter-spacing:-0.08px; color:var(--ink-48); font-variant-numeric:tabular-nums;}
-  .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:2px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
-  .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:4px;}
+  .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:6px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
+  .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:8px; display:flex; align-items:flex-start; gap:6px;}
+  .ev .note svg{flex:0 0 auto; margin-top:3px; opacity:.7;}
   .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:2px;}
   .ev .move-line svg{flex:0 0 auto; opacity:.7;}
   .ev .kico{display:inline-flex; align-items:center; color:var(--ink-48);}
-  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:5px;}
+  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:8px;}
   .ev-hours span{display:inline-flex; align-items:center; gap:5px;}
   .card-foot{display:flex; justify-content:flex-end; margin-top:8px;}
   .card-foot .maplink{margin-top:0;}
@@ -140,7 +143,9 @@
   .row.tap:active{transform:scale(.985);}
   .row.tap::after{content:"›"; position:absolute; right:16px; top:50%; transform:translateY(-50%); color:#c7c7cc; font-size:22px; line-height:1;}
   .row .r-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
+  .row .r-slot{margin-bottom:9px;}
   .row .r-name{font-size:16.5px; font-weight:600; letter-spacing:-0.32px; line-height:1.3; display:flex; gap:7px; align-items:center; flex-wrap:wrap; padding-right:24px;}
+  .row .r-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;}
   .row .r-meta{font-size:14px; letter-spacing:-0.224px; color:var(--ink-48); margin-top:8px; display:flex; flex-wrap:wrap; gap:6px 14px; line-height:1.45;}
   .row .r-meta span{display:inline-flex; align-items:center; gap:5px;}
   .row .r-foot{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:11px;}
@@ -398,7 +403,7 @@ const DAYS = [
     {t:"18:10–18:40", k:"food", ttl:"마트 — Tesco Express", note:"Gloucester Road 역 앞", map:"Tesco Express Gloucester Road London"},
     {t:"저녁", k:"rest", ttl:"저녁 — 숙소 (햇반+반찬)"},
   ]},
-  { n:7, date:"07.16", dow:"목", theme:"바스 당일치기 🛁", events:[
+  { n:7, date:"07.16", dow:"목", theme:"바스 당일치기", events:[
     {t:"05:00–06:20", k:"rest", ttl:"기상 / 준비"},
     {t:"06:20–07:00", k:"move", ttl:"패딩턴역 이동", move:"버스 17분 · High Street Kensington → Paddington Station"},
     {t:"07:29–08:42", k:"flight", ttl:"바스 이동 (기차)", note:"예약 완료", resv:"ok", map:"Bath Spa Railway Station"},
@@ -605,6 +610,7 @@ const bedSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stro
 const planeSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>';
 const KIND_ICON = {flight:planeSvg, move:"", food:forkSvg, see:pinSvg, shop:bagSvg, rest:bedSvg};
 function kindIcon(k){ return KIND_ICON[k]||""; }
+const noteSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
 const moveSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
 const MOVE_RAW = [
@@ -708,11 +714,11 @@ function dayHTML(d,i){
     let cls=(e.k==="move")?"ev move":"ev"; if(ongoing) cls+=" current";
     h+=`<div class="${cls}" data-kind="${e.k}"><div class="card">`;
     if(e.k==="move"){
-      h+=`<div class="time">${e.t}</div><div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48);margin-top:1px">${dash(e.ttl)}</div>`;
+      h+=`<div class="time">${e.t}</div><div class="move-title" style="font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48);margin-top:1px">${dash(e.ttl)}</div>`;
       if(e.move) h+=routeHTML(i,e);
     }else{
       h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)} ${resvBadge(e.resv)}</div>`;
-      if(e.note) h+=`<div class="note">${e.note}</div>`;
+      if(e.note) h+=`<div class="note">${noteSvg}<span>${e.note}</span></div>`;
       if(e.hour) h+=`<div class="ev-hours"><span>${clockSvg} ${e.hour}</span></div>`;
       if(e.move) h+=routeHTML(i,e);
       if(e.subs){ h+='<ul class="sub-list">'; e.subs.forEach(s=>h+=`<li>${s}</li>`); h+='</ul>'; }
@@ -828,9 +834,14 @@ function openHotelInfo(idx){
     if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
     const title=f.name||f.area||"미정"; const ic=f.icon?f.icon+" ":"";
     const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg, voucher:f.voucher});
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${slotBadge(f.slot)} ${ic}${title} ${resvBadge(f.resv)} ${vchChip(f.voucher)}</div>`;
-    let meta=[]; if(f.name&&f.area) meta.push(`<span>${pinSvg} ${f.area}</span>`); if(f.menu) meta.push(`<span>${forkSvg} ${f.menu}</span>`); if(f.hour) meta.push(`<span>${clockSvg} ${f.hour}</span>`);
+    h+=`<div class="row tap" onclick="openDetail('${id}')">`;
+    if(f.slot) h+=`<div class="r-slot">${slotBadge(f.slot)}</div>`;
+    h+=`<div class="r-name">${ic}${title}</div>`;
+    const badges=`${resvBadge(f.resv)}${vchChip(f.voucher)}`;
+    if(badges) h+=`<div class="r-badges">${resvBadge(f.resv)} ${vchChip(f.voucher)}</div>`;
+    let meta=[]; if(f.name&&f.area) meta.push(`<span>${pinSvg} ${f.area}</span>`); if(f.menu) meta.push(`<span>${forkSvg} ${f.menu}</span>`);
     if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
+    if(f.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${f.hour}</span></div>`;
     h+=`</div>`;
   });
   h+="</div>";
