@@ -534,12 +534,12 @@ const FOOD_PAGES = [
 FOOD.forEach((f,i)=>{ if(FOOD_PAGES[i]) f.pg = NB + FOOD_PAGES[i]; });
 // 예약 바우처 (레포 vouchers/ 폴더의 로컬 파일) — [라벨, 파일명] 배열, 항목당 여러 개 가능
 const VOUCHERS={
-  "Hobson`s Fish & Chips soho":[["예약 바우처","voucher_Hobson`s_Fish&Chips_soho.png"]],
+  "Hobson`s Fish & Chips soho":[["예약 바우처","voucher_hobsons.png"]],
   "The Ship Tavern":[["예약 바우처","voucher_ship_tavern.pdf"]],
   "Mr Fogg's Tavern":[["예약 바우처","voucher_mr_foggs.pdf"]],
   "The Promenade (The Dorchester)":[["예약 바우처","voucher_promenade.pdf"]],
   "웨스트민스터 사원 (Westminster Abbey)":[["입장권","voucher_westminster.pdf"]],
-  "뮤지컬 패딩턴":[["입장 티켓","ticket_paddington.pdf.pdf"]],
+  "뮤지컬 패딩턴":[["입장 티켓","ticket_paddington.pdf"]],
   "세인트 폴 대성당 (St. Paul's Cathedral)":[["입장권","voucher_st_pauls.pdf"]],
   "테이트 모던 (Tate Modern)":[["입장권","voucher_tate_modern.pdf"]],
   "자연사박물관 (Natural History Museum)":[["예약 바우처","voucher_natural_history.pdf"],["입장 티켓","ticket_natural_history.pdf"]],
@@ -558,7 +558,7 @@ const FLIGHT = {
   ],
 };
 const ACCOM = [
-  {name:"Strand Palace Hotel", tag:"호텔 · 7/10 ~ 7/14 (4박)", resNo:"-", cost:"-", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London", vouchers:[["호텔 바우처","Confirmation_letter_hotelguarantee_sph.PDF"]]},
+  {name:"Strand Palace Hotel", tag:"호텔 · 7/10 ~ 7/14 (4박)", resNo:"-", cost:"-", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London", vouchers:[["호텔 바우처","voucher_hotel_strand.pdf"]]},
   {name:"에어비앤비", tag:"Airbnb · 7/14 ~ 7/18 (4박)", resNo:"HMKCSB888Y", cost:"1,612,987원", area:"10 Stanford Rd, London W8 5QJ · Kensington", checkin:"5일차 (7/14) 저녁 · 체크인 방법 확인", checkout:"9일차 (7/18) 11:00", mapHref:"https://maps.app.goo.gl/B2FDDVwiYfemHRL49"},
 ];
 // 항공 예약 정보 페이지 이미지 (노션 항공 토글 이미지) — python으로 주입
