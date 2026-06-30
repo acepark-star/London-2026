@@ -1,0 +1,10 @@
+이 폴더에 예약 바우처 PDF를 아래 파일명으로 넣어주세요:
+- voucher_ship_tavern.pdf       (The Ship Tavern)
+- voucher_mr_foggs.pdf          (Mr Fogg's Tavern)
+- voucher_promenade.pdf         (The Promenade / 애프터눈티)
+- voucher_westminster.pdf       (웨스트민스터 사원)
+- voucher_paddington.pdf        (뮤지컬 패딩턴)
+- voucher_st_pauls.pdf          (세인트 폴 대성당)
+- voucher_tate_modern.pdf       (테이트 모던)
+- voucher_natural_history.pdf   (자연사 박물관)
+- voucher_national_gallery.pdf  (내셔널 갤러리)
