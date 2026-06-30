@@ -94,6 +94,9 @@
   .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:4px;}
   .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:2px;}
   .ev .move-line svg{flex:0 0 auto; opacity:.7;}
+  .ev .kico{display:inline-flex; align-items:center; color:var(--ink-48);}
+  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:5px;}
+  .ev-hours span{display:inline-flex; align-items:center; gap:5px;}
   .card-foot{display:flex; justify-content:flex-end; margin-top:8px;}
   .card-foot .maplink{margin-top:0;}
 
@@ -120,6 +123,7 @@
   .rd{display:inline-flex; flex:0 0 auto;}
   .busnum{background:#DC241F; color:#fff; font-size:12px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap;}
   .modechip{display:inline-flex; align-items:center; gap:4px;}
+  .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
   .rt-path{font-size:13px; color:var(--ink-48); margin-top:6px; letter-spacing:-0.1px; line-height:1.4;}
@@ -591,6 +595,11 @@ const ticketSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" s
 const tagSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V5a2 2 0 0 1 2-2h8l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>';
 const clipSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-8.49 8.49a5 5 0 0 1-7.07-7.07l8.49-8.49a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.41-1.41l7.78-7.78"/></svg>';
 function vchChip(v){ return (v&&v.length) ? `<span class="vch">${clipSvg} 바우처</span>` : ""; }
+const bagSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+const bedSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v0"/><path d="M6 12h4a2 2 0 0 0 0-4H6Z"/></svg>';
+const planeSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>';
+const KIND_ICON = {flight:planeSvg, move:"", food:forkSvg, see:pinSvg, shop:bagSvg, rest:bedSvg};
+function kindIcon(k){ return KIND_ICON[k]||""; }
 const moveSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
 const MOVE_RAW = [
@@ -621,7 +630,7 @@ function moveLink(i,m){ return m ? (MOVE_LINKS[i+"|"+norm(m)]||null) : null; }
 
 const TUBE_RD = '<span class="rd" title="Underground"><svg width="22" height="16" viewBox="0 0 44 32" aria-hidden="true"><circle cx="22" cy="16" r="11" fill="none" stroke="#DC241F" stroke-width="6"/><rect x="3" y="12.5" width="38" height="7" fill="#10069F"/></svg></span>';
 const RAIL_RD = '<span class="rd" title="National Rail"><svg width="20" height="14" viewBox="0 0 40 28" aria-hidden="true"><rect width="40" height="28" rx="4" fill="#C00"/><path d="M6 14h22M24 14l-6-5M24 14l-6 5M34 14H14M16 14l6 5M16 14l6-5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span>';
-const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"} };
+const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, bus:{label:"버스", icon:"🚌"}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"} };
 function parseRoute(t){
   if(!t) return null;
   const parts = t.split(" · "); const head = parts[0]; const tail = parts.slice(1).join(" · ").trim();
@@ -637,7 +646,6 @@ function parseRoute(t){
   return {legs, path, num, dist, alt:alts.length>1};
 }
 function legHTML(l){
-  if(l.type==="bus") return `<span class="leg"><span class="busnum">${l.num||"버스"}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
   const mi = MODE_INFO[l.type]||{label:l.type, icon:""};
   return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
 }
@@ -646,10 +654,11 @@ function routeHTML(i, e){
   if(!r) return `<div class="move-line">${moveSvg}${e.move}</div>`;
   const sep = r.alt ? '<span class="rt-alt">또는</span>' : '<span class="rt-arrow">›</span>';
   const strip = r.legs.map(legHTML).join(sep);
-  const detail = r.path || r.dist || "";
+  // 거리(도보/택시)·버스번호는 같은 줄에 인라인, 역 경로(→)만 아랫줄
+  let inline=""; if(!r.path){ if(r.num) inline=r.num+"번"; else if(r.dist) inline=r.dist; }
   const url = moveLink(i, e.move);
-  let h = '<div class="route"><div class="route-strip">'+strip+'</div>';
-  if(detail) h += `<div class="rt-path">${detail}</div>`;
+  let h = '<div class="route"><div class="route-strip">'+strip+(inline?'<span class="rt-inline">· '+inline+'</span>':'')+'</div>';
+  if(r.path) h += `<div class="rt-path">${r.path}</div>`;
   if(url) h += `<div class="rt-foot"><a class="maplink mini" href="${url}" target="_blank" rel="noopener">지도 ›</a></div>`;
   h += '</div>';
   return h;
@@ -694,8 +703,9 @@ function dayHTML(d,i){
       h+=`<div class="time">${e.t}</div><div style="font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48);margin-top:1px">${dash(e.ttl)}</div>`;
       if(e.move) h+=routeHTML(i,e);
     }else{
-      h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)} ${resvBadge(e.resv)} ${e.hour?'<span class="badge b-hour">'+e.hour+'</span>':''}</div>`;
+      h+=`<div class="time">${e.t}</div><div class="ttl">${kindIcon(e.k)?'<span class="kico">'+kindIcon(e.k)+'</span> ':''}${dash(e.ttl)} ${resvBadge(e.resv)}</div>`;
       if(e.note) h+=`<div class="note">${e.note}</div>`;
+      if(e.hour) h+=`<div class="ev-hours"><span>${clockSvg} ${e.hour}</span></div>`;
       if(e.move) h+=routeHTML(i,e);
       if(e.subs){ h+='<ul class="sub-list">'; e.subs.forEach(s=>h+=`<li>${s}</li>`); h+='</ul>'; }
       if(e.map) h+=`<div class="card-foot"><a class="maplink" href="${mapUrl(e.map)}" target="_blank" rel="noopener">지도 ›</a></div>`;
@@ -771,6 +781,24 @@ function openAirInfo(){
   document.getElementById("detail-body").innerHTML=h;
   prevView=curTab(); views.detail.classList.add("active"); views.detail.scrollTop=0;
 }
+const HOTEL_IMGS={"0":{"detail":[],"cancel":[]},"1":{"detail":["https://first-amusement-fba.notion.site/image/attachment%3A47c9fa66-ee2b-4291-87b4-8abf4e1c0e0e%3Aimage.png?table=block&id=38e807d0-78df-809f-b92c-de5b86830986&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=1600&cache=v2","https://first-amusement-fba.notion.site/image/attachment%3A11b45bce-ae92-4232-a365-775cb6f8d911%3Aimage.png?table=block&id=38e807d0-78df-800b-9a3b-d65e149643cd&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=1600&cache=v2"],"cancel":["https://first-amusement-fba.notion.site/image/attachment%3A6d57d212-3893-4f5a-8540-42bc67846831%3Aimage.png?table=block&id=38e807d0-78df-805e-9e6e-c75ca05e394a&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=1600&cache=v2"]}};
+function openHotelInfo(idx){
+  const d=HOTEL_IMGS[idx]||{detail:[],cancel:[]};
+  const name=(ACCOM[idx]&&ACCOM[idx].name)||"숙소";
+  const sec=[["예약내역 상세", d.detail||[]],["취소수수료", d.cancel||[]]];
+  let h=`<button class="back" onclick="backDetail()">‹ 뒤로</button>`;
+  h+=`<div class="detail-hd"><div class="d-cat">숙소 · 예약 정보</div><h2>${name}</h2></div>`;
+  h+=`<div style="margin-top:18px">`;
+  sec.forEach(([t,imgs])=>{
+    h+=`<div class="ai-sec"><div class="ai-h">${t}</div>`;
+    if(imgs&&imgs.length) imgs.forEach(u=>h+=`<img class="ai-img" src="${u}" alt="${t}" loading="lazy" onclick="openLB(this.src)">`);
+    else h+=`<div class="ai-empty">등록된 이미지가 없어요.</div>`;
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  document.getElementById("detail-body").innerHTML=h;
+  prevView=curTab(); views.detail.classList.add("active"); views.detail.scrollTop=0;
+}
 
 /* ===== FOOD ===== */
 (function(){
@@ -795,8 +823,10 @@ function openAirInfo(){
     if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
     const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher});
     h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name} ${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
-    let meta=[]; if(p.time) meta.push(`<span>${ticketSvg} ${p.time}</span>`); if(p.price) meta.push(`<span>${tagSvg} ${p.price}</span>`); if(p.hour) meta.push(`<span>${clockSvg} ${p.hour}</span>`);
+    const tm=(p.time||"").match(/\d{1,2}:\d{2}/);
+    let meta=[]; if(p.resv==="ok" && tm) meta.push(`<span>${ticketSvg} ${tm[0]} 예약</span>`); if(p.price) meta.push(`<span>${tagSvg} ${p.price}</span>`);
     if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
+    if(p.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${p.hour}</span></div>`;
     h+=`</div>`;
   });
   h+="</div>";
@@ -829,7 +859,7 @@ function openAirInfo(){
     h+=kvRow("체크아웃", a.checkout);
     h+=`<div class="d-actions" style="margin-top:12px">`;
     (a.vouchers||[]).forEach(vc=>{ h+=`<a class="d-btn primary" href="${vurl(vc[1])}" target="_blank" rel="noopener">${clipSvg} ${vc[0]}</a>`; });
-    h+=`<a class="d-btn ${(a.vouchers&&a.vouchers.length)?'ghost':'primary'}" href="${a.mapHref||mapUrl(a.map)}" target="_blank" rel="noopener">지도에서 보기</a></div></div>`;
+    h+=`<a class="d-btn ${(a.vouchers&&a.vouchers.length)?'ghost':'primary'}" href="${a.mapHref||mapUrl(a.map)}" target="_blank" rel="noopener">지도에서 보기</a><button class="d-btn ghost" onclick="openHotelInfo(${i})">예약내역 보기 ›</button></div></div>`;
     h+=`</div>`;
   });
   document.getElementById("book-body").innerHTML=h;
