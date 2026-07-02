@@ -882,7 +882,9 @@ function openHotelInfo(idx){
   PLACES.forEach(p=>{
     if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
     const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher});
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name} ${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name}</div>`;
+    const badges=`${resvBadge(p.resv)} ${vchChip(p.voucher)}`.trim();
+    if(badges) h+=`<div class="r-badges">${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
     const tm=(p.time||"").match(/\d{1,2}:\d{2}/);
     let meta=[]; if(p.resv==="ok" && tm) meta.push(`<span>${ticketSvg} ${tm[0]} 예약</span>`); if(p.price) meta.push(`<span>${tagSvg} ${p.price}</span>`);
     if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
