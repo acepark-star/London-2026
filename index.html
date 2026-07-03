@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1d1d1f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<title>런던 여행 · 2026.07</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#0066cc; --primary-focus:#0071e3; --primary-on-dark:#2997ff;
+    --ink:#1d1d1f; --ink-80:#333; --ink-48:#7a7a7a;
+    --divider-soft:#f0f0f0; --hairline:#e0e0e0; --hairline-a:rgba(0,0,0,.08);
+    --canvas:#fff; --parchment:#f5f5f7; --pearl:#fafafc; --tile-dark:#272729;
+    --sys-green:#34c759; --sys-orange:#ff9500; --sys-red:#ff3b30;
+    --r-sm:8px; --r-md:11px; --r-lg:18px; --r-pill:9999px;
+    --safe-b:env(safe-area-inset-bottom,0px);
+    --font:-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Inter", "Apple SD Gothic Neo", sans-serif;
+    --font-display:-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Display", "Inter", "Apple SD Gothic Neo", sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{font-family:var(--font); background:var(--parchment); color:var(--ink);
+    font-size:17px; line-height:1.47; letter-spacing:-0.374px; -webkit-font-smoothing:antialiased;
+    padding-bottom:calc(66px + var(--safe-b));}
+  button{font-family:inherit;}
+  a{color:var(--primary); text-decoration:none;}
+  /* iOS standalone 상태바 영역을 #1d1d1f로 고정 */
+  .sb{position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); background:#1d1d1f; z-index:200; pointer-events:none;}
+
+  header{position:sticky; top:0; z-index:30; overflow:hidden;
+    background:#1d1d1f url('header.jpg') center/cover no-repeat;
+    border-bottom:1px solid var(--hairline-a); padding:16px 20px 16px; padding-top:calc(env(safe-area-inset-top) + 16px);
+    min-height:120px; display:flex; flex-direction:column; justify-content:flex-end;}
+  header::after{content:""; position:absolute; inset:0; z-index:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.5) 100%);}
+  header > *{position:relative; z-index:1;}
+  header .eyebrow{font-size:12px; line-height:1; letter-spacing:-0.12px; color:rgba(255,255,255,.85); font-weight:700;}
+  header h1{font-family:var(--font-display); margin:5px 0 0; font-size:30px; font-weight:600; line-height:1.07; letter-spacing:-0.5px; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.35);}
+  header .dates{font-size:14px; line-height:1.43; letter-spacing:-0.224px; color:rgba(255,255,255,.92); margin-top:3px; text-shadow:0 1px 3px rgba(0,0,0,.3);}
+
+  main{padding:16px 16px 28px; max-width:100%; margin:0;}
+  .view{display:none; animation:fade .28s ease;}
+  .view.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;}}
+
+  /* day chips */
+  .daybar{position:sticky; top:0; z-index:20; margin:-16px -16px 16px; padding:12px 16px;
+    background:var(--parchment); border-bottom:1px solid var(--hairline-a); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;}
+  .daybar::-webkit-scrollbar{display:none;}
+  .day-sec{scroll-margin-top:var(--stick, 150px);}
+  .day-sec:not(:first-child){margin-top:10px;}
+  .chip{flex:0 0 auto; border:1px solid var(--hairline); background:var(--canvas); color:var(--ink-80);
+    padding:8px 14px; border-radius:var(--r-pill); cursor:pointer; min-width:54px;
+    display:flex; flex-direction:column; align-items:center; line-height:1.1; transition:transform .12s ease;}
+  .chip:active{transform:scale(.95);}
+  .chip b{font-size:15px; font-weight:600; letter-spacing:-0.374px; color:var(--ink);}
+  .chip small{font-size:11px; letter-spacing:-0.12px; color:var(--ink-48); font-weight:400; margin-top:1px;}
+  .chip.active{background:var(--ink); border-color:var(--ink);}
+  .chip.active b,.chip.active small{color:#fff;}
+
+  .dayhead{position:sticky; top:var(--stick,150px); z-index:15; background:var(--parchment); margin:0 -16px 14px; padding:11px 16px; display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;}
+  .dayhead h2{font-family:var(--font-display); font-size:19px; font-weight:600; letter-spacing:-0.4px; line-height:1.2; margin:0;}
+  .dayhead .dow{color:var(--ink-48); font-weight:400;}
+  .dayhead .theme{font-size:13.5px; letter-spacing:-0.2px; color:var(--primary); font-weight:600; margin:0;}
+  .dayhead.stuck{box-shadow:0 6px 8px -7px rgba(0,0,0,.10); border-bottom:1px solid var(--hairline-a);}
+
+  /* timeline */
+  .tl{position:relative; padding-left:18px;}
+  .tl::before{content:""; position:absolute; left:5px; top:8px; bottom:8px; width:1.5px; background:var(--hairline);}
+  .ev{position:relative; margin-bottom:10px;}
+  .ev::before{content:""; position:absolute; left:-17px; top:18px; width:9px; height:9px; border-radius:50%; background:var(--canvas); border:1.5px solid var(--ink-48);}
+  .ev[data-kind="food"]::before{border-color:var(--sys-orange);}
+  .ev[data-kind="see"]::before{border-color:var(--primary);}
+  .ev[data-kind="shop"]::before{border-color:var(--primary);}
+  .ev[data-kind="move"]::before{background:var(--ink-48); border-color:var(--ink-48);}
+  .ev[data-kind="rest"]::before{border-color:var(--sys-green);}
+  .ev[data-kind="flight"]::before{background:var(--ink); border-color:var(--ink);}
+  .nowline{position:relative; display:flex; align-items:center; gap:8px; margin:2px 0 12px;}
+  .nowline::before{content:""; position:absolute; left:-17px; top:50%; transform:translateY(-50%); width:11px; height:11px; border-radius:50%; background:var(--sys-red); box-shadow:0 0 0 3px rgba(255,59,48,.18); animation:pulse 1.6s ease-in-out infinite;}
+  .nowline .nl-label{font-size:12px; font-weight:700; letter-spacing:-0.08px; color:var(--sys-red); white-space:nowrap;}
+  .nowline .nl-bar{flex:1; height:2px; border-radius:2px; background:var(--sys-red); animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.32;}}
+  .ev.current .card{box-shadow:0 0 0 2px rgba(255,59,48,.5); border-color:transparent;}
+
+  .card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 16px;}
+  .ev.move .card{background:transparent; border:none; padding:5px 15px;}
+  .ev.move::before{top:10px;}
+  .ev .move-head{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
+  .ev .move-head .move-title{font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--ink-48);}
+  .ev .time{font-size:13px; font-weight:600; letter-spacing:-0.08px; color:var(--ink-48); font-variant-numeric:tabular-nums;}
+  .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:6px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
+  .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:8px; display:flex; align-items:flex-start; gap:6px;}
+  .ev .note svg{flex:0 0 auto; margin-top:3px; opacity:.7;}
+  .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:2px;}
+  .ev .move-line svg{flex:0 0 auto; opacity:.7;}
+  .ev .kico{display:inline-flex; align-items:center; color:var(--ink-48);}
+  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:8px;}
+  .ev-hours span{display:inline-flex; align-items:center; gap:5px;}
+  .card-foot{display:flex; justify-content:flex-end; margin-top:8px;}
+  .card-foot .maplink{margin-top:0;}
+
+  /* badges */
+  .badge{font-size:11px; font-weight:600; letter-spacing:-0.08px; padding:3px 9px; border-radius:var(--r-pill); white-space:nowrap; line-height:1.3;}
+  .b-ok{background:rgba(52,199,89,.14); color:#1c7a3c;}
+  .b-wait{background:rgba(255,149,0,.16); color:#9a5b00;}
+  .b-free{background:var(--pearl); color:var(--ink-48); border:1px solid var(--hairline-a);}
+  .b-hour{background:var(--pearl); color:var(--ink-80); border:1px solid var(--hairline-a);}
+
+  .maplink{display:inline-flex; align-items:center; gap:5px; margin-top:10px; font-size:14px; font-weight:600;
+    letter-spacing:-0.224px; color:var(--primary); background:rgba(0,102,204,.08); padding:7px 13px; border-radius:var(--r-pill); transition:transform .12s ease;}
+  .maplink:active{transform:scale(.95);}
+  .maplink.mini{margin-top:0; padding:5px 11px; font-size:13px; flex:0 0 auto;}
+  .sub-list{margin:8px 0 0; padding:0; list-style:none;}
+  .sub-list li{font-size:14px; letter-spacing:-0.224px; color:var(--ink-48); padding:3px 0 3px 16px; position:relative; line-height:1.43;}
+  .sub-list li::before{content:""; position:absolute; left:4px; top:11px; width:4px; height:4px; border-radius:50%; background:var(--hairline);}
+
+  /* route strip */
+  .route{margin-top:6px;}
+  .route-strip{display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
+  .leg{display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; letter-spacing:-0.1px; color:var(--ink);}
+  .leg .dur{color:var(--ink-48); font-weight:600;}
+  .rd{display:inline-flex; flex:0 0 auto;}
+  .busnum{background:#DC241F; color:#fff; font-size:12px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap;}
+  .modechip{display:inline-flex; align-items:center; gap:4px;}
+  .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
+  .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
+  .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
+  .rt-path{font-size:13px; color:var(--ink-48); margin-top:6px; letter-spacing:-0.1px; line-height:1.4;}
+  .rt-foot{display:flex; align-items:center; justify-content:flex-end; margin-top:8px;}
+
+  /* sections (food / places / accom) */
+  .group{margin-bottom:24px;}
+  .group-h{font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--ink-48); margin:0 4px 10px; display:flex; align-items:center; gap:8px;}
+  .group-h .cnt{font-size:12px; color:var(--ink-48); font-weight:400;}
+  .row{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:16px; margin-bottom:10px; position:relative;}
+  .row.tap{cursor:pointer; transition:transform .12s ease;}
+  .row.tap:active{transform:scale(.985);}
+  .row.tap::after{content:"›"; position:absolute; right:16px; top:50%; transform:translateY(-50%); color:#c7c7cc; font-size:22px; line-height:1;}
+  .row .r-top{display:flex; align-items:flex-start; justify-content:space-between; gap:8px;}
+  .row .r-slot{margin-bottom:9px;}
+  .row .r-name{font-size:16.5px; font-weight:600; letter-spacing:-0.32px; line-height:1.3; display:flex; gap:7px; align-items:center; flex-wrap:wrap; padding-right:24px;}
+  .row .r-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;}
+  .row .r-meta{font-size:14px; letter-spacing:-0.224px; color:var(--ink-48); margin-top:8px; display:flex; flex-wrap:wrap; gap:6px 14px; line-height:1.45;}
+  .row .r-meta span{display:inline-flex; align-items:center; gap:5px;}
+  .row .r-foot{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:11px;}
+  .pill{font-size:12px; background:var(--pearl); color:var(--ink-48); padding:4px 11px; border-radius:var(--r-pill); font-weight:500; border:1px solid var(--hairline-a); letter-spacing:-0.08px;}
+  /* 시간대 뱃지: 무채색(라벨) — 의미색은 예약 상태 뱃지에만 */
+  .slot{font-size:11px; font-weight:700; letter-spacing:-0.08px; padding:3px 10px; border-radius:var(--r-pill); white-space:nowrap; line-height:1.3; background:#eceef1; color:var(--ink-48);}
+  .slot.am,.slot.lunch,.slot.dinner,.slot.night,.slot.tea{background:#eceef1; color:var(--ink-48);}
+  .slot.alt{background:var(--pearl); color:var(--ink-48); border:1px solid var(--hairline-a);}
+  .vch{display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; letter-spacing:-0.08px; padding:3px 9px; border-radius:var(--r-pill); background:rgba(0,102,204,.10); color:var(--primary); white-space:nowrap;}
+  .docs-intro{font-size:13.5px; line-height:1.5; letter-spacing:-0.2px; color:var(--ink-48); margin:2px 4px 16px;}
+  .doc-row{display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--canvas); border:1px solid var(--hairline-a); border-radius:14px; padding:13px 15px; margin-bottom:8px;}
+  .doc-row .dl{font-size:15px; font-weight:500; letter-spacing:-0.3px; line-height:1.32;}
+  .doc-row .ds{font-size:12.5px; font-weight:400; color:var(--ink-48); margin-top:2px;}
+  .doc-open{flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; letter-spacing:-0.1px; color:var(--primary); background:rgba(0,102,204,.10); border:none; border-radius:var(--r-pill); padding:8px 14px; cursor:pointer;}
+  .doc-open:active{background:rgba(0,102,204,.2);}
+  .doc-todo{flex:0 0 auto; font-size:12px; font-weight:500; color:var(--ink-48); background:var(--pearl); border:1px solid var(--hairline-a); border-radius:var(--r-pill); padding:6px 11px; white-space:nowrap;}
+
+  /* accom / flight cards */
+  .info-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:18px; margin-bottom:12px;}
+  .info-card .ic-h{display:flex; align-items:center; gap:9px; font-size:18px; font-weight:700; letter-spacing:-0.4px;}
+  .info-card .ic-sub{font-size:13px; color:var(--ink-48); margin-top:5px; font-weight:600;}
+  .info-card .ic-meta{margin-top:4px; padding-bottom:16px; font-size:13px; color:var(--ink-48); font-weight:600; line-height:1.7; letter-spacing:-0.12px;}
+  .ai-sec{margin-bottom:24px;}
+  .ai-sec .ai-h{font-size:17px; font-weight:700; letter-spacing:-0.3px; margin:0 2px 10px;}
+  .ai-img{width:100%; border:1px solid var(--hairline-a); border-radius:var(--r-md); display:block; margin-bottom:8px; background:#fff; cursor:zoom-in;}
+  .ai-empty{color:var(--ink-48); font-size:14px; padding:10px 2px;}
+  /* image lightbox */
+  .lb{position:fixed; inset:0; z-index:300; background:rgba(0,0,0,.94); display:none; overflow:auto; -webkit-overflow-scrolling:touch;}
+  .lb.open{display:flex; align-items:flex-start; justify-content:center;}
+  .lb img{max-width:100%; height:auto; margin:auto; cursor:zoom-in; padding:env(safe-area-inset-top) 0 40px;}
+  .lb img.zoom{max-width:none; width:200%; cursor:zoom-out; padding-top:env(safe-area-inset-top);}
+  .lb-close{position:fixed; top:max(12px,calc(env(safe-area-inset-top) + 4px)); right:14px; z-index:301; color:#fff; font-size:22px; line-height:38px; text-align:center; background:rgba(0,0,0,.45); border:none; width:38px; height:38px; border-radius:50%; cursor:pointer;}
+  .kv{display:flex; gap:10px; padding:16px 0; border-top:1px solid var(--hairline-a); font-size:14.5px; line-height:1.5;}
+  .kv:first-of-type{margin-top:0;}
+  .kv .k{flex:0 0 76px; color:var(--ink-48); font-weight:600; letter-spacing:-0.2px;}
+  .kv .v{flex:1; color:var(--ink); letter-spacing:-0.2px;}
+  .flight-leg{display:flex; align-items:center; gap:12px; padding:16px 0; border-top:1px solid var(--hairline-a);}
+  .flight-leg:first-of-type{margin-top:0;}
+  .flight-leg .fl-end{text-align:center; min-width:54px;}
+  .flight-leg .fl-time{font-size:18px; font-weight:700; letter-spacing:-0.4px; font-variant-numeric:tabular-nums;}
+  .flight-leg .fl-code{font-size:11px; color:var(--ink-48); font-weight:600; margin-top:1px;}
+  .flight-leg .fl-mid{flex:1; text-align:center; color:var(--ink-48); font-size:11px;}
+  .flight-leg .fl-line{height:1.5px; background:var(--hairline); position:relative; margin:5px 4px;}
+  .flight-leg .fl-line::after{content:"✈"; position:absolute; right:-2px; top:-8px; font-size:12px; color:var(--primary);}
+
+  /* checklist */
+  .acc{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); margin-bottom:10px; overflow:hidden;}
+  .acc-h{display:flex; align-items:center; justify-content:space-between; padding:16px; cursor:pointer; user-select:none;}
+  .acc-h .lt{font-size:17px; font-weight:600; letter-spacing:-0.374px; display:flex; align-items:center; gap:9px;}
+  .acc-h .prog{font-size:13px; color:var(--ink-48); font-weight:400; font-variant-numeric:tabular-nums;}
+  .acc-h .arr{transition:transform .22s ease; color:var(--ink-48); font-size:20px; line-height:1;}
+  .acc.open .acc-h .arr{transform:rotate(90deg);}
+  .acc-b{display:none; padding:0 16px 8px;}
+  .acc.open .acc-b{display:block;}
+  .chk{display:flex; align-items:flex-start; gap:12px; padding:11px 2px; border-top:1px solid var(--hairline-a); cursor:pointer;}
+  .chk:first-child{border-top:none;}
+  .chk input{appearance:none; -webkit-appearance:none; width:22px; height:22px; border:1.5px solid var(--hairline); border-radius:50%; margin:0; flex:0 0 auto; position:relative; cursor:pointer; transition:.15s; background:var(--canvas);}
+  .chk input:checked{background:var(--sys-green); border-color:var(--sys-green);}
+  .chk input:checked::after{content:""; position:absolute; left:7px; top:3px; width:5px; height:10px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);}
+  .chk span{font-size:16px; letter-spacing:-0.3px; line-height:1.4; padding-top:1px;}
+  .chk input:checked + span{color:var(--ink-48); text-decoration:line-through;}
+  .reset{display:block; width:100%; margin-top:8px; padding:13px; background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-md); color:var(--primary); font-size:15px; font-weight:600; cursor:pointer; transition:transform .12s ease;}
+  .reset:active{transform:scale(.97);}
+
+  /* detail page — full-screen overlay (covers header, tab bar stays) */
+  #view-detail{position:fixed; left:0; right:0; top:0; bottom:0; z-index:35; background:var(--parchment);
+    overflow-y:auto; -webkit-overflow-scrolling:touch; will-change:transform;
+    padding:6px 16px calc(82px + var(--safe-b)); padding-top:max(16px,calc(env(safe-area-inset-top) + 4px));}
+  @keyframes slideIn{from{transform:translateX(100%);} to{transform:translateX(0);}}
+  #view-detail.active{display:block; animation:slideIn .3s cubic-bezier(.22,.61,.36,1);}
+  .back{display:inline-flex; align-items:center; gap:3px; background:none; border:none; color:var(--primary); font-size:16px; font-weight:500; letter-spacing:-0.3px; padding:14px 0 26px; cursor:pointer;}
+  .detail-hd .d-cat{font-size:12px; font-weight:700; letter-spacing:.02em; color:var(--ink-48); text-transform:uppercase;}
+  .detail-hd h2{font-family:var(--font-display); font-size:25px; font-weight:600; letter-spacing:-0.5px; line-height:1.12; margin:4px 0 0;}
+  .detail-hd .d-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+  .d-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:4px 16px; margin-top:16px;}
+  .d-card .kv .k{flex:0 0 70px;}
+  .d-card .kv:first-of-type{border-top:none;}
+  .d-actions{display:flex; flex-direction:column; gap:9px; margin-top:16px;}
+  .d-btn{display:flex; align-items:center; justify-content:center; gap:6px; padding:13px; border-radius:var(--r-md); font-size:15px; font-weight:600; letter-spacing:-0.2px; transition:transform .12s ease;}
+  .d-btn:active{transform:scale(.97);}
+  .d-btn.primary{background:var(--primary); color:#fff;}
+  .d-btn.ghost{background:var(--canvas); color:var(--primary); border:1px solid var(--hairline-a);}
+  .notion-embed{margin-top:22px;}
+  .notion-embed .ne-h{font-size:13px; font-weight:700; letter-spacing:.02em; color:var(--ink-48); text-transform:uppercase; margin:0 2px 9px;}
+  .nb-card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:4px 16px 18px;}
+  .nb h1{font-size:18.5px; font-weight:700; letter-spacing:-0.3px; margin:18px 0 6px;}
+  .nb h2{font-size:16.5px; font-weight:700; letter-spacing:-0.3px; margin:16px 0 5px;}
+  .nb h3{font-size:15.5px; font-weight:700; letter-spacing:-0.2px; margin:15px 0 4px;}
+  .nb .tg{font-size:15.5px; font-weight:700; letter-spacing:-0.2px; margin:15px 0 4px;}
+  .nb p{font-size:15px; line-height:1.62; margin:6px 0; color:var(--ink-80); letter-spacing:-0.2px;}
+  .nb .li{font-size:15px; line-height:1.55; margin:5px 0 5px 16px; position:relative; color:var(--ink-80); letter-spacing:-0.2px;}
+  .nb .li::before{content:"•"; position:absolute; left:-14px; color:var(--ink-48);}
+  .nb .c{background:var(--pearl); border:1px solid var(--hairline-a); border-radius:var(--r-md); padding:10px 13px; margin:9px 0; font-size:14.5px; line-height:1.55; color:var(--ink-80);}
+  .nb .q{border-left:3px solid var(--hairline); padding-left:12px; color:var(--ink-48); margin:9px 0;}
+  .nb a{color:var(--primary); word-break:break-all;}
+  .nb hr{border:none; border-top:1px solid var(--hairline-a); margin:15px 0;}
+
+  /* bottom nav (5 tabs) */
+  nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--canvas);
+    border-top:1px solid var(--hairline-a); display:flex; padding-bottom:var(--safe-b);}
+  nav button{flex:1; background:none; border:none; padding:8px 0 7px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--ink-48); cursor:pointer; transition:transform .12s ease;}
+  nav button:active{transform:scale(.9);}
+  nav button.active{color:var(--primary);}
+  nav button .lbl{font-size:10px; font-weight:600; letter-spacing:-0.2px;}
+  nav button svg{width:23px; height:23px;}
+  nav button .emo{font-size:21px; line-height:23px; height:23px; display:flex; align-items:center; justify-content:center; filter:grayscale(1) opacity(.55);}
+  nav button.active .emo{filter:none;}
+</style>
+</head>
+<body>
+<div class="sb"></div>
+<header>
+  <div class="eyebrow">LONDON TRIP</div>
+  <h1>런던 여행 🇬🇧</h1>
+  <div class="dates">2026.07.10 (금) – 07.19 (일) · 10일</div>
+</header>
+
+<main>
+  <section id="view-plan" class="view active"><div class="daybar" id="daybar"></div><div id="plan-body"></div></section>
+  <section id="view-food" class="view"><div id="food-body"></div></section>
+  <section id="view-place" class="view"><div id="place-body"></div></section>
+  <section id="view-book" class="view"><div id="book-body"></div></section>
+  <section id="view-docs" class="view"><div id="docs-body"></div></section>
+  <section id="view-detail" class="view"><div id="detail-body"></div></section>
+</main>
+
+<nav id="nav">
+  <button data-view="plan" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    <span class="lbl">일정</span>
+  </button>
+  <button data-view="food">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v20"/><path d="M4 2v5a3 3 0 0 0 6 0V2"/><path d="M17 2c-1.6 1.4-2.4 3.8-2.4 6.5 0 2.2 0.9 3.5 2.4 3.5v10"/></svg>
+    <span class="lbl">식당</span>
+  </button>
+  <button data-view="place">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l10-4 10 4-10 4z"/><path d="M6 9.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3V9.5"/></svg>
+    <span class="lbl">장소</span>
+  </button>
+  <button data-view="book">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+    <span class="lbl">항공·숙소</span>
+  </button>
+  <button data-view="docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg>
+    <span class="lbl">서류</span>
+  </button>
+</nav>
+
+<div id="lb" class="lb" onclick="lbTap(event)"><button class="lb-close" aria-label="닫기">×</button><img id="lbimg" alt=""></div>
+
+
+<script>
+const NOTION_URL = "https://first-amusement-fba.notion.site/2026-07-223807d078df802f8f20d296fd1e1142";
+const NOTION_CONTENT={"316807d078df800f8b2ac5a455d2cc88":[["p","→ 상설전시는 무료 / 기획전시 유료 (£18)"],["p","→ 특별전시 필요없음"],["h2","예약 정보"],["h2","AI 여행 가이드"],["h3","📍 기본 정보"],["li","장소 이름: 테이트 브리튼 (Tate Britain)"],["li","위치: 런던 밀뱅크(Millbank), 템스 강변"],["li","추천 방문 소요 시간: 2~3시간 (주요 작품만 보려면 1.5시간)"],["li","입장료: 상설전시 무료 / 특별전시는 유료 (보통 £12~18)"],["li","운영 시간: 매일 10:00~18:00"],["li","이런 분들께 추천: 영국 미술사에 관심 있는 분, 터너나 라파엘 전파 작품을 좋아하는 분, 조용히 그림 감상하고 싶은 분"],["h3","💡 한 문장으로 이해하기"],["p","테이트 브리튼은 1500년대부터 현재까지 영국 미술의 모든 것을 한자리에서 볼 수 있는 국립 미술관입니다. 영국이 자랑하는 화가 터너의 작품을 세계에서 가장 많이 소장하고 있어서, \"터너를 보러 가는 미술관\"이라고 해도 과언이 아니에요."],["h3","🏛️ 역사와 특별한 이야기"],["p","이 미술관의 시작은 꽤 드라마틱합니다. 1897년, 설탕 사업으로 큰 부자가 된 헨리 테이트 경이 자신의 미술 컬렉션과 건립 자금을 영국에 기증하면서 탄생했어요. 재미있는 건, 헨리 테이트가 발명한 게 바로 우리가 커피에 넣는 '각설탕'이라는 점이에요. 각설탕으로 번 돈으로 미술관을 세운 셈이죠."],["p","미술관이 들어선 자리도 의미심장합니다. 지금 테이트 브리튼이 서 있는 곳은 과거 악명 높은 밀뱅크 교도소가 있던 자리예요. 1816년부터 1890년까지 이곳에서 수많은 죄수들이 호주로 유배되기 전 거쳐 갔죠. 그런 어두운 역사의 장소가 이제는 영국 미술의 보고가 된 겁니다."],["p","2000년에 테이트 모던이 개관하면서 현대 미술 작품들이 옮겨갔고, 테이트 브리튼은 영국 미술의 역사에 집중하는 미술관으로 자리 잡았어요. 테이트 모던이 국제적이고 현대적인 느낌이라면, 테이트 브리튼은 좀 더 클래식하고 영국적인 분위기를 간직하고 있습니다."],["h3","🎨 건축과 공간의 매력"],["p","미술관 건물 자체가 하나의 작품입니다. 신고전주의 양식으로 지어진 정면은 웅장한 기둥이 인상적이에요. 입구를 들어서면 넓고 높은 중앙 홀이 나오는데, 이 공간만으로도 \"아, 제대로 된 미술관에 왔구나\" 하는 느낌이 듭니다."],["p","꼭 봐야 할 포인트 TOP 3:"],["li","터너 컬렉션 전시실 (클로어 갤러리): 2001년에 추가된 이 공간은 터너의 작품만을 위한 특별한 갤러리예요. 자연광이 들어오도록 설계되어서 터너의 빛과 색채를 가장 잘 감상할 수 있습니다."],["li","중앙 계단: 인스타그램 감성 사진 찍기 좋은 곳. 대리석 계단과 높은 천장이 만들어내는 공간감이 멋져요."],["li","자연 채광 전시실: 곳곳에 스카이라이트가 있어서 자연광으로 그림을 볼 수 있습니다. 특히 맑은 날 오전에 방문하면 작품이 더 생생하게 보여요."],["h3","🖼️ 꼭 봐야 할 주요 작품들"],["p","테이트 브리튼에 왔다면 이 작품들은 꼭 챙겨보세요:"],["li","J.M.W. 터너의 작품들: 특히 \"비, 증기, 속도(Rain, Steam and Speed)\"는 산업혁명 시대의 기차를 그린 작품으로, 터너 특유의 몽환적인 빛의 표현이 일품입니다. 터너는 빛과 색채의 마술사라고 불리는데, 그의 작품 앞에 서면 왜 그런 별명이 붙었는지 바로 알 수 있어요."],["li","존 에버렛 밀레이의 \"오필리아(Ophelia)\": 셰익스피어의 햄릿에 나오는 오필리아가 물에 떠 있는 장면을 그린 작품. 너무 사실적이고 섬뜩해서 처음 전시되었을 때 큰 논란이 됐어요. 모델이었던 엘리자베스 시달은 이 그림을 위해 실제로 차가운 욕조에 누워 포즈를 취했고, 그 과정에서 심한 감기에 걸렸다는 일화가 있습니다."],["li","윌리엄 블레이크의 환상적인 작품들: 시인이자 화가였던 블레이크의 신비롭고 상징적인 작품들도 놓치지 마세요."],["li","존 컨스터블의 \"건초 마차(The Hay Wain)\": 영국 시골의 목가적인 풍경을 담은 대표작입니다."],["h3","💎 알고 가면 더 재밌는 팁"],["li","덜 붐비는 시간: 평일 오전 10시~11시 또는 오후 4시 이후가 비교적 한산합니다. 주말 오후는 피하는 게 좋아요."],["li","무료 가이드 투어: 매일 무료 가이드 투어가 진행됩니다. 특히 터너 컬렉션 투어는 인기가 많으니 시간을 미리 확인하세요. 영어에 자신 없어도 작품 설명을 들으면 이해도가 훨씬 높아집니다."],["li","테이트 보트: 테이트 브리튼과 테이트 모던을 연결하는 특별한 수상 택시가 있어요. 아티스트 데미안 허스트가 디자인한 알록달록한 점무늬 보트로, 템스 강을 따라 이동하는 재미가 쏠쏠합니다. 시간 여유가 있다면 한번 타보세요."],["li","동선 팁: 미술관이 넓으니 꼭 보고 싶은 작품을 미리 체크해두는 게 좋아요. 입구에서 무료 지도를 받거나 앱을 다운받으면 편합니다. 시대순으로 전시되어 있어서, 처음부터 차근차근 보면 영국 미술의 흐름을 이해하기 좋아요."],["li","사진 촬영: 대부분의 작품은 사진 촬영이 가능하지만 플래시는 금지입니다. 특별전시는 촬영이 안 될 수도 있으니 확인하세요."],["li","카페에서 휴식: 미술관 내 카페가 있어서 중간에 쉬어가기 좋습니다. 커피 한 잔 하면서 여유롭게 감상하세요."],["li","숨겨진 보물: 사람들이 터너나 라파엘 전파에만 집중하는데, 20세기 영국 미술 섹션도 정말 볼 만합니다. 프랜시스 베이컨이나 데이비드 호크니 같은 현대 작가들의 작품도 훌륭해요."],["p","이걸 알고 보면 시선이 달라집니다: 테이트 브리튼은 단순히 옛날 그림을 모아둔 곳이 아니라, 영국이라는 나라가 어떤 미적 감각과 역사를 거쳐왔는지 보여주는 살아있는 교과서입니다. 한 작품 한 작품에 영국의 시대정신이 담겨 있으니, 천천히 느끼면서 보세요. 터너의 그림 앞에서 5분만 서 있어도, 왜 영국인들이 이 화가를 그토록 사랑하는지 이해하게 될 거예요."],["hr",""],["h3","재미있는 정보와 이야기"],["li","밀뱅크 교도소 터: 테이트 브리튼이 세워진 자리는 과거 악명 높은 밀뱅크 교도소가 있던 곳입니다. 1816년부터 1890년까지 운영된 이 교도소는 호주로 유배되는 죄수들이 거쳐가는 곳이었습니다."],["li","설탕 사업가의 선물: 미술관 설립자인 헨리 테이트 경은 설탕 사업으로 큰 부를 축적했습니다. 그가 발명한 '각설탕'은 큰 상업적 성공을 거두었고, 이 수익으로 미술품을 수집하고 미술관을 설립할 수 있었습니다."],["li","테이트 브리튼과 테이트 모던 사이의 수상 택시: 테이트 브리튼과 테이트 모던을 연결하는 특별 디자인의 수상 택시 '테이트 보트(Tate Boat)'가 운행됩니다. 아티스트 데미안 허스트가 디자인한 알록달록한 점무늬 보트로 유명합니다."],["li","터너상: 테이트 브리튼은 매년 영국의 젊은 현대 미술가에게 수여하는 '터너상(Turner Prize)'을 주관합니다. 이 상은 J.M.W. 터너를 기리기 위해 1984년 제정되었으며, 영국에서 가장 권위 있는 현대미술상 중 하나입니다."],["li","스캔들을 일으킨 작품들: 존 에버렛 밀레이의 '오필리아'가 처음 전시되었을 때 너무 사실적이고 섬뜩하다는 비판을 받았습니다. 모델이었던 엘리자베스 시달은 차가운 욕조에 누워 포즈를 취했고, 물이 식으면서 심한 감기에 걸렸다는 일화가 있습니다."],["li","숨겨진 보물: 미술관의 지하 보관소에는 전시되지 않은 수많은 작품들이 보관되어 있습니다. 테이트 브리튼은 약 70,000점의 작품을 소장하고 있지만, 그 중 일부만 전시됩니다."],["li","무료 투어: 미술관에서는 매일 무료 가이드 투어를 제공합니다. 특히 터너 컬렉션 투어는 인기가 많으니 시간을 확인해보세요."],["li","레스토랑과 카페: 미술관 내부의 렉스 휘슬러(Rex Whistler) 레스토랑은 1927년에 개관했으며, 벽화로 유명합니다. 다만 논란의 여지가 있는 이미지 때문에 2020년부터 폐쇄되었습니다."],["li","영화 촬영 장소: 테이트 브리튼은 여러 영화와 드라마의 촬영지로도 사용되었습니다. 특히 신고전주의 건축물의 웅장한 계단과 홀이 인기 있는 촬영 장소입니다."]],"316807d078df80a5abd7f9055182b79d":[["p","예약 완료"],["h3","홈페이지"],["p","https://www.westminster-abbey.org/","https://www.westminster-abbey.org/"],["h3","구매페이지"],["li","웨스트민스터 공홈 / £31.00 (약 62,000원)"],["p","‣"],["tg","구매 옵션"],["li","마이리얼트립 / 51,091원"],["p","‣"],["li","클룩 / 60,200원"],["p","‣"],["li","NOL티켓 / 60,485원"],["p","‣"],["h3","주의사항"],["li","오전/오후 투어시간 1시간 전까지 입장 가능"],["h3","참고 블로그"],["p","‣"],["h2","AI 여행 가이드"],["h3","1️⃣ 장소의 기본 정보"],["li","장소 이름: 웨스트민스터 사원 / Westminster Abbey"],["li","위치: 런던 중심부, 웨스트민스터 지역 (빅벤과 국회의사당 바로 옆)"],["li","추천 방문 소요 시간: 1시간 30분 ~ 2시간"],["li","입장료: 유료 (성인 기준 약 £27~31)"],["li","운영 시간: 월~금 09:30~15:30, 토 09:30~15:00 (일요일은 예배만 가능)"],["li","이런 여행자에게 추천: 영국 왕실 역사에 관심 있는 분, 고딕 건축을 좋아하는 분, 역사적 인물들의 흔적을 느끼고 싶은 분"],["h3","2️⃣ 한 문장으로 이해하는 기본 소개"],["p","이곳은 한마디로 말하면 영국 왕실의 역사가 그대로 살아 숨 쉬는 공간입니다. 천 년이 넘는 시간 동안 대관식, 왕실 결혼식, 장례식이 모두 이곳에서 열렸고, 지금도 영국인들에게 가장 신성한 장소로 여겨지고 있어요. 런던 여행에서 빅벤만큼이나 꼭 들러야 할 필수 코스죠."],["h3","3️⃣ 역사와 이 장소만의 특징"],["p","웨스트민스터 사원의 역사는 11세기로 거슬러 올라갑니다. 1066년 윌리엄 1세가 이곳에서 대관식을 올린 이후, 모든 영국 국왕의 대관식이 이곳에서 열렸어요. 최근에는 2023년 찰스 3세의 대관식도 바로 이곳에서 진행됐죠."],["p","이 건물이 특별한 이유는 단순히 왕실의 행사만 열린 게 아니라, 영국 역사를 만든 수많은 인물들이 이곳에 잠들어 있기 때문입니다. 시인 코너(Poets' Corner)에는 셰익스피어를 비롯한 문학가들의 기념비가, 그 외에도 과학자 아이작 뉴턴, 진화론의 찰스 다윈 등이 묻혀 있어요. 어떻게 보면 영국의 과거와 현재가 모두 응축된 공간이라고 할 수 있죠."],["p","다른 관광지와 구별되는 핵심 포인트는 \"살아있는 역사의 현장\"이라는 점입니다. 박물관처럼 유물만 전시된 게 아니라, 지금도 실제 예배가 열리고, 국가 행사가 진행되는 곳이에요."],["h3","4️⃣ 건축물(공간) 관람 포인트 설명"],["p","고딕 양식의 압도적인 아름다움을 직접 눈으로 보시면 정말 입이 떡 벌어지실 거예요. 천장 높이가 31미터에 달하는 내부 공간은 웅장함 그 자체죠. 특히 천장의 부채꼴 아치(Fan Vaulting)는 고딕 건축의 정수를 보여줍니다."],["p","여기서 꼭 봐야 할 포인트 TOP 3:"],["li","코로네이션 체어(Coronation Chair): 700년 넘게 대관식에 사용된 왕좌예요. 엘리자베스 2세도 이 의자에 앉아 대관식을 치렀죠. 실제로 보면 생각보다 소박해서 놀라실 수도 있어요."],["li","레이디 채플(Lady Chapel): 헨리 7세가 만든 공간으로, 천장 장식이 정말 환상적입니다. \"돌로 만든 레이스\"라고 불릴 정도로 섬세해요."],["li","시인 코너(Poets' Corner): 셰익스피어, 디킨스, 브론테 자매 등 영국 문학의 거장들을 기리는 공간이에요. 문학 팬이라면 이곳만으로도 방문할 가치가 있습니다."],["p","사진 찍기 좋은 위치는 정면 입구에서 보는 외관과, 내부에서 천장을 올려다보는 앵글이 특히 멋져요. 다만 내부는 대부분 촬영이 제한되니 눈에 담아두시길 추천합니다."],["h3","5️⃣ 주요 작품 / 상징적인 요소 소개"],["p","코로네이션 체어는 이 장소를 상징하는 가장 중요한 유물입니다. 1296년 에드워드 1세가 제작한 이후, 역대 군주 모두가 이 의자에 앉아 대관식을 치렀어요. 의자 아래에는 원래 \"운명의 돌(Stone of Scone)\"이라는 스코틀랜드의 성스러운 돌이 놓여 있었는데, 현재는 스코틀랜드로 반환된 상태예요."],["p","무명용사의 묘(Tomb of the Unknown Warrior)도 꼭 보셔야 할 곳입니다. 1차 세계대전에서 전사한 신원 미상의 군인을 기리는 무덤으로, 영국에서 유일하게 밟을 수 없는 무덤이에요. 방문하시면 사람들이 이곳만은 절대 밟지 않고 조심스럽게 우회해서 지나가는 모습을 보실 수 있죠."],["p","헨리 7세 레이디 채플의 천장은 \"부채꼴 볼트(Fan Vault)\"의 최고 걸작으로 꼽힙니다. 마치 하늘에서 레이스가 내려온 것 같은 섬세함에 누구나 감탄하게 돼요."],["h3","6️⃣ 알고 가면 여행이 더 재밌어지는 이야기"],["p","덜 붐비는 시간대: 오픈 직후인 오전 9시 30분~10시 사이, 또는 오후 2시 이후가 비교적 한산합니다. 점심시간대는 단체 관광객이 몰리는 경우가 많아요."],["p","동선 팁: 오디오 가이드를 꼭 받으세요(입장료에 포함). 한국어 지원도 되고, 각 공간의 역사적 배경을 들으면서 보면 훨씬 더 의미 있는 관람이 됩니다. 그리고 무조건 시계 방향으로 동선을 따라가세요. 역류하면 사람들과 부딪히기 쉬워요."],["p","놓치기 쉬운 포인트: 많은 분들이 시인 코너만 보고 지나가는데, 과학자들의 무덤 구역도 정말 볼 만합니다. 아이작 뉴턴, 찰스 다윈, 스티븐 호킹까지, 과학사의 전설들이 한자리에 모여 있어요. 그리고 레이디 채플 뒤편의 헨리 5세 예배당도 사람들이 잘 안 가는데, 조용하고 아름다운 공간이라 추천드립니다."],["p","재미있는 팁: 2011년 윌리엄 왕세자와 케이트 미들턴의 결혼식이 이곳에서 열렸는데, 당시 전 세계 20억 명이 시청했다고 해요. 그 장면을 떠올리며 보면 더 특별하게 느껴질 거예요."],["p","이걸 알고 보면 시선이 달라집니다: 웨스트민스터 사원은 단순한 관광지가 아니라 \"영국인의 정체성\"이 담긴 곳입니다. 이곳에 묻힌다는 것은 영국 역사에 이름을 남긴다는 의미죠. 그래서 영국인들은 이곳을 \"국가의 영혼\"이라고 부릅니다."],["tg","프롬프트"]],"357807d078df810f90ece952cd0be026":[["h2","AI 여행 가이드"],["h3","1️⃣ 장소의 기본 정보"],["li","장소 이름: 던트 북스 메릴본 / Daunt Books Marylebone"],["li","위치: 런던 메릴본 하이 스트리트 (Marylebone High Street)"],["li","추천 방문 소요 시간: 30분~1시간"],["li","입장료: 무료 (서점이므로 자유롭게 둘러볼 수 있습니다)"],["li","운영 시간: 월~토 오전 9시~오후 7시 30분, 일요일 오전 11시~오후 6시 (방문 전 확인 권장)"],["li","이런 여행자에게 추천: 책과 건축을 좋아하는 분, 감성적인 공간을 찾는 분, 인스타그램 사진 명소를 찾는 분, 여행 관련 서적에 관심 있는 분"],["h3","2️⃣ 한 문장으로 이해하는 기본 소개"],["p","이곳은 한마디로 말하면 에드워디안 시대의 아름다운 건축 공간에서 책과 여행의 낭만을 동시에 느낄 수 있는 독립 서점입니다. 런던에서 가장 아름다운 서점으로 손꼽히며, 단순히 책을 사는 곳을 넘어 그 자체로 하나의 문화 공간이자 관광 명소예요."],["h3","3️⃣ 역사와 이 장소만의 특징"],["p","던트 북스는 1990년 제임스 던트(James Daunt)가 설립한 독립 서점으로, 원래 1910년에 지어진 에드워디안 갤러리 공간을 그대로 살려 만들어졌어요. 이 건물은 원래 옥스포드 대학 출판부의 서점으로 사용되던 곳인데, 던트 북스가 이 공간의 역사성과 아름다움을 보존하면서 여행 전문 서점으로 재탄생시켰습니다."],["p","특히 이 서점이 다른 곳과 다른 점은 국가별로 책을 분류한다는 거예요. 일반 서점처럼 장르별로 나누지 않고, 여행하고 싶은 나라를 선택하면 그 나라의 소설, 역사, 에세이, 가이드북까지 한곳에서 만날 수 있죠. 여행을 준비하는 사람에게는 정말 천국 같은 공간이에요."],["h3","4️⃣ 건축물(공간) 관람 포인트 설명"],["p","던트 북스의 가장 큰 매력은 바로 천장까지 이어지는 나무 서가와 스테인드글라스 천창이에요. 에드워디안 양식 특유의 우아함이 그대로 살아있는 공간으로, 자연광이 스테인드글라스를 통해 쏟아지면 서점 전체가 따뜻한 빛으로 가득 차요."],["p","꼭 봐야 할 포인트 TOP 3:"],["li","중앙 홀의 긴 갤러리: 서점 중심부에 있는 긴 갤러리 공간은 양옆으로 높은 책장이 늘어서 있고, 끝까지 걸어가면 마치 책의 미로 속에 들어온 듯한 느낌을 받을 수 있어요."],["li","천장의 스테인드글라스: 고개를 들어 천장을 보세요. 색유리로 된 천창이 정말 아름답고, 특히 오전 시간대에 방문하면 햇빛이 들어와 더 환상적입니다."],["li","나선형 계단: 2층으로 올라가는 나무 계단도 포토 스팟으로 인기예요. 빈티지한 분위기가 물씬 나죠."],["p","사진 찍기 좋은 위치: 입구에서 들어가 중앙 홀 끝에서 입구 방향으로 찍으면 갤러리의 긴 원근감이 잘 살아요. 또 계단 중간에서 위를 올려다보며 찍는 각도도 인기 있어요."],["h3","5️⃣ 주요 작품 / 상징적인 요소 소개"],["p","던트 북스는 특정 작품보다는 공간 전체가 하나의 상징이에요. 하지만 몇 가지 주목할 요소가 있습니다:"],["li","여행 섹션의 방대한 컬렉션: 세계 각국의 여행 가이드북부터 각 나라를 배경으로 한 소설, 역사서까지 한 곳에 모아둔 시스템은 던트 북스만의 독특한 큐레이션이에요. 예를 들어 '한국' 섹션에 가면 한국 관련 소설과 역사책, 가이드북이 함께 있죠."],["li","에드워디안 시대의 원목 서가: 100년 넘은 오리지널 서가가 그대로 보존되어 있어요. 이 서가 자체가 문화재 수준의 가치를 지니고 있습니다."],["li","독립 서점으로서의 정체성: 대형 체인이 아닌 독립 서점으로, 직원들의 세심한 큐레이션과 추천이 살아있는 공간이에요. 이런 독립 서점 문화가 영국에서 얼마나 중요한지를 보여주는 상징적인 장소죠."],["h3","6️⃣ 알고 가면 여행이 더 재밌어지는 이야기"],["p","현지 가이드만 아는 팁들:"],["li","덜 붐비는 시간대: 평일 오전이 가장 한산해요. 주말 오후는 현지인과 관광객으로 꽤 붐빕니다. 특히 토요일 점심 이후는 피하는 게 좋아요."],["li","동선 팁: 메릴본 하이 스트리트는 감성적인 카페와 부티크가 많은 동네예요. 던트 북스를 들른 뒤 주변 거리를 천천히 걸으며 카페에서 차 한잔 하는 코스를 추천해요. 특히 근처 'Monocle Café'나 'Daisy Green'도 인기예요."],["li","많이들 놓치는 포인트: 서점 뒤쪽에 작은 정원이 있어요. 많은 사람들이 중앙 홀만 보고 나가는데, 뒤편까지 가보면 조용히 책을 읽을 수 있는 아늑한 공간이 있답니다."],["li","책 구매 팁: 영국에서 출판된 책은 한국보다 저렴한 경우가 많아요. 특히 페이퍼백 소설이나 여행 가이드북은 가격 차이가 제법 나니, 마음에 드는 책이 있다면 기념으로 구매하는 것도 좋아요."],["p","\"이 서점의 천장을 올려다보며 책장 사이를 걷다 보면, 책이 단순한 물건이 아니라 여행과 삶의 동반자라는 걸 새삼 느끼게 됩니다.\""]],"357807d078df81bb85bad0643b48b394":[["h2","AI 여행 가이드"],["h3","1️⃣ 장소의 기본 정보"],["li","장소 이름: 월리스 컬렉션 (The Wallace Collection)"],["li","위치: 런던 메릴본 (Marylebone), Hertford House, Manchester Square"],["li","추천 방문 소요 시간: 1.5~2시간"],["li","입장료: 무료 (특별 전시는 유료일 수 있음)"],["li","운영 시간: 매일 10:00~17:00 (12월 24~26일 휴관)"],["li","이런 여행자에게 추천: 프랑스 로코코 미술을 좋아하는 분, 조용한 미술관을 선호하는 분, 귀족 저택의 우아한 분위기를 경험하고 싶은 분"],["h3","2️⃣ 한 문장으로 이해하는 기본 소개"],["p","이곳은 한마디로 말하면 18세기 프랑스 귀족의 저택을 그대로 옮겨놓은 듯한 아름다운 미술관입니다. 런던에서 프랑스 로코코 회화와 장식미술을 가장 풍부하게 소장하고 있는 곳으로, 대영박물관이나 내셔널 갤러리와는 또 다른 매력을 지닌 숨은 보석 같은 장소예요."],["h3","3️⃣ 역사와 이 장소만의 특징"],["p","월리스 컬렉션의 시작은 19세기 영국 귀족 가문의 열정에서 비롯됩니다. 4대에 걸쳐 수집한 방대한 컬렉션을 마지막 소유주인 레이디 월리스가 영국 국가에 기증하면서 1900년에 대중에게 개방되었어요."],["p","이 미술관의 가장 큰 특징은 궁전 같은 저택 안에서 작품을 감상한다는 점입니다. 보통의 미술관처럼 흰 벽에 작품만 걸려 있는 게 아니라, 화려한 샹들리에, 황금빛 액자, 벨벳 소파가 어우러진 공간에서 마치 귀족의 응접실을 방문한 듯한 느낌을 받을 수 있죠."],["p","특히 프랑스 로코코 미술 컬렉션은 프랑스 밖에서는 가장 훌륭하다는 평가를 받고 있어요. 루이 15세 시대의 우아함과 화려함이 그대로 살아 숨쉬는 곳입니다."],["h3","4️⃣ 건축물(공간) 관람 포인트 설명"],["p","월리스 컬렉션이 위치한 Hertford House는 18세기에 지어진 타운하우스로, 전형적인 조지안 양식의 우아함을 보여줍니다. 내부는 프랑스 로코코 스타일로 꾸며져 있어 런던에 있으면서도 베르사유 궁전에 온 듯한 착각이 들 정도예요."],["p","꼭 봐야 할 포인트 TOP 3:"],["li","그레이트 갤러리 (Great Gallery): 미술관의 하이라이트로, 천장부터 바닥까지 명화로 가득 찬 압도적인 공간입니다. 벨라스케스, 티치아노, 루벤스 등 거장들의 작품이 빼곡하게 걸려 있어요."],["li","백 스테이트 룸 (Back State Room): 황금빛으로 장식된 로코코 스타일의 방으로, 부셰의 작품들이 전시되어 있습니다. 마치 프랑스 궁정에 온 듯한 화려함이 압권이에요."],["li","아모리 (Armouries): 유럽과 동양의 갑옷, 무기 컬렉션이 전시된 공간으로, 화려한 장식이 새겨진 중세 갑옷들이 인상적입니다."],["p","실제로 서서 보면 작품과 공간이 하나로 어우러져 '살아있는 미술관'이라는 느낌을 받게 됩니다. 사진 찍기 좋은 곳은 그레이트 갤러리 중앙에서 양쪽을 바라보는 앵글과, 중앙 계단 부근이에요."],["h3","5️⃣ 주요 작품 / 상징적인 요소 소개"],["li","프란스 할스의 '웃는 기사 (The Laughing Cavalier)': 월리스 컬렉션의 대표 작품입니다. 17세기 네덜란드 초상화로, 모델의 자신감 넘치는 미소와 화려한 의상이 인상적이에요. 어디서 봐도 눈이 마주치는 듯한 착각을 일으킨다는 점도 재미있죠."],["li","프랑수아 부셰의 작품들: 루이 15세 시대를 대표하는 화가의 작품이 여러 점 소장되어 있습니다. 파스텔톤의 부드러운 색감과 우아한 인물 묘사가 로코코 미술의 정수를 보여줍니다."],["li","세브르 도자기 컬렉션: 프랑스 왕실에서 사용하던 고급 도자기들이 전시되어 있어요. 섬세한 문양과 황금 장식이 당시 귀족 문화의 화려함을 엿볼 수 있게 해줍니다."],["p","처음 보시는 분들도 '웃는 기사' 앞에 서면 \"아, 이게 그 유명한 그림이구나\" 하고 바로 알아보실 수 있을 거예요."],["h3","6️⃣ 알고 가면 여행이 더 재밌어지는 이야기"],["p","월리스 컬렉션에는 재미있는 규칙이 하나 있어요. 바로 컬렉션을 절대 매각하거나 대여할 수 없다는 조건입니다. 레이디 월리스가 기증할 때 붙인 조건이죠. 그래서 이곳의 작품들은 다른 미술관으로 대여되는 일 없이 오직 이곳에서만 볼 수 있습니다."],["p","여행 팁:"],["li","덜 붐비는 시간대: 평일 오전이 가장 한적해요. 대형 미술관에 비해 관광객이 적은 편이라 언제 가도 여유롭게 감상할 수 있습니다."],["li","동선 팁: 1층부터 차근차근 올라가며 보는 것을 추천합니다. 특히 2층 갤러리들이 하이라이트니 시간이 부족하면 2층 위주로 보세요."],["li","놓치기 쉬운 포인트: 1층 중앙 아트리움에서 무료로 제공되는 오디오 가이드를 꼭 받으세요. 한국어는 없지만 영어 가이드가 작품 이해에 큰 도움이 됩니다. 그리고 미술관 내 레스토랑(Wallace Restaurant)도 분위기가 좋으니 시간 여유가 있다면 들러보세요."],["p","던트 북스에서 책 구경을 마친 후 걸어서 5분 거리라, 메릴본 지역을 여유롭게 산책하며 둘러보기 좋은 코스예요. 이곳에서 프랑스 로코코의 우아함을 느끼고 나면, 런던이 얼마나 다양한 문화를 품고 있는 도시인지 새삼 느끼게 될 겁니다."]],"357807d078df81d2a4d7e9db54d8bdc2":[["h2","AI 여행 가이드"],["h3","1️⃣ 장소의 기본 정보"],["li","장소 이름: 리버티 백화점 (Liberty London)"],["li","위치: 런던 웨스트엔드, 리젠트 스트리트 근처 (Great Marlborough Street)"],["li","추천 방문 소요 시간: 1~2시간 (쇼핑 목적이라면 더 길어질 수 있음)"],["li","입장료: 무료 (백화점이라 자유롭게 입장 가능)"],["li","운영 시간: 월~토 10:00~20:00, 일 12:00~18:00 (시즌에 따라 변동 가능)"],["li","이런 여행자에게 추천: 독특한 인테리어와 건축을 좋아하는 사람, 영국 감성의 패브릭·홈데코에 관심 있는 사람, SNS 감성 사진을 남기고 싶은 사람"],["h3","2️⃣ 한 문장으로 이해하는 기본 소개"],["p","이곳은 한마디로 말하면 튜더 양식의 아름다운 건축 안에서 영국 감성 쇼핑을 즐길 수 있는 백화점입니다. 단순히 물건을 파는 곳이 아니라, 건물 자체가 하나의 예술 작품이라 들어서는 순간부터 감탄이 나오는 곳이에요."],["h3","3️⃣ 역사와 이 장소만의 특징"],["p","리버티 백화점은 1875년 아서 라센비 리버티가 설립한 곳으로, 처음에는 일본과 동양의 직물을 판매하는 작은 상점에서 시작했어요. 당시 빅토리아 시대 영국에서는 동양 문화에 대한 관심이 높았는데, 리버티는 이 흐름을 타고 독특한 디자인의 패브릭과 홈데코 제품으로 큰 인기를 끌었죠."],["p","1924년에 지금의 튜더 양식 건물로 이전했는데, 재미있는 건 이 건물이 두 척의 군함—HMS 임피어리어스(Impregnable)와 HMS 힌더스탄(Hindustan)—의 목재로 지어졌다는 거예요. 그래서 건물 곳곳에 배에서 쓰던 나무가 사용되었고, 이게 리버티만의 독특한 분위기를 만들어냅니다."],["p","다른 백화점들이 화려하고 현대적인 외관을 자랑한다면, 리버티는 중세 영국의 저택 같은 외관과 아늑한 내부로 차별화돼요. 마치 해리포터에 나올 법한 공간이랄까요?"],["h3","4️⃣ 건축물(공간) 관람 포인트 설명"],["p","튜더 양식의 목조 건축이 주는 따뜻함이 이 건물의 백미예요. 외관은 검은색과 흰색의 목재 프레임이 특징적인 튜더 스타일이고, 내부로 들어가면 나무 계단과 복도, 천장이 미로처럼 이어져 있어요. 일반 백화점처럼 탁 트인 구조가 아니라, 작은 방들이 연결된 느낌이라 마치 저택을 탐험하는 기분이 들죠."],["p","꼭 봐야 할 포인트 TOP 3:"],["li","중앙 홀의 나무 계단과 발코니: 건물 중심에 있는 나선형 계단과 목재 발코니는 리버티의 상징이에요. 위를 올려다보면 여러 층이 겹쳐진 구조가 정말 인상적이고, 사진 찍기에도 최고예요."],["li","스테인드글라스 창문: 곳곳에 있는 스테인드글라스가 은은한 빛을 만들어내면서 분위기를 더해줍니다."],["li","패브릭 섹션: 1층에 있는 리버티 프린트 패브릭 코너는 브랜드의 정체성을 가장 잘 보여주는 곳이에요. 화려한 꽃무늬 원단들이 벽면 가득 진열되어 있는 모습이 압권입니다."],["h3","5️⃣ 주요 작품 / 상징적인 요소 소개"],["p","리버티 프린트(Liberty Print)가 이곳을 대표하는 상징이에요. 리버티는 독자적인 디자인의 꽃무늬 패턴으로 유명한데, 이 패턴들은 100년이 넘는 역사를 자랑하면서도 여전히 트렌디하게 느껴져요. 특히 작은 꽃들이 빼곡하게 들어간 섬세한 디자인이 특징이죠."],["p","이 프린트는 의류뿐만 아니라 가방, 스카프, 노트, 심지어 폰케이스까지 다양한 제품에 적용되어 있어서, \"영국 감성 기념품\"을 찾는다면 리버티 프린트 제품을 추천해요."],["p","또 하나 재미있는 건, 건물 외벽에 있는 시계탑과 조각상들이에요. Great Marlborough Street 쪽 외벽을 보면 성 조지와 드래곤 조각이 있는데, 이것도 포토 스팟으로 인기가 많아요."],["h3","6️⃣ 알고 가면 여행이 더 재밌어지는 이야기"],["p","덜 붐비는 시간대: 평일 오전 10시~11시, 또는 저녁 7시 이후가 비교적 한적해요. 주말 오후는 현지인과 관광객으로 붐비니 피하는 게 좋습니다."],["p","동선 팁: 1층 패브릭 코너에서 시작해서 중앙 계단을 따라 위로 올라가면서 각 층을 둘러보세요. 4층에는 홈데코와 가구 코너가 있는데, 여기도 분위기가 근사해요. 그리고 건물 뒤편에는 카페도 있으니 쇼핑 중간에 쉬어가기 좋아요."],["p","놓치기 쉬운 포인트: 많은 사람들이 1~2층만 보고 나가는데, 꼭 위층까지 올라가보세요. 층마다 분위기가 다르고, 특히 목재 구조가 더 잘 보여요. 그리고 외부에서 건물을 꼭 한 바퀴 돌아보세요. 각 면마다 다른 느낌을 주거든요."],["p","이걸 알고 보면 시선이 달라집니다: 리버티 백화점은 단순히 쇼핑 공간이 아니라, 영국의 '미학'과 '장인정신'이 녹아 있는 문화공간이에요. 여기서 파는 제품 하나하나가 스토리를 담고 있고, 건물 자체도 역사의 일부죠. 그냥 스쳐 지나가기보다는, 천천히 구석구석을 음미하며 걸어보세요. 런던에서 가장 '영국다운' 경험 중 하나가 될 거예요."]],"357807d078df817cbe00e3b41c353aa6":[["h2","AI 여행 가이드"]],"317807d078df80fea824c4be27589a9a":[["p","예약 완료"],["h3","홈페이지"],["p","https://www.stpauls.co.uk/","https://www.stpauls.co.uk/"],["h3","예약내역"],["li","예약 사이트 : NOL","https://tour.yanolja.com/tna/products/d1bf7d80-3a8f-4ad7-832c-53ded6abe8b3"],["li","결제 금액 : 총 90,216원 (인당 45,108원)"],["li","예약번호 : 8232CF"],["li","취소/환불 : 2026년 7월 12일 오후 6시까지 무료 취소"],["tg","취소/환불 규정"],["h3","예약 정보"],["tg","예약페이지"],["tg","참고 블로그"],["hr",""],["h2","AI 여행 가이드"],["h3","1️⃣ 장소의 기본 정보"],["li","장소 이름: 세인트 폴 대성당 / St. Paul's Cathedral"],["li","위치: 런던 중심부 (City of London)"],["li","추천 방문 소요 시간: 1시간 30분 ~ 2시간"],["li","입장료: 유료 (약 £27, 한화 약 54,000원)"],["li","운영 시간: 평일 오전 8:30 ~ 오후 4:30 (주일 예배 시간에는 관광 제한)"],["li","이런 여행자에게 추천: 역사와 건축을 좋아하는 사람, 런던 전망을 감상하고 싶은 사람, 영국 왕실 이야기에 관심 있는 사람"],["h3","2️⃣ 한 문장으로 이해하는 기본 소개"],["p","이곳은 한마디로 말하면 \"영국의 역사와 함께 숨 쉬어온 런던의 상징적인 대성당\"입니다."],["p","웨스트민스터 사원이 왕실의 공간이라면, 세인트 폴은 국가적 기념과 희망의 공간이에요. 2차 세계대전 때 런던이 폭격당할 때도 끝까지 무너지지 않았던 곳이고, 찰스 왕세자와 다이애나의 결혼식이 열린 곳이기도 하죠. 런던 여행에서 이 대성당을 빼놓으면 런던의 절반을 놓치는 거라고 할 정도로 중요한 장소입니다."],["h3","3️⃣ 역사와 이 장소만의 특징"],["p","세인트 폴 대성당은 604년에 처음 세워졌지만, 지금 우리가 보는 건물은 1666년 런던 대화재 이후 크리스토퍼 렌 경이 35년에 걸쳐 재건한 바로크 양식의 걸작이에요."],["p","1940년대 2차 세계대전 때 런던이 독일의 폭격을 받던 밤, 주변 건물들이 모두 불타는 와중에도 세인트 폴의 돔은 기적처럼 살아남았어요. 그 모습이 사진으로 전 세계에 퍼지면서 '희망의 상징'이 됐죠."],["p","웨스트민스터 사원과 자주 비교되는데, 웨스트민스터가 왕의 대관식과 장례식이 열리는 왕실 전용 공간이라면, 세인트 폴은 국가적 기념행사와 일반 시민들의 기도가 함께 이루어지는 열린 공간이라는 차이가 있어요. 처칠 장례식, 찰스-다이애나 결혼식 등 영국 역사의 중요한 순간들이 이곳에서 펼쳐졌습니다."],["h3","4️⃣ 건축물(공간) 관람 포인트 설명"],["p","바로크 양식의 걸작 돔"],["p","세인트 폴의 가장 큰 특징은 바로 그 거대한 돔이에요. 로마의 성 베드로 대성당에서 영감을 받아 설계됐는데, 높이가 111m나 되고 런던 어디서든 보일 정도예요. 안에서 올려다보면 천장화가 정말 압도적이에요."],["p","여기서 꼭 봐야 할 포인트 TOP 3"],["li","위스퍼링 갤러리 (Whispering Gallery): 돔 내부를 따라 원형으로 돌아가는 회랑인데요, 한쪽 벽에 대고 속삭이면 반대편 벽에서 들린다고 해서 이런 이름이 붙었어요. 실제로 해보면 신기해요. 다만 257개 계단을 올라가야 해요."],["li","골든 갤러리: 돔 꼭대기 야외 전망대예요. 528개 계단을 올라가야 하지만, 런던 시내 전경이 한눈에 들어오는 최고의 뷰 포인트예요. 템즈강, 타워브리지, 런던아이까지 다 보입니다."],["li","지하 묘지 (Crypt): 넬슨 제독, 웰링턴 공작, 크리스토퍼 렌 등 영국 역사 속 인물들이 묻혀 있어요. 웅장한 내부와는 달리 조용하고 경건한 분위기예요."],["p","사진 찍기 좋은 곳"],["p","밀레니엄 브리지에서 바라본 세인트 폴 대성당이 가장 유명한 각도예요. 해리포터 영화에도 나왔던 그 장면이죠. 템즈강을 배경으로 대성당 돔이 떠 있는 느낌이 정말 환상적이에요."],["h3","5️⃣ 주요 작품 / 상징적인 요소 소개"],["p","돔 내부 천장화"],["p","돔 안쪽을 올려다보면 성 바울의 생애를 그린 프레스코화가 펼쳐져 있어요. 제임스 손힐이라는 화가가 그렸는데, 바티칸 시스티나 성당의 미켈란젤로 천장화처럼 종교적 장면을 웅장하게 담아냈어요."],["p","높은 제단과 모자이크"],["p","제단 위쪽 벽면에는 빅토리아 시대에 추가된 화려한 모자이크가 있어요. 금빛과 푸른빛이 어우러져서 성당 안이 더 신성하게 느껴지죠. 처음 보면 \"와, 이게 진짜 성당이구나\" 싶을 정도로 압도적이에요."],["p","넬슨 제독과 웰링턴 공작의 묘"],["p","지하 묘지에는 트라팔가 해전의 영웅 넬슨 제독과 나폴레옹을 물리친 웰링턴 공작이 잠들어 있어요. 두 사람 모두 영국 역사에서 전쟁 영웅으로 추앙받는 인물들이라, 이곳이 단순한 성당을 넘어 국가적 기념 공간이라는 걸 실감하게 됩니다."],["h3","6️⃣ 알고 가면 여행이 더 재밌어지는 이야기"],["p","덜 붐비는 시간대"],["p","오전 일찍 오픈 직후(8:30~9:30)나 오후 3시 이후가 비교적 한적해요. 특히 아침 일찍 가면 위스퍼링 갤러리를 거의 혼자 체험할 수도 있어요."],["p","동선 팁"],["p","입장하면 먼저 1층 본당을 둘러본 뒤, 바로 계단을 올라가서 위스퍼링 갤러리 → 스톤 갤러리 → 골든 갤러리 순서로 오르는 게 좋아요. 내려올 때 지하 묘지를 보면 동선이 자연스럽습니다. 골든 갤러리까지 올라가려면 체력 소모가 꽤 되니까 편한 신발은 필수예요."],["p","사람들이 놓치기 쉬운 포인트"],["li","성당 북쪽에 있는 작은 예배당들도 정말 아름다워요. 대부분 사람들이 돔만 보고 가는데, 이 작은 공간들에 숨겨진 조각과 스테인드글라스가 진짜 보석 같아요."],["li","오디오 가이드(무료 포함)를 꼭 받으세요. 한국어도 지원되고, 각 공간의 역사적 의미를 자세히 설명해줘서 훨씬 더 깊이 있게 볼 수 있어요."],["li","일요일 오전에는 예배가 열려서 관광객 입장이 제한돼요. 하지만 예배에 참석하면 무료로 들어갈 수 있고, 파이프 오르간 연주와 성가대 찬양을 들을 수 있어서 색다른 경험이 됩니다."],["p","이걸 알고 보면 시선이 달라집니다"],["p","세인트 폴 대성당은 단순히 아름다운 건축물이 아니라, 전쟁과 재건, 희망과 기도의 역사가 켜켜이 쌓인 공간이에요. 2차 세계대전 때 폭격 속에서도 무너지지 않았던 그 돔 아래 서 있으면, 단순한 관광이 아니라 역사의 한 순간을 함께 경험하는 기분이 듭니다."],["h2","🎧 오디오 가이드 투어"],["h3","정문 입구 (The West Front)"],["p","세인트 폴 대성당에 오신 것을 환영합니다. 지금 여러분이 서 계신 이곳은 1697년에 완공된 서쪽 정면입니다. 크리스토퍼 렌이 설계한 이 웅장한 바로크 양식의 건축물은 1666년 런던 대화재 이후 35년에 걸쳐 재건되었습니다. 위를 올려다보시면 성 바울을 포함한 사도들의 조각상이 보이실 거예요. 이제 안으로 들어가 보시겠습니다."],["h3","본당 (The Nave)"],["p","본당에 들어서시면 천장까지 이어지는 높은 기둥들이 보이실 겁니다. 이 공간의 길이는 약 150미터에 달하며, 바로크 양식의 웅장함과 고전주의적 질서가 완벽하게 조화를 이루고 있습니다. 좌우를 둘러보시면 작은 예배당들이 있는데, 각각 다른 성인들을 기리고 있습니다. 특히 북쪽의 올 소울즈 채플(All Souls Chapel)은 1차 세계대전 희생자들을 추모하는 공간입니다."],["h3","돔 아래 (Beneath the Dome)"],["p","이제 대성당의 중심, 거대한 돔 아래에 서 계십니다. 고개를 들어 위를 올려다보세요. 111미터 높이의 이 돔은 로마의 성 베드로 대성당에서 영감을 받아 설계되었습니다. 돔 내부를 장식한 프레스코화는 성 바울의 생애를 그린 것으로, 제임스 손힐이 1716년에 완성했습니다. 2차 세계대전 당시 독일군의 폭격 속에서도 이 돔은 기적처럼 살아남아 런던 시민들에게 희망의 상징이 되었습니다."],["h3","위스퍼링 갤러리 입구 (Whispering Gallery Entrance)"],["p","이제 257개의 계단을 올라 위스퍼링 갤러리로 향하실 차례입니다. 천천히 오르시면서 계단 중간중간 보이는 창문을 통해 런던 시내를 내려다보세요. 위스퍼링 갤러리는 돔 내부를 따라 원형으로 돌아가는 회랑으로, 음향 효과가 특별합니다. 한쪽 벽에 대고 속삭이면 반대편 벽에서 그 소리가 들린다고 해서 '속삭임의 갤러리'라는 이름이 붙었습니다."],["h3","위스퍼링 갤러리 (Whispering Gallery)"],["p","위스퍼링 갤러리에 도착하셨습니다. 이곳에서는 돔의 천장화를 훨씬 가까이에서 감상하실 수 있습니다. 벽을 따라 천천히 걸으시면서 돔의 내부 구조를 자세히 살펴보세요. 한쪽 벽에 귀를 대고 누군가 반대편에서 속삭이는 소리를 들어보시는 것도 잊지 마세요. 아래를 내려다보면 본당의 모자이크 바닥이 한눈에 들어옵니다."],["h3","스톤 갤러리 (Stone Gallery)"],["p","더 올라가시면 스톤 갤러리에 도착합니다. 이곳은 돔 외부를 둘러싼 첫 번째 야외 전망대로, 런던 시내의 멋진 풍경을 감상하실 수 있습니다. 북쪽으로는 시티 오브 런던의 현대적인 고층 빌딩들이, 남쪽으로는 템즈강과 사우스뱅크가 보입니다. 잠시 쉬어가시면서 신선한 공기를 마시고 사진을 찍어보세요."],["h3","골든 갤러리 (Golden Gallery)"],["p","마지막 528개 계단을 모두 오르신 것을 축하드립니다! 여기는 세인트 폴 대성당의 최고 정점, 골든 갤러리입니다. 돔의 황금빛 꼭대기에서 런던 전체를 360도로 조망할 수 있는 최고의 전망대입니다. 동쪽으로는 타워 브리지와 타워 오브 런던이, 서쪽으로는 웨스트민스터와 런던아이가, 남쪽으로는 셰익스피어 글로브 극장이 보입니다. 이 풍경을 마음껏 즐겨보세요."],["h3","제단 (The High Altar)"],["p","이제 다시 내려와 본당 동쪽 끝의 제단으로 이동합니다. 제단 위쪽 벽면에는 빅토리아 시대에 추가된 화려한 모자이크가 장식되어 있습니다. 금빛과 푸른빛, 붉은빛이 어우러진 이 모자이크는 그리스도와 성인들의 모습을 담고 있습니다. 제단 뒤편의 아치형 천장도 섬세한 조각으로 가득합니다. 이곳에서 1981년 찰스 왕세자와 다이애나 비의 결혼식이 거행되었습니다."],["h3","지하 묘지 입구 (Crypt Entrance)"],["p","이제 지하 묘지로 내려가 보겠습니다. 이곳은 영국 역사의 위대한 인물들이 영면하는 공간입니다. 본당의 웅장함과는 대조적으로 조용하고 경건한 분위기가 흐릅니다. 계단을 천천히 내려가시면서 마음을 가다듬어 보세요."],["h3","넬슨 제독 묘 (Nelson's Tomb)"],["p","여기는 트라팔가 해전의 영웅, 호레이쇼 넬슨 제독의 묘입니다. 1805년 나폴레옹의 프랑스 함대를 물리친 그는 전투 중 전사했고, 국가장으로 이곳에 안장되었습니다. 검은 대리석 관 위에는 그의 업적을 기리는 문구가 새겨져 있습니다. 넬슨 제독은 영국 해군의 상징이자 국가적 영웅으로 추앙받고 있습니다."],["h3","웰링턴 공작 묘 (Duke of Wellington's Tomb)"],["p","조금 더 가시면 웰링턴 공작의 거대한 석관이 보입니다. 1815년 워털루 전투에서 나폴레옹을 최종적으로 물리친 그는 영국의 또 다른 전쟁 영웅입니다. 그의 묘는 콘월산 화강암으로 만들어졌으며, 무게만 18톤에 달합니다. 주변에는 그의 군사적 업적을 기리는 깃발과 훈장들이 전시되어 있습니다."],["h3","크리스토퍼 렌 묘 (Christopher Wren's Tomb)"],["p","지하 묘지의 동쪽 구석에는 이 대성당을 설계한 크리스토퍼 렌 경이 잠들어 있습니다. 그의 묘비에는 라틴어로 이렇게 적혀 있습니다. \"Lector, si monumentum requiris, circumspice\" - \"독자여, 그의 기념비를 찾는다면 주위를 둘러보라.\" 바로 이 대성당 전체가 그의 가장 위대한 기념비라는 뜻입니다. 렌은 1723년 91세의 나이로 세상을 떠났으며, 자신이 평생을 바쳐 지은 이곳에 영면하게 되었습니다."],["h3","OBE 채플 (OBE Chapel)"],["p","지하 묘지 동쪽에는 대영제국 훈장(Order of the British Empire) 수여자들을 기리는 채플이 있습니다. 스테인드글라스와 기념 명판들이 조용히 빛나고 있습니다. 이곳은 국가에 기여한 평범한 시민들을 기억하는 공간으로, 세인트 폴이 단순히 왕족과 귀족만의 공간이 아니라는 것을 보여줍니다."],["h3","투어 마무리 (Tour Conclusion)"],["p","세인트 폴 대성당 오디오 투어를 마치겠습니다. 이 성당은 300년이 넘는 시간 동안 런던의 중심에서 기도와 희망, 기념의 공간으로 자리해왔습니다. 대화재와 세계대전의 폭격 속에서도 살아남아 오늘날까지 우뚝 서 있는 이 건축물은 단순한 관광지가 아니라, 영국 역사 그 자체입니다. 오늘 이곳에서의 경험이 여러분에게 오래도록 기억되길 바랍니다. 방문해 주셔서 감사합니다."]],"317807d078df806e8f29e2e0a68b7966":[["p","예약 완료"],["h3","홈페이지"],["p","https://www.tate.org.uk/visit/tate-modern","https://www.tate.org.uk/visit/tate-modern"],["h3","예약내역"],["li","예약 사이트 : 공식홈페이지","https://www.tate.org.uk/whats-on/tate-modern/frida-kahlo-the-making-of-an-icon"],["li","결제 금액 : 총 £50 / 원 (1인 원)"],["li","예약번호 : 8232CF"],["li","취소/환불 : 환불 불가"],["tg","취소/환불 규정"],["h3","예약 정보"],["tg","참고 블로그"],["hr",""],["h2","AI 여행 가이드"],["h3","1️⃣ 장소의 기본 정보"],["p","장소 이름: 테이트 모던 (Tate Modern)"],["p","위치: 런던 템즈강 남쪽, 밀레니엄 브릿지 건너편 (사우스 뱅크 지역)"],["p","추천 방문 소요 시간: 2~3시간 (특별전까지 보려면 4시간 이상)"],["p","입장료: 상설전시 무료 / 특별전 유료 (£12~18 정도)"],["p","운영 시간: 일~목 10:00~18:00, 금~토 10:00~22:00"],["p","이런 여행자에게 추천: 현대미술에 관심 있는 분, 독특한 건축 공간을 좋아하는 분, 템즈강 야경을 즐기고 싶은 분"],["h3","2️⃣ 한 문장으로 이해하는 기본 소개"],["p","이곳은 한마디로 말하면 \"옛 발전소를 개조해 만든 세계 최고의 현대미술관\"입니다."],["p","런던이 전통과 현대가 공존하는 도시라는 걸 가장 잘 보여주는 공간이에요. 19세기 산업시설이 21세기 예술 공간으로 탈바꿈한 사례 중 가장 성공적인 곳이죠. 세계 3대 현대미술관 중 하나로, 피카소, 워홀, 백남준 같은 거장들의 작품을 무료로 볼 수 있다는 점에서 여행자들에게 큰 매력이 있습니다."],["h3","3️⃣ 역사와 이 장소만의 특징"],["p","테이트 모던의 건물은 원래 1947년에 지어진 뱅크사이드 발전소(Bankside Power Station)였어요. 템즈강변에서 런던에 전기를 공급하던 곳이었죠. 1981년 발전소가 문을 닫은 후, 이 거대한 산업 유산을 어떻게 활용할지 고민하던 중 2000년 현대미술관으로 재탄생했습니다."],["p","스위스 건축가 헤르조크 & 드 뫼롱이 설계를 맡았는데, 발전소의 벽돌 외관과 거대한 굴뚝을 그대로 살리면서 내부만 미술관으로 바꿨어요. 이게 정말 천재적인 선택이었죠. 99미터 높이의 굴뚝은 이제 테이트 모던의 상징이 되었고, 내부의 거대한 터빈 홀(Turbine Hall)은 세계 어디에도 없는 독특한 전시 공간이 됐습니다."],["p","다른 미술관과의 가장 큰 차이점은 \"산업 건축의 거친 매력과 현대 예술의 세련됨이 공존한다\"는 점이에요. 높은 천장, 노출된 콘크리트, 거대한 공간감—이 모든 게 작품을 보는 경험을 완전히 다르게 만듭니다."],["h3","4️⃣ 건축물(공간) 관람 포인트 설명"],["p","건축 양식: 산업 건축(Industrial Architecture) + 현대적 개조"],["p","🔹 꼭 봐야 할 포인트 TOP 3"],["li","터빈 홀(Turbine Hall): 입구 들어서면 바로 보이는 거대한 홀. 원래 발전기가 있던 공간인데, 천장 높이가 35미터나 돼요. 여기서 매년 대형 설치 작품을 전시하는데, 그 스케일이 압도적입니다. \"미술관에 들어왔다\"는 느낌보다 \"거대한 공장에 들어왔다\"는 느낌이 먼저 들 거예요."],["li","10층 전망대: 런던 시내와 템즈강, 세인트 폴 대성당이 한눈에 보이는 무료 전망 공간이에요. 금요일 저녁에 가면 야경까지 볼 수 있어서 강력 추천합니다."],["li","브릿지 연결 통로: 밀레니엄 브릿지를 건너 세인트 폴 대성당에서 걸어오는 경로가 정말 멋져요. 다리 위에서 테이트 모던의 외관을 보면 굴뚝이 랜드마크처럼 서 있는 모습이 인상적입니다."],["p","📸 사진 찍기 좋은 위치"],["li","밀레니엄 브릿지 중간에서 테이트 모던 건물 전경"],["li","터빈 홀 안에서 위를 올려다본 구도"],["li","10층 전망대에서 템즈강 + 세인트 폴 대성당"],["h3","5️⃣ 주요 작품 / 상징적인 요소 소개"],["p","테이트 모던은 1900년 이후의 현대·동시대 미술을 다루는 곳이에요. 대표 소장품으로는:"],["li","파블로 피카소 《우는 여인》(The Weeping Woman): 스페인 내전의 비극을 담은 작품. 피카소의 큐비즘 기법을 가장 잘 보여주는 걸작 중 하나입니다."],["li","앤디 워홀 《마릴린 먼로》: 팝아트의 상징. 대중문화와 예술의 경계를 허문 워홀의 대표작이에요."],["li","마크 로스코의 추상화: 거대한 색면 회화. 작품 앞에 서면 색이 주는 감정적 울림을 직접 느낄 수 있어요."],["li","백남준 비디오 아트: 한국 작가! TV를 이용한 설치 작품으로, 미디어 아트의 선구자로 평가받습니다."],["p","특별전도 정말 수준이 높아요. 세계적인 작가들의 회고전이나 주제별 기획전이 자주 열리니, 방문 전에 홈페이지에서 확인해 보세요."],["h3","6️⃣ 알고 가면 여행이 더 재밌어지는 이야기"],["p","🕐 덜 붐비는 시간대: 평일 오전 10~11시, 또는 금요일 저녁 8시 이후. 금요일 밤에 가면 야경도 보고 여유롭게 관람할 수 있어요."],["p","🚶 동선 팁:"],["li","입구는 북쪽(밀레니엄 브릿지 쪽)과 서쪽(강변 쪽) 두 곳. 브릿지에서 걸어오면 북쪽 입구가 가깝습니다."],["li","터빈 홀부터 보고, 엘리베이터로 위층 전시실 올라가서 내려오며 보는 게 효율적이에요."],["li","10층 전망대는 마지막에 들르는 걸 추천. 관람 후 템즈강 뷰 보며 여운 즐기기 좋습니다."],["p","🎁 사람들이 놓치기 쉬운 포인트:"],["li","1층 숍에 있는 아트북 코너—런던에서 현대미술 관련 책을 가장 잘 갖춘 곳 중 하나예요."],["li","6층 레스토랑—음식 가격은 좀 있지만, 뷰가 정말 좋습니다. 커피 한 잔만 시켜도 앉아 있을 수 있어요."],["li","건물 외벽의 벽돌 질감—가까이서 보면 발전소 시절의 흔적이 그대로 남아 있어요. 세월의 무게가 느껴집니다."],["p","💡 이걸 알고 보면 시선이 달라집니다:"],["p","테이트 모던은 단순히 \"미술 작품을 보러 가는 곳\"이 아니라, \"공간 자체가 하나의 예술품인 곳\"이에요. 발전소였던 건물이 어떻게 사람들에게 영감을 주는 문화 공간으로 바뀔 수 있는지, 그 과정 자체가 하나의 이야기거든요. 작품만 보지 말고, 천장도 보고, 벽도 만져보고, 공간의 스케일을 온몸으로 느껴보세요. 그게 이 미술관을 제대로 즐기는 방법입니다."],["h2","🎧 오디오 가이드 투어"],["p","소요 시간: 약 90분 (주요 작품 중심)"],["p","추천 동선: 북쪽 입구 → 터빈 홀 → 2층 → 4층 → 10층 전망대"],["h3","🎙️ Stop 1: 북쪽 입구 (밀레니엄 브릿지 쪽)"],["p","\"테이트 모던에 오신 것을 환영합니다. 여러분이 지금 서 있는 이 건물은 1981년까지 실제로 가동되던 뱅크사이드 발전소였습니다. 99미터 높이의 저 굴뚝이 보이시나요? 저것이 바로 이곳의 산업 유산을 상징하는 랜드마크입니다. 이제 안으로 들어가 과거와 현재가 만나는 공간을 경험해보시죠.\""],["h3","🎙️ Stop 2: 터빈 홀 (Turbine Hall)"],["p","\"지금 서 계신 이 거대한 공간이 바로 터빈 홀입니다. 천장 높이가 35미터에 달하는 이곳은 원래 발전기가 있던 자리예요. 위를 한번 올려다보세요. 이 압도적인 스케일, 노출된 콘크리트와 철골 구조—이 모든 것이 발전소의 흔적입니다. 매년 이곳에서는 세계적인 작가들의 대형 설치 작품이 전시됩니다. 공간 자체가 하나의 캔버스가 되는 거죠. 잠시 이 공간의 울림을 느껴보세요.\""],["h3","🎙️ Stop 3: 2층 - 피카소 《우는 여인》"],["p","\"2층 전시실로 올라오셨습니다. 여기서 만나실 첫 번째 작품은 파블로 피카소의 《우는 여인》입니다. 1937년, 스페인 내전이 한창일 때 그려진 이 그림은 전쟁의 비극을 여성의 얼굴로 표현했어요. 큐비즘 기법으로 얼굴이 여러 조각으로 나뉘어 있지만, 그 속에서 느껴지는 고통과 슬픔은 너무나 생생합니다. 가까이 다가가서 피카소가 사용한 붓터치를 직접 확인해보세요.\""],["h3","🎙️ Stop 4: 2층 - 앤디 워홀 《마릴린 먼로》"],["p","\"다음은 팝아트의 아이콘, 앤디 워홀의 《마릴린 먼로》입니다. 1960년대, 워홀은 대중문화의 이미지를 예술로 끌어올렸어요. 반복되는 마릴린의 얼굴, 강렬한 색감—이것은 단순한 초상화가 아니라 현대 사회의 소비문화와 유명인에 대한 숭배를 보여주는 작품입니다. 여러분도 한 번쯤 본 적 있는 이미지죠? 바로 그게 워홀이 의도한 거예요.\""],["h3","🎙️ Stop 5: 4층 - 마크 로스코 작품실"],["p","\"4층에는 마크 로스코의 거대한 색면 회화가 전시되어 있습니다. 로스코는 '색 자체가 감정을 전달할 수 있다'고 믿었어요. 작품 앞에 서서 잠시 눈을 감았다가 다시 떠보세요. 색이 주는 무게감, 깊이감, 그리고 묘한 감정의 울림이 느껴지실 겁니다. 이 방은 특별히 조명도 낮게 설정되어 있어요. 명상하듯 천천히 감상해보세요.\""],["h3","🎙️ Stop 6: 4층 - 백남준 비디오 아트"],["p","\"한국 작가 백남준의 비디오 아트입니다. 1960~70년대, 백남준은 TV라는 매체를 예술의 도구로 사용한 선구자였어요. 수십 개의 모니터가 빠르게 이미지를 바꾸며 만들어내는 리듬과 패턴—이것은 미디어가 우리 삶을 어떻게 점령하고 있는지를 보여주는 작품이기도 합니다. 지금 보시는 이 화면들, 50년 전 작품이지만 오늘날의 디지털 세상을 예견한 것 같지 않나요?\""],["h3","🎙️ Stop 7: 10층 전망대"],["p","\"마지막으로 10층 전망대에 오셨습니다. 템즈강 너머로 세인트 폴 대성당이 보이시죠? 저 대성당은 17세기 바로크 건축의 걸작이고, 여러분이 서 있는 이곳은 20세기 산업 건축이 21세기 문화 공간으로 재탄생한 곳입니다. 과거와 현재가 강을 사이에 두고 마주 보고 있는 거예요. 이 풍경을 기억해주세요. 런던은 이렇게 시간을 쌓아가는 도시입니다.\""],["p","💡 오디오 가이드 활용 팁:"],["li","각 Stop마다 2~3분 정도 여유를 두고 작품을 감상하세요"],["li","특별전이 열리고 있다면 해당 전시실도 추가로 방문해보세요"],["li","금요일 저녁 방문 시 야경과 함께 투어를 마무리하면 더욱 특별합니다"]],"316807d078df8027a1efc0d32a49d400":[["p","→ 상설전시는 무료 / 특별전시 유료 (£12.5)"],["p","→ 월레스와 그로밋 특별전시 예약 필요 (9/15 까지 진행) → Young V&A 에서 진행함"],["p","→ 예약 필요없음"],["h3","구매페이지"],["p","‣"],["tg","구매 옵션"],["h3","참고 블로그"],["p","‣"]],"316807d078df80d4a9b8cde67709c5be":[["p","→ 상설전시는 무료 / 기획전시 유료"],["p","→ 특별전시 필요없음"],["p","→ 무료이나 현장 대기 있어서 사전 입장 에약 필요"],["h3","홈페이지"],["p","https://www.nhm.ac.uk/","https://www.nhm.ac.uk/"],["tg","구매 옵션"]],"316807d078df809da37de70cf951da4b":[["p","→ 무료이나 현장 대기 있어서 사전 입장 에약 필요"],["h2","예약 정보"],["h2","AI 여행 가이드"],["h3","1️⃣ 장소의 기본 정보"],["li","장소 이름: 내셔널 갤러리 (The National Gallery)"],["li","위치: 런던 트라팔가 광장 (Trafalgar Square), 웨스트민스터"],["li","추천 방문 소요 시간: 2~3시간 (주요 작품 위주) / 반나절 (천천히 감상)"],["li","입장료: 무료 (특별 전시는 유료일 수 있음)"],["li","운영 시간: 매일 10:00~18:00 (금요일 ~21:00)"],["li","이런 여행자에게 추천: 미술 애호가, 유럽 회화에 관심 있는 분, 무료로 세계적 명작을 감상하고 싶은 분, 비오는 날 실내 관광을 원하는 분"],["h3","2️⃣ 한 문장으로 이해하는 기본 소개"],["p","내셔널 갤러리는 한마디로 말하면 유럽 회화의 정수를 무료로 감상할 수 있는 세계 최고 수준의 미술관입니다. 13세기부터 20세기 초까지 서양 미술사의 거장들 작품 2,300여 점을 소장하고 있어, 런던을 방문하는 미술 애호가라면 절대 놓칠 수 없는 필수 코스죠."],["h3","3️⃣ 역사와 이 장소만의 특징"],["p","내셔널 갤러리는 1824년 영국 정부가 은행가 존 줄리어스 앵거스타인의 개인 소장품 38점을 구입하면서 시작되었습니다. 당시 프랑스의 루브르, 스페인의 프라도 미술관처럼 왕실 소장품을 기반으로 한 미술관과 달리, 영국은 국민 모두가 예술을 향유할 수 있도록 '국립' 미술관을 만들겠다는 취지로 설립했죠."],["p","1838년 현재의 트라팔가 광장 자리로 이전하면서 본격적인 모습을 갖추게 되었고, 이후 꾸준한 기증과 구입을 통해 컬렉션을 확장해왔습니다. 특히 다른 미술관들과 달리 설립 초기부터 '무료 입장' 원칙을 고수해온 점이 인상적인데요, 이는 예술이 소수의 특권이 아닌 모든 시민의 것이라는 영국의 철학을 보여줍니다."],["p","내셔널 갤러리만의 차별점은 르네상스부터 인상주의까지 서양 미술사의 핵심 시대를 고루 아우르는 균형 잡힌 컬렉션입니다. 한 시대나 한 화가에 치우치지 않고, 미술사의 흐름을 한눈에 볼 수 있다는 점에서 교육적 가치도 높습니다."],["h3","4️⃣ 건축물(공간) 관람 포인트 설명"],["p","내셔널 갤러리 건물은 윌리엄 윌킨스가 설계한 신고전주의 양식으로, 트라팔가 광장을 내려다보는 위치에 자리잡고 있습니다. 정면의 거대한 코린트식 기둥과 돔이 인상적이죠."],["p","여기서 꼭 봐야 할 포인트 TOP 3:"],["li","세인즈베리 윙 (Sainsbury Wing): 1991년 증축된 현대적인 공간으로, 13~15세기 초기 르네상스 작품들이 전시되어 있습니다. 자연광을 최대한 활용한 설계가 돋보이며, 작품 감상에 최적화된 공간입니다."],["li","중앙 홀: 건물 중심부의 넓은 홀은 여러 전시실로 연결되는 허브 역할을 합니다. 천장의 자연광이 들어오는 구조가 인상적이며, 잠시 쉬어가기 좋은 벤치도 마련되어 있습니다."],["li","동쪽 전시실: 17~19세기 작품들이 주로 전시된 공간으로, 렘브란트와 베르메르 같은 네덜란드 거장들의 작품을 만날 수 있습니다."],["p","실제로 서서 보면 천장이 높고 공간이 넓어 답답하지 않으면서도, 작품 하나하나에 집중할 수 있게 설계되어 있다는 느낌을 받으실 겁니다. 각 전시실은 시대별, 화파별로 구성되어 있어 자연스럽게 미술사의 흐름을 따라가며 관람할 수 있습니다."],["p","사진 찍기 좋은 위치: 정면 계단에서 트라팔가 광장을 배경으로 찍으면 멋진 사진이 나옵니다. 내부에서는 대부분의 작품이 촬영 가능하지만(플래시 없이), 일부 특별 전시는 촬영 금지일 수 있으니 표지를 확인하세요."],["h3","5️⃣ 주요 작품 / 상징적인 요소 소개"],["p","내셔널 갤러리를 대표하는 작품들을 소개합니다:"],["li","빈센트 반 고흐 〈해바라기〉(Sunflowers): 반 고흐가 1888년 프랑스 남부 아를에서 그린 연작 중 하나입니다. 노란색의 강렬한 생명력과 고흐 특유의 거친 붓터치가 인상적이죠. 이 작품은 고흐가 함께 작업하던 폴 고갱을 환영하기 위해 그렸다고 알려져 있습니다."],["li","레오나르도 다 빈치 〈암굴의 성모〉(The Virgin of the Rocks): 다 빈치의 두 가지 버전 중 런던 버전으로, 르네상스 회화의 정점을 보여주는 작품입니다. 신비로운 암굴 속 빛의 표현과 인물들의 섬세한 손가락 묘사가 특히 유명합니다."],["li","얀 반 에이크 〈아르놀피니 부부의 초상〉(The Arnolfini Portrait): 1434년 작품으로, 그림 속 볼록 거울에 반사된 화가의 모습까지 정교하게 그려진 북유럽 르네상스의 걸작입니다. 부부의 결혼 서약을 기록한 일종의 '법적 문서' 역할을 했다는 해석도 있습니다."],["li","디에고 벨라스케스 〈거울 앞의 비너스〉(The Rokeby Venus): 스페인 화가 벨라스케스가 그린 누드화로, 거울을 통해 비너스의 얼굴을 보여주는 독특한 구도가 인상적입니다."],["li","조르주 쇠라 〈아니에르에서의 물놀이〉(Bathers at Asnières): 점묘법으로 그려진 대형 작품으로, 가까이서 보면 수많은 점들로 이루어져 있지만 멀리서 보면 완벽한 그림이 되는 신기한 경험을 할 수 있습니다."],["p","처음 보는 분들도 \"교과서에서 봤던 그 그림!\"이라고 알아보실 만한 유명 작품들이 많아요. 특히 반 고흐의 해바라기 앞에서는 사람들이 가장 오래 머물곤 합니다."],["h3","6️⃣ 알고 가면 여행이 더 재밌어지는 이야기"],["p","덜 붐비는 시간대: 오픈 직후인 오전 10시나 금요일 저녁 시간대(18시 이후)가 비교적 한적합니다. 점심시간(12~14시)과 주말 오후는 가장 붐비니 피하는 게 좋아요."],["p","동선 팁: 시대 순서대로 보고 싶다면 세인즈베리 윙(초기 르네상스)부터 시작해서 시계 반대 방향으로 도는 게 좋습니다. 하지만 꼭 보고 싶은 작품이 있다면 입구에서 무료 지도를 받아 해당 전시실로 바로 가는 것도 방법입니다. 오디오 가이드(유료)도 있지만, 각 작품 옆 설명문만으로도 충분히 이해할 수 있어요."],["p","사람들이 놓치기 쉬운 포인트:"],["li","지하에 카페가 있어서 관람 중간에 커피 한 잔 하며 쉬어갈 수 있습니다."],["li","뮤지엄 샵의 엽서와 아트 프린트가 퀄리티 대비 가격이 합리적이에요."],["li","트라팔가 광장 쪽 계단에 앉아 있으면 거리 공연도 자주 볼 수 있습니다."],["li","월요일~목요일에는 무료 가이드 투어(영어)가 있으니 참고하세요."],["p","재미있는 이야기: 1914년, 여성 참정권 운동가 메리 리처드슨이 벨라스케스의 〈거울 앞의 비너스〉를 식칼로 훼손하는 사건이 있었습니다. 체포된 그녀는 \"정부가 에멀린 팽크허스트(참정권 운동 지도자)를 파괴하고 있으니, 역사상 가장 아름다운 여성(그림 속 비너스)을 파괴하겠다\"고 말했죠. 현재 작품은 복원되었지만, 가까이서 보면 아직도 칼자국의 흔적을 발견할 수 있습니다."],["p","이걸 알고 보면 시선이 달라집니다: 내셔널 갤러리의 모든 작품은 기증이나 구입을 통해 확보한 것으로, 약탈이나 전쟁을 통해 얻은 작품이 하나도 없다는 점이 자랑입니다. 그래서 더욱 '국민의 미술관'이라는 의미가 깊게 다가오죠."]],"317807d078df815ea97ee311869cacce":[["h3","후보"]],"317807d078df81639fd2ecc07efb7059":[["h3","피쉬앤칩스 후보"]],"317807d078df81b5bac8ef2208ee86e9":[["h3","기존 후보"],["p","Little Four Seasons","https://maps.app.goo.gl/FyUkT73EeKxGnYTHA"]],"317807d078df8181beaec729001627c6":[["h3","선데이로스트 후보"],["h3","THE SHIP TAVERN"],["p","https://theshiptavern.co.uk/dining-rooms/","https://theshiptavern.co.uk/dining-rooms/"]],"317807d078df80bea0c5dce650daa671":[["h3","기존 후보"],["p","Fatt Pundit","https://maps.app.goo.gl/7Y1g8cH3Zfy6oaoDA"]],"317807d078df80aca86ac1b561202ca9":[["h3","후보"]],"317807d078df802a9ceff75b0a21066b":[["h3","기존 후보"],["p","The Marylebone Corner","https://maps.app.goo.gl/KUEMYGwUAGD4G5A97"]],"317807d078df8015a6b7e7ce55245a17":[["h3","후보"]],"317807d078df802580ecff1e3749f9fe":[["h3","후보"]]};
+function pgId(pg){ const m=(pg||"").match(/([0-9a-f]{32})$/); return m?m[1]:""; }
+function nbEsc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function nbContent(pg){
+  const all = NOTION_CONTENT[pgId(pg)];
+  if(!all||!all.length) return "";
+  // 'AI 여행 가이드' 이후 내용만 표시 (없으면 비움)
+  const idx = all.findIndex(r=>r[1] && r[1].trim()==="AI 여행 가이드");
+  if(idx<0) return "";
+  const rows = all.slice(idx+1);
+  if(!rows.length) return "";
+  let h='<div class="notion-embed"><div class="ne-h">AI 여행 가이드</div><div class="nb-card"><div class="nb">';
+  rows.forEach(r=>{
+    const ty=r[0], tx=nbEsc(r[1]), href=r[2];
+    if(ty==="hr"){ h+="<hr>"; return; }
+    if(!tx) return;
+    if(href){ h+=`<p><a href="${href}" target="_blank" rel="noopener">${tx}</a></p>`; return; }
+    if(ty==="h1") h+=`<h1>${tx}</h1>`;
+    else if(ty==="h2") h+=`<h2>${tx}</h2>`;
+    else if(ty==="h3") h+=`<h3>${tx}</h3>`;
+    else if(ty==="tg") h+=`<div class="tg">${tx}</div>`;
+    else if(ty==="li") h+=`<div class="li">${tx}</div>`;
+    else if(ty==="c") h+=`<div class="c">${tx}</div>`;
+    else if(ty==="q") h+=`<div class="q">${tx}</div>`;
+    else h+=`<p>${tx}</p>`;
+  });
+  h+="</div></div></div>";
+  return h;
+}
+
+/* ===== DATA ===== */
+const DAYS = [
+  { n:1, date:"07.10", dow:"금", theme:"런던 입성", events:[
+    {t:"10:55–17:20", k:"flight", ttl:"인천 → 런던 KE907", note:"대한항공"},
+    {t:"17:20–18:30", k:"see", ttl:"입국 수속"},
+    {t:"18:30–20:00", k:"move", ttl:"런던 시내 이동", move:"튜브 46분 · Heathrow Terminals → Tottenham Court Road → Charing Cross"},
+    {t:"20:00–20:30", k:"see", ttl:"호텔 체크인 (Strand Palace Hotel)", map:"Strand Palace Hotel London"},
+    {t:"20:30–21:30", k:"food", ttl:"마트 — Tesco Express", map:"Tesco Express Strand London"},
+    {t:"~", k:"rest", ttl:"숙소 휴식"},
+  ]},
+  { n:2, date:"07.11", dow:"토", theme:"노팅힐 · 소호", events:[
+    {t:"06:30–07:20", k:"rest", ttl:"기상 / 준비"},
+    {t:"07:20–08:00", k:"move", ttl:"노팅힐 이동", move:"튜브 25분 · Embankment → Notting Hill Gate"},
+    {t:"08:00–09:00", k:"see", ttl:"노팅힐", note:"사람 없을 때 거리 사진", map:"Notting Hill London"},
+    {t:"09:00–10:00", k:"food", ttl:"아침 — Dishoom Permit Room", note:"포토벨로마켓 근처 · 인도 음식", hour:"토 09:00–24:00", map:"Dishoom Permit Room London"},
+    {t:"10:00–14:00", k:"shop", ttl:"포토벨로 마켓", note:"서점·가게 구경", map:"Portobello Road Market London", subs:["Books for Cooks","Cheeky Scone","LoveShackFancy"]},
+    {t:"14:00–15:00", k:"move", ttl:"런던 시내 이동", move:"튜브 28분 · Notting Hill Gate → Tottenham Court Rd"},
+    {t:"15:00–16:30", k:"food", ttl:"점심 — Funky Noodles", note:"차이나타운 · 중국 음식", hour:"토 12:00–23:00", map:"Funky Noodles Chinatown London"},
+    {t:"16:30–17:00", k:"shop", ttl:"랄프로렌 (Ralph Lauren Flagship)", hour:"토 10:00–20:00", move:"도보 14분 · 1km", map:"Ralph Lauren Bond Street London"},
+    {t:"17:00–18:30", k:"shop", ttl:"포트넘 앤 메이슨", hour:"10:00–20:00", move:"도보 4분 · 300m", map:"Fortnum and Mason Piccadilly London"},
+    {t:"18:30–19:00", k:"shop", ttl:"F1 카드샵 (Fanatics Collectibles)", note:"시간 되면: 햄리스 · M&M · 레고스토어", hour:"10:00–20:00", move:"도보 6분 · 350m", map:"Fanatics Collectibles Regent Street London"},
+    {t:"19:00–20:00", k:"see", ttl:"트라팔가 광장", note:"시내 중심 구경하며 이동", move:"도보 8분 · 650m", map:"Trafalgar Square London"},
+    {t:"20:00–22:00", k:"see", ttl:"빅벤 노을 / 야경", note:"일몰 21:12 (작년 기준)", move:"도보 13분 · 900m", map:"Big Ben London"},
+    {t:"22:00–22:20", k:"move", ttl:"숙소 이동", move:"도보 19분 · 1.3km"},
+    {t:"~", k:"rest", ttl:"숙소 휴식"},
+  ]},
+  { n:3, date:"07.12", dow:"일", theme:"코벤트가든 · 런던브릿지", events:[
+    {t:"06:30–07:30", k:"rest", ttl:"기상 / 준비"},
+    {t:"07:30–08:00", k:"move", ttl:"코벤트가든 이동", move:"도보 8분 · 550m"},
+    {t:"08:00–09:00", k:"see", ttl:"다이애건 앨리 (Goodwin's Court)", map:"Goodwins Court London"},
+    {t:"09:00–10:00", k:"food", ttl:"아침 — Capilungo All Day Dining", note:"완전 간단히", hour:"일 09:00–20:00", map:"Capilungo All Day Dining London"},
+    {t:"10:00–12:30", k:"shop", ttl:"해리포터 거리 (Cecil Court)", note:"코벤트가든 마켓·문구점·빈티지 버버리·폴스미스", map:"Cecil Court London"},
+    {t:"12:30–13:00", k:"move", ttl:"식당 이동", move:"도보 18분 · 1.2km"},
+    {t:"13:00–14:30", k:"food", ttl:"점심 — The Ship Tavern", note:"선데이 로스트", hour:"일 11:00–24:00", resv:"ok", map:"The Ship Tavern Holborn London"},
+    {t:"14:40–16:10", k:"see", ttl:"닐스 야드 (Neal's Yard)", move:"도보 7분 · 500m", map:"Neals Yard London"},
+    {t:"16:30–18:30", k:"food", ttl:"애프터눈티 — Centre Court-Yard (Ham Yard Hotel)", hour:"07:00–22:30", move:"도보 11분 · 750m", map:"Ham Yard Hotel Soho London"},
+    {t:"18:30–19:00", k:"see", ttl:"소호", move:"도보 5분 · 350m", map:"Soho London"},
+    {t:"19:00–19:30", k:"move", ttl:"런던브릿지 이동", move:"튜브 25분 · Oxford Circus → Bank"},
+    {t:"19:30–21:00", k:"see", ttl:"런던브릿지 야경", note:"일몰 21:12 (작년 기준)", map:"London Bridge London"},
+    {t:"21:00–21:30", k:"move", ttl:"숙소 이동", move:"버스 19분 · 15번"},
+    {t:"21:30–22:30", k:"food", ttl:"야식 (배고프면)", note:"Nando's Covent Garden / Vasiniko (피자)", map:"Nandos Covent Garden London"},
+    {t:"~", k:"rest", ttl:"숙소 휴식"},
+  ]},
+  { n:4, date:"07.13", dow:"월", theme:"빅벤 · 웨스트민스터", events:[
+    {t:"06:30–07:30", k:"rest", ttl:"기상 / 준비"},
+    {t:"07:30–08:30", k:"food", ttl:"아침 — WatchHouse Covent Garden", note:"카페", hour:"월 07:30–18:00", move:"도보 2분 · 150m", map:"WatchHouse Covent Garden London"},
+    {t:"08:30–09:00", k:"move", ttl:"빅벤 이동", move:"버스 14분 · 26·87번"},
+    {t:"09:00–12:00", k:"see", ttl:"빅벤 · 웨스트민스터교 · 런던아이", note:"사진 많이 찍고 오기", map:"Big Ben London"},
+    {t:"12:00–12:30", k:"move", ttl:"웨스트민스터 사원 이동", move:"도보 5분 · 350m"},
+    {t:"12:30–14:00", k:"see", ttl:"웨스트민스터 사원", note:"£31 · 12:30 입장", hour:"월–금 09:30–15:30", resv:"ok", map:"Westminster Abbey London"},
+    {t:"14:00–14:30", k:"move", ttl:"테이트 브리튼 이동", move:"도보 15분 · 1.1km"},
+    {t:"14:30–16:00", k:"see", ttl:"테이트 브리튼", note:"상설 무료", hour:"매일 10:00–18:00", resv:"free", map:"Tate Britain London"},
+    {t:"16:30–18:00", k:"food", ttl:"점심 — Mr Fogg's Tavern", note:"현지식 · 버스 24분 87번", hour:"월 12:00–23:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
+    {t:"18:00–18:10", k:"move", ttl:"호텔 이동 (짐 놓기)", move:"도보 8분 · 600m"},
+    {t:"19:00–22:00", k:"see", ttl:"뮤지컬 — 패딩턴", note:"사보이 극장 · 19:00", resv:"ok", map:"Savoy Theatre London"},
+    {t:"~", k:"rest", ttl:"숙소 휴식 · 저녁 누룽지+반찬 · 체크아웃 짐싸기"},
+  ]},
+  { n:5, date:"07.14", dow:"화", theme:"메릴본 · 애프터눈티", events:[
+    {t:"06:00–07:00", k:"rest", ttl:"기상 / 준비"},
+    {t:"07:00–07:30", k:"see", ttl:"호텔 체크아웃 / 짐 맡기기"},
+    {t:"07:30–08:00", k:"move", ttl:"메릴본 이동", move:"튜브 26분 · Charing Cross → Edgware Road"},
+    {t:"08:00–09:00", k:"food", ttl:"아침 — White Mulberries", note:"카페 · 호텔 앞", hour:"07:00–18:00", map:"White Mulberries London"},
+    {t:"09:00–10:00", k:"see", ttl:"던트 북스 (Daunt Books Marylebone)", map:"Daunt Books Marylebone London"},
+    {t:"10:00–12:00", k:"see", ttl:"월리스 컬렉션", map:"The Wallace Collection London"},
+    {t:"12:30–14:30", k:"food", ttl:"애프터눈티 — The Promenade (The Dorchester)", note:"£95 · 15% 서비스차지", hour:"07:00–22:30", map:"The Dorchester London"},
+    {t:"14:30–15:30", k:"see", ttl:"더 콘노트 호텔 부근 동네 산책", move:"도보 8분 · 550m", map:"The Connaught Hotel London"},
+    {t:"15:30–16:10", k:"shop", ttl:"젤리캣 스토어 (Selfridges 백화점)", move:"도보 8분 · 550m", map:"Selfridges London"},
+    {t:"16:30–18:00", k:"shop", ttl:"리버티 백화점 (Liberty London)", move:"도보 12분 · 850m", map:"Liberty London"},
+    {t:"18:00–18:30", k:"move", ttl:"코벤트가든 이동", move:"버스 23분 · 139번"},
+    {t:"18:30–19:30", k:"shop", ttl:"마리아쥬 프레르 · 위타드 (Whittard)", note:"코벤트가든점 구경", map:"Mariage Freres Covent Garden London"},
+    {t:"19:30–20:00", k:"move", ttl:"숙소 이동", move:"도보 4분 · 350m"},
+    {t:"20:00–20:30", k:"move", ttl:"짐 찾아 숙소 이동", note:"체크인 방법: 열쇠 보관함", move:"우버 23분 · 6km"},
+    {t:"~", k:"rest", ttl:"숙소 휴식 (에어비앤비)"},
+  ]},
+  { n:6, date:"07.15", dow:"수", theme:"세인트폴 · 테이트 모던", events:[
+    {t:"08:00–09:00", k:"rest", ttl:"기상 / 준비"},
+    {t:"09:00–10:20", k:"food", ttl:"아침 — The Muffin Man Tea Shop", hour:"수 09:00–17:00", move:"도보 11분 · 850m", map:"The Muffin Man Tea Shop Kensington London"},
+    {t:"10:20–11:00", k:"move", ttl:"세인트폴 대성당 이동", move:"튜브 35분 · Mansion House → High Street Kensington"},
+    {t:"11:00–12:00", k:"see", ttl:"세인트 폴 대성당", note:"£27 · 11:00 입장", hour:"월–토 08:30–16:30", resv:"ok", map:"St Pauls Cathedral London"},
+    {t:"12:30–14:00", k:"see", ttl:"테이트 모던", note:"상설 무료 · 12:30 입장", hour:"일–목 10:00–18:00", resv:"ok", map:"Tate Modern London"},
+    {t:"14:30–15:00", k:"see", ttl:"리플렉션 가든 (Reflection Garden)", move:"도보 11분 · 850m", map:"Reflection Garden London"},
+    {t:"15:00–16:00", k:"food", ttl:"점심 — Five Guys St. Paul's", note:"버거", hour:"10:00–23:30", move:"도보 15분 · 1km", map:"Five Guys St Pauls London"},
+    {t:"16:30–18:00", k:"shop", ttl:"Fortnum & Mason at The Royal Exchange", note:"또는 Tea shop", hour:"10:00–19:00", move:"도보 5분 · 300m", map:"Fortnum Mason Royal Exchange London"},
+    {t:"18:30–19:30", k:"see", ttl:"루드게이트 힐 (Ludgate Hill)", note:"근처 루프탑 올라가서 사진", move:"도보 15분 · 1km", map:"Ludgate Hill London"},
+    {t:"20:00–21:30", k:"see", ttl:"F1 Arcade London", note:"예약 필요", hour:"12:00–01:00", move:"버스 13분 · 8·25번", map:"F1 Arcade London"},
+    {t:"21:30–22:10", k:"move", ttl:"숙소 이동", move:"튜브 37분 · Mansion House → Gloucester Road"},
+    {t:"저녁", k:"rest", ttl:"저녁 — 숙소 (햇반+반찬)"},
+  ]},
+  { n:7, date:"07.16", dow:"목", theme:"바스 당일치기", events:[
+    {t:"05:00–06:20", k:"rest", ttl:"기상 / 준비"},
+    {t:"06:20–07:00", k:"move", ttl:"패딩턴역 이동", move:"버스 17분 · High Street Kensington → Paddington Station"},
+    {t:"07:29–08:42", k:"flight", ttl:"바스 이동 (기차)", note:"예약 완료", resv:"ok", map:"Bath Spa Railway Station"},
+    {t:"08:42–10:00", k:"see", ttl:"메인 길 산책", map:"Bath city centre UK"},
+    {t:"10:00–11:30", k:"see", ttl:"리젠시 티룸 / 제인오스틴 기념관", hour:"10:00–16:30", resv:"wait", map:"The Jane Austen Centre Bath"},
+    {t:"11:30–12:30", k:"see", ttl:"로얄 크레스켄트 (Royal Crescent)", map:"Royal Crescent Bath"},
+    {t:"13:00–14:00", k:"food", ttl:"점심 — Sally Lunn's (Historic Eating House)", note:"현지식", hour:"매일 10:00–21:00", map:"Sally Lunns Bath"},
+    {t:"14:00–16:00", k:"see", ttl:"홀번 뮤지엄 / 풀테니 다리", map:"Pulteney Bridge Bath"},
+    {t:"16:00–17:00", k:"see", ttl:"펌프룸 (The Pump Room) · 저녁식사", hour:"10:00–16:00", map:"The Pump Room Bath"},
+    {t:"17:00–18:00", k:"see", ttl:"애비 델리 (The Abbey Deli)", note:"프라이어파크 랜드스케이프 가든", map:"The Abbey Deli Bath"},
+    {t:"18:43–20:07", k:"flight", ttl:"패딩턴 이동 (기차)", note:"예약 완료", resv:"ok"},
+    {t:"20:07–20:40", k:"move", ttl:"숙소 이동"},
+    {t:"20:40–21:30", k:"food", ttl:"마트 — Tesco Express", note:"Gloucester Road 역 앞", map:"Tesco Express Gloucester Road London"},
+    {t:"~", k:"rest", ttl:"숙소 휴식"},
+  ]},
+  { n:8, date:"07.17", dow:"금", theme:"V&A · 내셔널 갤러리", events:[
+    {t:"08:00–09:30", k:"rest", ttl:"기상 / 준비"},
+    {t:"09:30–10:00", k:"move", ttl:"V&A 박물관 이동", move:"버스 19분 · 49번"},
+    {t:"10:00–12:00", k:"see", ttl:"V&A 박물관", map:"Victoria and Albert Museum London"},
+    {t:"12:00–12:30", k:"move", ttl:"자연사박물관 이동", move:"도보 5분"},
+    {t:"12:30–13:00", k:"see", ttl:"자연사박물관", note:"공룡뼈만 보고 나오기 · 12:30 입장", resv:"ok", map:"Natural History Museum London"},
+    {t:"13:00–14:30", k:"food", ttl:"점심 — 자연사박물관 근처", map:"Natural History Museum London"},
+    {t:"14:30–15:00", k:"move", ttl:"내셔널 갤러리 이동"},
+    {t:"15:00–16:30", k:"see", ttl:"내셔널 갤러리", note:"15:00 입장", resv:"ok", map:"The National Gallery London"},
+    {t:"16:30–17:30", k:"move", ttl:"만다린 오리엔탈 이동", move:"버스 20분 · 19번"},
+    {t:"17:30–19:00", k:"food", ttl:"저녁 — Hyde Park Garden", note:"만다린 오리엔탈", resv:"ok", map:"Mandarin Oriental Hyde Park London"},
+    {t:"19:30–20:00", k:"see", ttl:"빅벤 일몰 / 야경", note:"일몰 21:12 (작년 기준)", map:"Big Ben London"},
+    {t:"20:00–20:30", k:"move", ttl:"숙소 이동", move:"튜브 26분 · Westminster → Gloucester Road"},
+    {t:"~", k:"rest", ttl:"숙소 휴식"},
+  ]},
+  { n:9, date:"07.18", dow:"토", theme:"마무리 · 귀국", events:[
+    {t:"오전", k:"rest", ttl:"기상 / 준비"},
+    {t:"11:00", k:"see", ttl:"체크아웃"},
+    {t:"11:00", k:"see", ttl:"짐 맡기기 — Local Supermarket", note:"Bounce 앱 예약 · 도보 3분", map:"left luggage Kensington London"},
+    {t:"15:00", k:"food", ttl:"브런치", note:"숙소 근처", map:"brunch Kensington London"},
+    {t:"15:30–16:30", k:"move", ttl:"짐 찾기 / 공항 이동", move:"튜브 50분 · High St Kensington → Paddington → Heathrow"},
+    {t:"19:35", k:"flight", ttl:"런던 → 인천 KE908"},
+  ]},
+  { n:10, date:"07.19", dow:"일", theme:"인천 도착", events:[
+    {t:"16:15", k:"flight", ttl:"인천공항 도착 🛬"},
+  ]},
+];
+
+const FOOD = [
+  {day:1, date:"07.10(금)", slot:"저녁", icon:"🍽️", area:"숙소", name:"숙소", menu:"", hour:"", resv:null, map:null},
+  {day:2, date:"07.11(토)", slot:"아침", icon:"🍽️", area:"노팅힐", name:"Dishoom Permit Room", menu:"인도 음식점", hour:"09:00~24:00 (토)", resv:null, map:"Dishoom Permit Room London"},
+  {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"차이나타운", name:"Funky Noodles", menu:"중국 음식점", hour:"12:00~22:00 (토)", resv:null, map:"Funky Noodles Chinatown London"},
+  {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"소호", name:"Hobson`s Fish & Chips soho (후보·취소 예정)", menu:"피쉬앤칩스", hour:"12:00~23:00 (토)", resv:"ok", map:"Hobsons Fish and Chips Soho London"},
+  {day:3, date:"07.12(일)", slot:"아침", icon:"🍽️", area:"코벤트가든", name:"Capilungo All Day Dining", menu:"이탈리안 카페", hour:"09:00~20:00 (일)", resv:null, map:"Capilungo All Day Dining London"},
+  {day:3, date:"07.12(일)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"The Ship Tavern", menu:"선데이로스트", hour:"11:00~24:00 (일)", resv:"ok", map:"The Ship Tavern Holborn London"},
+  {day:3, date:"07.12(일)", slot:"애프터눈티", icon:"🫖", area:"소호", name:"Centre Court-Yard (Ham Yard Hotel)", menu:"애프터눈티", hour:"매일 07:00~22:30", resv:null, map:"Ham Yard Hotel Soho London"},
+  {day:3, date:"07.12(일)", slot:"저녁", icon:"🍽️", area:"타워브릿지", name:"Tower Bridge Collective (후보)", menu:"버거", hour:"08:00~22:30", resv:null, map:"Tower Bridge Collective London"},
+  {day:3, date:"07.12(일)", slot:"야식", icon:"🍽️", area:"숙소 근처", name:"Nando's Covent Garden", menu:"타코", hour:"11:00~22:00", resv:null, map:"Nandos Covent Garden London"},
+  {day:3, date:"07.12(일)", slot:"야식", icon:"🍽️", area:"숙소 근처", name:"Vasiniko", menu:"피자", hour:"12:00~22:30 (일)", resv:null, map:"Vasiniko London"},
+  {day:4, date:"07.13(월)", slot:"아침", icon:"🍽️", area:"코벤트가든", name:"WatchHouse Covent Garden", menu:"카페", hour:"07:30~18:00 (월)", resv:null, map:"WatchHouse Covent Garden London"},
+  {day:4, date:"07.13(월)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"Mr Fogg's Tavern", menu:"현지식", hour:"12:00~23:30 (월)", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
+  {day:4, date:"07.13(월)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"Fatto a Mano Covent Garden (후보)", menu:"피자", hour:"12:00~22:00", resv:null, map:"Fatto a Mano Covent Garden London"},
+  {day:4, date:"07.13(월)", slot:"저녁", icon:"🏠", area:"숙소 (호텔)", name:"숙소 (호텔)", menu:"누룽지+반찬", hour:"", resv:null, map:null},
+  {day:5, date:"07.14(화)", slot:"아침", icon:"🍽️", area:"메릴본", name:"White Mulberries", menu:"카페", hour:"07:00~18:00", resv:null, map:"White Mulberries London"},
+  {day:5, date:"07.14(화)", slot:"점심", icon:"🫖", area:"애프터눈티", name:"The Promenade (The Dorchester)", menu:"애프터눈티", hour:"07:00~22:30", resv:null, map:"The Dorchester London"},
+  {day:5, date:"07.14(화)", slot:"저녁", icon:"🏠", area:"숙소 (에어비앤비)", name:"숙소 (에어비앤비)", menu:"햇반+반찬", hour:"", resv:null, map:null},
+  {day:6, date:"07.15(수)", slot:"아침", icon:"🍽️", area:"숙소 근처", name:"The Muffin Man Tea Shop", menu:"", hour:"09:00~17:00", resv:null, map:"The Muffin Man Tea Shop Kensington London"},
+  {day:6, date:"07.15(수)", slot:"점심", icon:"🍽️", area:"세인트 폴 대성당", name:"Five Guys Burgers and Fries St. Paul's", menu:"", hour:"10:00~23:30", resv:null, map:"Five Guys St Pauls London"},
+  {day:6, date:"07.15(수)", slot:"저녁", icon:"🏠", area:"숙소 (에어비앤비)", name:"숙소 (에어비앤비)", menu:"햇반+반찬", hour:"", resv:null, map:null},
+  {day:7, date:"07.16(목)", slot:"아침", icon:"🏠", area:"바스", name:"숙소 (에어비앤비)", menu:"누룽지+반찬", hour:"", resv:null, map:null},
+  {day:7, date:"07.16(목)", slot:"점심", icon:"🍽️", area:"바스", name:"Sally Lunn's Historic Eating House & Museum", menu:"현지식", hour:"매일 10:00~21:00", resv:null, map:"Sally Lunns Bath"},
+  {day:7, date:"07.16(목)", slot:"저녁", icon:"🍽️", area:"바스", name:"저녁식사 (펌프룸)", menu:"", hour:"10:00~16:00", resv:null, map:"The Pump Room Bath"},
+  {day:8, date:"07.17(금)", slot:"점심", icon:"🍽️", area:"자연사 박물관", name:"자연사박물관 근처", menu:"", hour:"", resv:null, map:"Natural History Museum London"},
+  {day:8, date:"07.17(금)", slot:"저녁", icon:"🍽️", area:"하이드파크", name:"Hyde Park Garden", menu:"브런치", hour:"매일 12:00~20:00", resv:"ok", map:"Mandarin Oriental Hyde Park London"},
+  {day:9, date:"07.18(토)", slot:"점심", icon:"🍽️", area:"숙소 근처", name:"브런치", menu:"브런치", hour:"", resv:null, map:null},
+];
+
+// 박물관/미술관 + 공연 + 관광지(투어스팟), 날짜별
+const PLACES = [
+  {day:4, date:"07.13(월)", cat:"박물관·미술관", type:"🏛️", name:"테이트 브리튼", price:"상설 무료 / 특별전 유료", time:"", hour:"매일 10:00~18:00", resv:"free", via:"", note:"상설전시는 예약 불필요", map:"Tate Britain London"},
+  {day:4, date:"07.13(월)", cat:"박물관·미술관", type:"🏛️", name:"웨스트민스터 사원 (Westminster Abbey)", price:"£31", time:"12:30 입장", hour:"월~금 09:30~15:30 · 토 09:30~15:00", resv:"ok", via:"마이리얼트립", note:"7/12까지 취소 가능", map:"Westminster Abbey London"},
+  {day:4, date:"07.13(월)", cat:"공연", type:"🎩", name:"뮤지컬 패딩턴", price:"", time:"19:00", hour:"", resv:"ok", via:"", note:"사보이 극장", map:"Savoy Theatre London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"던트 북스 (Daunt Books Marylebone)", price:"", time:"", hour:"", resv:null, via:"", note:"메릴본 명물 서점", map:"Daunt Books Marylebone London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"월리스 컬렉션 (The Wallace Collection)", price:"무료", time:"", hour:"", resv:null, via:"", note:"", map:"The Wallace Collection London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"리버티 백화점 (Liberty London)", price:"", time:"", hour:"", resv:null, via:"", note:"튜더풍 백화점", map:"Liberty London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"마리아쥬 프레르 (Mariage Frères)", price:"", time:"", hour:"", resv:null, via:"", note:"프랑스 홍차 매장", map:"Mariage Freres Covent Garden London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"위타드 (Whittard of Chelsea)", price:"", time:"", hour:"", resv:null, via:"", note:"코벤트가든점 · 홍차", map:"Whittard of Chelsea Covent Garden London"},
+  {day:6, date:"07.15(수)", cat:"박물관·미술관", type:"🏛️", name:"세인트 폴 대성당 (St. Paul's Cathedral)", price:"£27", time:"11:00 입장", hour:"월~토 08:30~16:30 · 수 10:00~16:30", resv:"ok", via:"NOL", note:"7/12까지 취소 가능", map:"St Pauls Cathedral London"},
+  {day:6, date:"07.15(수)", cat:"박물관·미술관", type:"🏛️", name:"테이트 모던 (Tate Modern)", price:"상설 무료 / 특별전 £25", time:"12:30 입장", hour:"일~목 10:00~18:00 · 금~토 10:00~21:00", resv:"ok", via:"공식홈페이지", note:"취소 불가", map:"Tate Modern London"},
+  {day:6, date:"07.15(수)", cat:"투어 스팟", type:"💂", name:"리플렉션 가든 (Reflection Garden)", price:"", time:"", hour:"", resv:null, via:"", note:"세인트폴 근처 정원", map:"Reflection Garden London"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"리젠시 티룸 (Regency Tea Room)", price:"", time:"", hour:"매일 10:00~16:30", resv:null, via:"", note:"제인오스틴 센터 내 티룸", map:"Regency Tea Room Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"제인오스틴 기념관 (The Jane Austen Centre)", price:"", time:"", hour:"매일 09:45~17:30", resv:"wait", via:"", note:"예약 필요 (예약 전)", map:"The Jane Austen Centre Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"로얄 크레스켄트 (Royal Crescent)", price:"", time:"", hour:"", resv:null, via:"", note:"", map:"Royal Crescent Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"홀번 뮤지엄 (The Holburne Museum)", price:"", time:"", hour:"", resv:null, via:"", note:"", map:"The Holburne Museum Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"풀테니 다리 (Pulteney Bridge)", price:"", time:"", hour:"", resv:null, via:"", note:"", map:"Pulteney Bridge Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"펌프룸 (The Pump Room Restaurant)", price:"", time:"", hour:"10:00~16:00", resv:null, via:"", note:"", map:"The Pump Room Bath"},
+  {day:7, date:"07.16(목)", cat:"투어 스팟 (바스)", type:"🛁", name:"애비 델리 (The Abbey Deli)", price:"", time:"", hour:"", resv:null, via:"", note:"프라이어파크 랜드스케이프 가든", map:"The Abbey Deli Bath"},
+  {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"V&A 박물관 (Victoria and Albert Museum)", price:"상설 무료 / 특별전 유료", time:"", hour:"금 10:00~22:00 · 토~목 10:00~17:45", resv:"free", via:"", note:"상설전시는 예약 불필요", map:"Victoria and Albert Museum London"},
+  {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"자연사박물관 (Natural History Museum)", price:"무료 (무료예약 필요)", time:"12:30 입장", hour:"매일 10:00~17:50", resv:"ok", via:"공식홈페이지", note:"공룡뼈만 보고 나오기", map:"Natural History Museum London"},
+  {day:8, date:"07.17(금)", cat:"박물관·미술관", type:"🏛️", name:"내셔널 갤러리 (The National Gallery)", price:"무료 (무료예약 필요)", time:"15:00 입장", hour:"토~목 10:00~18:00 · 금 10:00~21:00", resv:"ok", via:"공식홈페이지", note:"", map:"The National Gallery London"},
+];
+// 각 장소의 노션 세부페이지 (PLACES와 동일 순서) — 상세 화면에서 그대로 임베드
+const NB = "https://first-amusement-fba.notion.site/";
+const PLACE_PAGES = [
+  "316807d078df800f8b2ac5a455d2cc88",
+  "Westminster-Abbey-316807d078df80a5abd7f9055182b79d",
+  "357807d078df8125bd18d3447a76b234",
+  "Daunt-Books-Marylebone-357807d078df810f90ece952cd0be026",
+  "The-Wallace-Collection-357807d078df81bb85bad0643b48b394",
+  "Liberty-London-357807d078df81d2a4d7e9db54d8bdc2",
+  "Mariage-Freres-357807d078df817cbe00e3b41c353aa6",
+  "",
+  "St-Paul-s-Cathedral-317807d078df80fea824c4be27589a9a",
+  "Tate-Modern-317807d078df806e8f29e2e0a68b7966",
+  "",
+  "Regency-Tea-Room-38d807d078df80e695accb75b74240f6",
+  "The-Jane-Austen-Centre-38d807d078df8025a65bf6a9a704cc0f",
+  "Royal-Cres-38d807d078df80098c25cc5aabb76fc4",
+  "The-Holburne-Museum-38d807d078df807ab55fea69e18fe8f7",
+  "Pulteney-Bridge-38d807d078df80c883d1c5a71fe4b568",
+  "The-Pump-Room-Restaurant-38d807d078df802987a5e2406b4006f0",
+  "The-Abbey-Deli-38d807d078df800f9dc4c6b151be3a4e",
+  "V-A-Victoria-and-Albert-Museum-316807d078df8027a1efc0d32a49d400",
+  "Natural-History-Museum-316807d078df80d4a9b8cde67709c5be",
+  "The-National-Gallery-316807d078df809da37de70cf951da4b",
+];
+PLACES.forEach((p,i)=>{ if(PLACE_PAGES[i]) p.pg = NB + PLACE_PAGES[i]; });
+// 식당 노션 세부페이지 (FOOD와 동일 순서, 숙소·후보 등은 빈칸)
+const FOOD_PAGES = [
+  "",
+  "Dishoom-Permit-Room-317807d078df815ea97ee311869cacce",
+  "Funky-Noodles-317807d078df81b5bac8ef2208ee86e9",
+  "Hobson-s-Fish-Chips-soho-317807d078df81639fd2ecc07efb7059",
+  "Capilungo-All-Day-Dining-317807d078df8167860df484abdd1458",
+  "The-Ship-Tavern-317807d078df8181beaec729001627c6",
+  "",
+  "Tower-Bridge-Collective-317807d078df80bb942afa83e57419e7",
+  "Nando-s-Covent-Garden-317807d078df80bea0c5dce650daa671",
+  "Vasiniko-317807d078df80c79030ec525989aed0",
+  "",
+  "Mr-Fogg-s-Tavern-317807d078df8097aacbf522717c3c60",
+  "",
+  "",
+  "White-Mulberries-317807d078df802a9ceff75b0a21066b",
+  "The-Promenade-The-Dorchester-317807d078df802d8604dd51aea432db",
+  "",
+  "The-Muffin-Man-Tea-Shop-317807d078df80029bbfdc4902414119",
+  "Five-Guys-Burgers-and-Fries-St-Paul-s-317807d078df8009b76ef1ac2e332b33",
+  "",
+  "",
+  "Sally-Lunn-s-The-Oldest-House-In-Bath-317807d078df80db8838f4d2ced867db",
+  "317807d078df80eda67fc22876b8f31d",
+  "317807d078df8015a6b7e7ce55245a17",
+  "Hyde-Park-Garden-317807d078df8096813ac7bdef24f326",
+  "317807d078df802580ecff1e3749f9fe",
+];
+FOOD.forEach((f,i)=>{ if(FOOD_PAGES[i]) f.pg = NB + FOOD_PAGES[i]; });
+// 예약 바우처 (레포 vouchers/ 폴더의 로컬 파일) — [라벨, 파일명] 배열, 항목당 여러 개 가능
+const VOUCHERS={
+  "Hobson`s Fish & Chips soho":[["예약 바우처","voucher_hobsons.png"]],
+  "The Ship Tavern":[["예약 바우처","voucher_ship_tavern.pdf"]],
+  "Mr Fogg's Tavern":[["예약 바우처","voucher_mr_foggs.pdf"]],
+  "The Promenade (The Dorchester)":[["예약 바우처","voucher_promenade.pdf"]],
+  "Hyde Park Garden":[["예약 바우처","voucher_hyde_park_garden.pdf"]],
+  "웨스트민스터 사원 (Westminster Abbey)":[["입장권","voucher_westminster.pdf"]],
+  "뮤지컬 패딩턴":[["입장 티켓","ticket_paddington.pdf"]],
+  "세인트 폴 대성당 (St. Paul's Cathedral)":[["입장권","voucher_st_pauls.pdf"]],
+  "테이트 모던 (Tate Modern)":[["입장권","voucher_tate_modern.pdf"]],
+  "자연사박물관 (Natural History Museum)":[["예약 바우처","voucher_natural_history.pdf"],["입장 티켓","ticket_natural_history.pdf"]],
+  "내셔널 갤러리 (The National Gallery)":[["예약 바우처","voucher_national_gallery.pdf"],["입장 티켓","ticket_national_gallery.pdf"]],
+};
+function vurl(fn){ return "vouchers/"+encodeURIComponent(fn); }
+FOOD.forEach(f=>{ if(VOUCHERS[f.name]) f.voucher=VOUCHERS[f.name]; });
+PLACES.forEach(p=>{ if(VOUCHERS[p.name]) p.voucher=VOUCHERS[p.name]; });
+
+const FLIGHT = {
+  airline:"대한항공", status:"ok", resNo:"FURTGR / FUR6EW", cost:"802,000원 + 140,000마일",
+  vouchers:[["항공권 (김수진)","ETKT_KIMSOOJINMS.pdf"],["항공권 (박용준)","ETKT_PARKYONGJUNMR.pdf"]],
+  legs:[
+    {dep:"10:55", depCode:"ICN 인천", arr:"17:20", arrCode:"LHR 런던", no:"KE907", date:"07.10 (금)"},
+    {dep:"19:35", depCode:"LHR 런던", arr:"16:15", arrCode:"ICN 인천", no:"KE908", date:"07.18 (토) → 07.19 (일)"},
+  ],
+};
+const ACCOM = [
+  {name:"Strand Palace Hotel", tag:"호텔 · 7/10 ~ 7/14 (4박)", resNo:"-", cost:"-", area:"Strand, WC2R 0JJ · Charing Cross/코벤트가든 인근", checkin:"1일차 (7/10) 저녁", checkout:"5일차 (7/14) 오전 · 짐 맡기기", map:"Strand Palace Hotel London", vouchers:[["호텔 바우처","voucher_hotel_strand.pdf"]]},
+  {name:"에어비앤비", tag:"Airbnb · 7/14 ~ 7/18 (4박)", resNo:"HMKCSB888Y", cost:"1,612,987원", area:"10 Stanford Rd, London W8 5QJ · Kensington", checkin:"5일차 (7/14) 저녁 · 체크인 방법 확인", checkout:"9일차 (7/18) 11:00", mapHref:"https://maps.app.goo.gl/B2FDDVwiYfemHRL49"},
+];
+// 항공 예약 정보 페이지 이미지 (노션 항공 토글 이미지) — python으로 주입
+const AIR_IMGS={"reservation":["https://first-amusement-fba.notion.site/image/attachment%3A238ae1b3-2cc0-44ea-a9f9-7ee646f33536%3Aimage.png?table=block&id=298807d0-78df-80ca-ba44-ef8614813600&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=2000&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"],"cancel":["https://first-amusement-fba.notion.site/image/attachment%3A67214a55-a6ce-4308-90cc-e68d60aa129f%3Aimage.png?table=block&id=298807d0-78df-8007-97b1-c581062a0c7f&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=530&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl","https://first-amusement-fba.notion.site/image/attachment%3Ade6b627c-b3d2-452d-abee-1f46e138d9df%3Aimage.png?table=block&id=298807d0-78df-80b4-9b53-c765ae21aa12&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=2000&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"],"baggage":["https://first-amusement-fba.notion.site/image/attachment%3A52283c6c-ae1a-4a6f-b896-e4733bf3795f%3Aimage.png?table=block&id=298807d0-78df-80c1-92d8-c6bd5def5e9a&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=2000&userId=&cache=v2&imgBuildSrc=requestProxiedImageUrl"]};
+
+const PREP = [
+  {title:"할 일", icon:"📝", items:["항공 예약","숙소 예약","여행자보험 가입","공항–호텔 이동방법 확인","항공 마일리지 재확인","항공 위탁수하물 재확인","eSIM 구매","ETA 신청","예산 정리 (카드/현금)","환전","서류 출력","마지막날 짐 맡길 곳","마지막날 공항 가는 법·일정","더위 용품 체크 (쿨패치·선풍기 등)","만다린오리엔탈 예약","선데이로스트 예약","제인오스틴센터 예약","피쉬앤칩스 예약","소니 일정 — 엄마에게 물어보기"]},
+  {title:"서류 / 지갑", icon:"🛂", items:["서류","지갑 (트래블카드)","여권","항공권","호텔 바우처","바스 기차 티켓","여행자보험","eSIM","Bounce 짐보관 예약"]},
+  {title:"전자기기", icon:"🔌", items:["아이폰 Xs","오즈모","보조배터리 (큰거/작은거)","노트북 충전기","외장하드","헤드폰 (회사에서 가져오기)","3in1 충전기 (회사에서 가져오기)","손풍기 / 부채","휴대용 포트","스트랩 (핸드폰용·가방용)"]},
+  {title:"기타 / 옷 / 화장품", icon:"🧴", items:["옷","화장품 (스킨·로션)","선크림","샤워기 필터","쿨링패드","상비약","영양제 (글루콤·마그콤)"]},
+  {title:"먹을거", icon:"🍱", items:["햇반 작은거 4개","누룽지 2회분","참치캔 작은거 3개","닭가슴살 스팸 1캔","라면 2개"]},
+];
+
+/* ===== HELPERS ===== */
+const KIND_EMOJI = {flight:"✈️", move:"", food:"🍽️", see:"📍", shop:"🛍️", rest:"🛌"};
+function mapUrl(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
+function resvBadge(r){
+  if(r==="ok") return '<span class="badge b-ok">예약완료</span>';
+  if(r==="wait") return '<span class="badge b-wait">예약필요</span>';
+  if(r==="free") return '<span class="badge b-free">예약불필요</span>';
+  return "";
+}
+const SLOT_CLASS = {"아침":"am","점심":"lunch","저녁":"dinner","야식":"night","애프터눈티":"tea"};
+function slotBadge(s){ if(!s) return ""; return `<span class="slot ${SLOT_CLASS[s]||"alt"}">${s}</span>`; }
+function dash(s){ return (s||"").replace(/—/g,"-"); }
+const clockSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+const pinSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+const forkSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v20"/><path d="M4 2v5a3 3 0 0 0 6 0V2"/><path d="M17 2c-1.6 1.4-2.4 3.8-2.4 6.5 0 2.2 0.9 3.5 2.4 3.5v10"/></svg>';
+const ticketSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 1.6 1.6 0 0 0 0 3 1.6 1.6 0 0 0 0 3 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 1.6 1.6 0 0 0 0-3 1.6 1.6 0 0 0 0-3Z"/><path d="M15 7v10" stroke-dasharray="2 2"/></svg>';
+const tagSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V5a2 2 0 0 1 2-2h8l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>';
+const clipSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-8.49 8.49a5 5 0 0 1-7.07-7.07l8.49-8.49a3 3 0 0 1 4.24 4.24l-8.49 8.49a1 1 0 0 1-1.41-1.41l7.78-7.78"/></svg>';
+function vchChip(v){ return (v&&v.length) ? `<span class="vch">${clipSvg} 바우처</span>` : ""; }
+const bagSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+const bedSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v0"/><path d="M6 12h4a2 2 0 0 0 0-4H6Z"/></svg>';
+const planeSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>';
+const KIND_ICON = {flight:planeSvg, move:"", food:forkSvg, see:pinSvg, shop:bagSvg, rest:bedSvg};
+function kindIcon(k){ return KIND_ICON[k]||""; }
+const noteSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
+const moveSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+const MOVE_RAW = [
+  [1,"튜브 25분 · Embankment → Notting Hill Gate","LNKigi3sJKkKfNNM6"],
+  [1,"튜브 20분 · Notting Hill Gate → Tottenham Court Rd","ovzC4sgtQU7NRDji6"],
+  [1,"도보 13분 · 950m","4RnCgraDtrrzBAPa9"],
+  [2,"도보 8분 · 550m","aNfYCFcakfWhWdLW6"],
+  [2,"도보 13분 · 900m","a4iqYbGQffL8YW5a9"],
+  [2,"버스 37분 · 15번","T5KM3AY1rRBiG59s8"],
+  [2,"튜브 24분 또는 보트 29분 · London Bridge → Westminster","9ZPDWyGsqkfh9mCp8"],
+  [2,"도보 19분 · 1.3km","3b42p1Lfat3X3PNd9"],
+  [3,"도보 19분 · 1.3km","MenzY66T7WgYUwej6"],
+  [3,"도보 3분 · 220m","Uz824CkkUTAwPL7a8"],
+  [3,"도보 20분 · 1.4km","t71GLqWfLLNSFZMP6"],
+  [4,"튜브 26분 · Charing Cross → Edgware Road","vXW4UsMiHNqdMw186"],
+  [4,"도보 15분 · 1.1km","jS8SjuiCSR8oqHNBA"],
+  [5,"튜브 35분 · Mansion House → High Street Kensington","MuUwezJGXYTNW7Vz6"],
+  [5,"튜브 37분 · Mansion House → Gloucester Road","NxkBmDcEj2dh6mep7"],
+  [7,"버스 19분 · 49번","JURWPrp793prsyxh7"],
+  [7,"버스 20분 · 19번","WVKaq7WakvNrHiX8A"],
+  [7,"버스 16분 · 9·452번","ap77NXfgPpPRPtmbA"],
+  [8,"튜브 50분 · High St Kensington → Paddington → Heathrow","KxyxSdagvdwa9pvL7"],
+];
+const norm = s => (s||"").replace(/[\s·\/→]/g,"");
+const MOVE_LINKS = {};
+MOVE_RAW.forEach(([d,m,id])=>{ MOVE_LINKS[d+"|"+norm(m)] = "https://maps.app.goo.gl/"+id; });
+function moveLink(i,m){ return m ? (MOVE_LINKS[i+"|"+norm(m)]||null) : null; }
+
+const TUBE_RD = '<span class="rd" title="Underground"><svg width="22" height="16" viewBox="0 0 44 32" aria-hidden="true"><circle cx="22" cy="16" r="11" fill="none" stroke="#DC241F" stroke-width="6"/><rect x="3" y="12.5" width="38" height="7" fill="#10069F"/></svg></span>';
+const RAIL_RD = '<span class="rd" title="National Rail"><svg width="20" height="14" viewBox="0 0 40 28" aria-hidden="true"><rect width="40" height="28" rx="4" fill="#C00"/><path d="M6 14h22M24 14l-6-5M24 14l-6 5M34 14H14M16 14l6 5M16 14l6-5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span>';
+const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, bus:{label:"버스", icon:"🚌"}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"}, uber:{label:"우버", icon:"🚕"} };
+function parseRoute(t){
+  if(!t) return null;
+  const parts = t.split(" · "); const head = parts[0]; const tail = parts.slice(1).join(" · ").trim();
+  const modeMap={"튜브":"tube","버스":"bus","도보":"walk","보트":"boat","기차":"rail","택시":"taxi","우버":"uber"};
+  const alts = head.split("또는").map(s=>s.trim());
+  const legs = [];
+  alts.forEach(a=>{ const m=a.match(/(튜브|버스|도보|보트|기차|택시|우버)\s*(\d+\s*분)?/); if(m) legs.push({type:modeMap[m[1]], dur:(m[2]||"").replace(/\s/g,"")}); });
+  if(!legs.length) return null;
+  let path=null, num=null, dist=null;
+  if(/→/.test(tail)) path=tail;
+  else { const bn=tail.match(/([\d·]+)\s*번/); if(bn) num=bn[1]; const dm=tail.match(/([\d.]+\s*(?:km|m))/); if(dm) dist=dm[1].replace(/\s/g,""); }
+  legs.forEach(l=>{ if(l.type==="bus"&&num) l.num=num; });
+  return {legs, path, num, dist, alt:alts.length>1};
+}
+function legHTML(l){
+  const mi = MODE_INFO[l.type]||{label:l.type, icon:""};
+  return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
+}
+function routeHTML(i, e){
+  const r = parseRoute(e.move);
+  if(!r) return `<div class="move-line">${moveSvg}${e.move}</div>`;
+  const sep = r.alt ? '<span class="rt-alt">또는</span>' : '<span class="rt-arrow">›</span>';
+  const strip = r.legs.map(legHTML).join(sep);
+  // 거리(도보/택시)·버스번호는 같은 줄에 인라인, 역 경로(→)만 아랫줄
+  let inline=""; if(!r.path){ if(r.num) inline=r.num+"번"; else if(r.dist) inline=r.dist; }
+  const url = moveLink(i, e.move);
+  let h = '<div class="route"><div class="route-strip">'+strip+(inline?'<span class="rt-inline">· '+inline+'</span>':'')+'</div>';
+  if(r.path) h += `<div class="rt-path">${r.path}</div>`;
+  if(url) h += `<div class="rt-foot"><a class="maplink mini" href="${url}" target="_blank" rel="noopener">지도 ›</a></div>`;
+  h += '</div>';
+  return h;
+}
+
+/* ===== TIME (London now-line) ===== */
+function londonParts(){
+  const f = new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  const p={}; f.formatToParts(new Date()).forEach(x=>{ if(x.type!=='literal') p[x.type]=x.value; });
+  if(p.hour==='24') p.hour='00'; return p;
+}
+function londonNowMs(){ const p=londonParts(); return Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute); }
+function londonHHMM(){ const p=londonParts(); return `${p.hour}:${p.minute}`; }
+function parseTimeRange(t){
+  if(!t) return null; const m=t.match(/(\d{1,2}):(\d{2})/g); if(!m) return null;
+  const toMin=x=>{const[h,mm]=x.split(':').map(Number);return h*60+mm;};
+  const s=toMin(m[0]); let e=m[1]?toMin(m[1]):s; if(e<s)e+=1440; return {s,e};
+}
+const dayMeta = DAYS.map(d=>{
+  const DD=parseInt(d.date.split('.')[1],10); const base=Date.UTC(2026,6,DD); let last=0;
+  return d.events.map(e=>{ const r=parseTimeRange(e.t); const s=r?r.s:last; const en=r?r.e:s; last=s; return {s:base+s*60000, e:base+en*60000}; });
+});
+let NOW, NOW_HHMM, MARK;
+function computeNow(){
+  NOW = londonNowMs(); NOW_HHMM = londonHHMM(); MARK=null;
+  outer: for(let i=0;i<DAYS.length;i++){ for(let j=0;j<dayMeta[i].length;j++){ if(NOW<dayMeta[i][j].e){ MARK={d:i,j}; break outer; } } }
+  if(!MARK){ const li=DAYS.length-1; MARK={d:li, j:DAYS[li].events.length}; }
+}
+computeNow();
+function nowLineHTML(){ return `<div class="nowline" id="nowmark"><span class="nl-label">지금 ${NOW_HHMM} 런던</span><span class="nl-bar"></span></div>`; }
+
+/* ===== PLAN (전체 연속 스크롤) ===== */
+const daybar=document.getElementById("daybar"); const planBody=document.getElementById("plan-body");
+const headerEl=document.querySelector("header");
+DAYS.forEach((d,i)=>{ const c=document.createElement("div"); c.className="chip"; c.innerHTML=`<b>${d.n}일</b><small>${d.date}</small>`; c.onclick=()=>gotoDay(i); daybar.appendChild(c); });
+
+function dayHTML(d,i){
+  let h=`<section class="day-sec" id="day-${i}"><div class="dayhead"><h2>${d.n}일차 · ${d.date} <span class="dow">(${d.dow})</span></h2><div class="theme">${d.theme}</div></div><div class="tl">`;
+  d.events.forEach((e,j)=>{
+    if(MARK.d===i && MARK.j===j) h+=nowLineHTML();
+    const meta=dayMeta[i][j]; const ongoing=meta && NOW>=meta.s && NOW<meta.e;
+    let cls=(e.k==="move")?"ev move":"ev"; if(ongoing) cls+=" current";
+    h+=`<div class="${cls}" data-kind="${e.k}"><div class="card">`;
+    if(e.k==="move"){
+      h+=`<div class="move-head"><span class="time">${e.t}</span><span class="move-title">${dash(e.ttl)}</span></div>`;
+      if(e.move) h+=routeHTML(i,e);
+    }else{
+      h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)} ${resvBadge(e.resv)}</div>`;
+      if(e.note) h+=`<div class="note">${noteSvg}<span>${e.note}</span></div>`;
+      if(e.hour) h+=`<div class="ev-hours"><span>${clockSvg} ${e.hour}</span></div>`;
+      if(e.move) h+=routeHTML(i,e);
+      if(e.subs){ h+='<ul class="sub-list">'; e.subs.forEach(s=>h+=`<li>${s}</li>`); h+='</ul>'; }
+      if(e.map) h+=`<div class="card-foot"><a class="maplink" href="${mapUrl(e.map)}" target="_blank" rel="noopener">지도 ›</a></div>`;
+    }
+    h+='</div></div>';
+  });
+  if(MARK.d===i && MARK.j>=d.events.length) h+=nowLineHTML();
+  h+='</div></section>';
+  return h;
+}
+function renderPlan(){ planBody.innerHTML = DAYS.map((d,i)=>dayHTML(d,i)).join(''); }
+renderPlan();
+
+function syncStick(){ const hh=headerEl.offsetHeight; daybar.style.top=hh+"px"; document.documentElement.style.setProperty('--stick',(hh+daybar.offsetHeight)+"px"); }
+// 헤더 높이가 폰트·이미지 로딩으로 늦게 확정되면 데이바 위치가 어긋나 가려지는 버그 방지: 변화를 계속 감지해 재계산
+if(window.ResizeObserver){ new ResizeObserver(syncStick).observe(headerEl); }
+window.addEventListener('load', syncStick);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(syncStick);
+[120,400,1000,2200].forEach(t=>setTimeout(syncStick,t));
+function setActiveChip(i){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===i)); const ch=daybar.children[i]; if(ch) ch.scrollIntoView({inline:"center", block:"nearest"}); }
+let navLock=false, navStop=null;
+function gotoDay(i){ navLock=true; setActiveChip(i); const el=document.getElementById("day-"+i); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
+let spyTick=false;
+function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stick'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } if(!navLock){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); } for(let i=0;i<DAYS.length;i++){ const sec=document.getElementById("day-"+i); if(sec){ const head=sec.querySelector(".dayhead"); if(head) head.classList.toggle("stuck", i===cur); } } }); }
+function onScroll(){ if(navLock){ clearTimeout(navStop); navStop=setTimeout(()=>{ navLock=false; spy(); }, 140); } spy(); }
+window.addEventListener('scroll', onScroll, {passive:true});
+window.addEventListener('resize', syncStick);
+function gotoNow(){ syncStick(); const nm=document.getElementById("nowmark"); if(nm) nm.scrollIntoView({block:"center"}); else gotoDay(MARK.d); setActiveChip(MARK.d); spy(); }
+syncStick();
+// '지금' 실시간 갱신: 30초마다 런던 현재시각 재계산 → 라벨 갱신, 위치(일정 경계) 변하면 다시 그림
+setInterval(()=>{
+  const od=MARK.d, oj=MARK.j; computeNow();
+  const lbl=document.querySelector("#nowmark .nl-label"); if(lbl) lbl.textContent="지금 "+NOW_HHMM+" 런던";
+  if(MARK.d!==od || MARK.j!==oj){ renderPlan(); spy(); }
+}, 30000);
+
+/* ===== detail registry ===== */
+const DETAILS = {};
+function regDetail(obj){ const id="d"+(Object.keys(DETAILS).length); DETAILS[id]=obj; return id; }
+function kvRow(k,v){ return v ? `<div class="kv"><div class="k">${k}</div><div class="v">${v}</div></div>` : ""; }
+let prevView = "place";
+function openDetail(id){
+  const o=DETAILS[id]; if(!o) return;
+  let h=`<button class="back" onclick="backDetail()">‹ 뒤로</button>`;
+  h+=`<div class="detail-hd"><div class="d-cat">${o.cat||""}</div><h2>${o.title}</h2><div class="d-badges">`;
+  if(o.dayLabel) h+=`<span class="badge b-free">${o.dayLabel}</span>`;
+  if(o.slot) h+=slotBadge(o.slot);
+  h+=resvBadge(o.resv)+`</div></div>`;
+  h+=`<div class="d-card">`;
+  h+=kvRow("위치", o.area);
+  h+=kvRow("입장", o.time);
+  h+=kvRow("운영시간", o.hour);
+  h+=kvRow("비용", o.price);
+  h+=kvRow("메뉴", o.menu);
+  h+=kvRow("예매처", o.via);
+  h+=kvRow("비고", o.note);
+  h+=`</div><div class="d-actions">`;
+  const hasV = o.voucher && o.voucher.length;
+  if(hasV) o.voucher.forEach(vc=>{ h+=`<button class="d-btn primary" onclick="openVoucher('${vurl(vc[1])}','${vc[0]||'예약내역'}')">${clipSvg} ${vc[0]||'예약내역 확인하기'}</button>`; });
+  if(o.map) h+=`<a class="d-btn ${hasV?'ghost':'primary'}" href="${mapUrl(o.map)}" target="_blank" rel="noopener">지도에서 보기</a>`;
+  h+=`<a class="d-btn ghost" href="${o.pg||NOTION_URL}" target="_blank" rel="noopener">노션에서 전체화면으로 열기 ›</a>`;
+  h+=`</div>`;
+  if(o.pg) h+=nbContent(o.pg);
+  document.getElementById("detail-body").innerHTML=h;
+  prevView=curTab();
+  views.detail.classList.add("active");
+  views.detail.scrollTop=0;
+}
+function curTab(){ for(const k of ['plan','food','place','book','docs']){ if(views[k].classList.contains('active')) return k; } return prevView||'place'; }
+function openLB(src){ const lb=document.getElementById('lb'), im=document.getElementById('lbimg'); im.className=''; im.src=src; lb.classList.add('open'); lb.scrollTop=0; }
+function lbTap(e){ const im=document.getElementById('lbimg'); if(e.target===im){ im.classList.toggle('zoom'); document.getElementById('lb').scrollTop=0; return; } document.getElementById('lb').classList.remove('open'); }
+function openVoucher(url, label){ window.open(url, '_blank', 'noopener'); }
+function closeDetail(){ views.detail.classList.remove("active"); }
+function openAirInfo(){
+  const sec=[["예약내역 상세",AIR_IMGS.reservation||[]],["취소수수료",AIR_IMGS.cancel||[]],["수화물 규정",AIR_IMGS.baggage||[]]];
+  let h=`<button class="back" onclick="backDetail()">‹ 뒤로</button>`;
+  h+=`<div class="detail-hd"><div class="d-cat">대한항공 · 예약 정보</div><h2>예약내역 · 수화물 규정</h2></div>`;
+  h+=`<div style="margin-top:18px">`;
+  sec.forEach(([t,imgs])=>{
+    h+=`<div class="ai-sec"><div class="ai-h">${t}</div>`;
+    if(imgs&&imgs.length) imgs.forEach(u=>h+=`<img class="ai-img" src="${u}" alt="${t}" loading="lazy" onclick="openLB(this.src)">`);
+    else h+=`<div class="ai-empty">이미지 준비 중 — 노션에서 확인하세요.</div>`;
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  document.getElementById("detail-body").innerHTML=h;
+  prevView=curTab(); views.detail.classList.add("active"); views.detail.scrollTop=0;
+}
+const HOTEL_IMGS={"0":{"detail":[],"cancel":[]},"1":{"detail":["https://first-amusement-fba.notion.site/image/attachment%3A47c9fa66-ee2b-4291-87b4-8abf4e1c0e0e%3Aimage.png?table=block&id=38e807d0-78df-809f-b92c-de5b86830986&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=1600&cache=v2","https://first-amusement-fba.notion.site/image/attachment%3A11b45bce-ae92-4232-a365-775cb6f8d911%3Aimage.png?table=block&id=38e807d0-78df-800b-9a3b-d65e149643cd&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=1600&cache=v2"],"cancel":["https://first-amusement-fba.notion.site/image/attachment%3A6d57d212-3893-4f5a-8540-42bc67846831%3Aimage.png?table=block&id=38e807d0-78df-805e-9e6e-c75ca05e394a&spaceId=0f9f1e15-ea2d-4d1e-a7cb-ace16f628628&width=1600&cache=v2"]}};
+function openHotelInfo(idx){
+  const d=HOTEL_IMGS[idx]||{detail:[],cancel:[]};
+  const name=(ACCOM[idx]&&ACCOM[idx].name)||"숙소";
+  const sec=[["예약내역 상세", d.detail||[]],["취소수수료", d.cancel||[]]];
+  let h=`<button class="back" onclick="backDetail()">‹ 뒤로</button>`;
+  h+=`<div class="detail-hd"><div class="d-cat">숙소 · 예약 정보</div><h2>${name}</h2></div>`;
+  h+=`<div style="margin-top:18px">`;
+  sec.forEach(([t,imgs])=>{
+    h+=`<div class="ai-sec"><div class="ai-h">${t}</div>`;
+    if(imgs&&imgs.length) imgs.forEach(u=>h+=`<img class="ai-img" src="${u}" alt="${t}" loading="lazy" onclick="openLB(this.src)">`);
+    else h+=`<div class="ai-empty">등록된 이미지가 없어요.</div>`;
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  document.getElementById("detail-body").innerHTML=h;
+  prevView=curTab(); views.detail.classList.add("active"); views.detail.scrollTop=0;
+}
+
+/* ===== FOOD ===== */
+(function(){
+  let h=""; let cur=null;
+  FOOD.forEach(f=>{
+    if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
+    const title=f.name||f.area||"미정"; const ic=f.icon?f.icon+" ":"";
+    const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg, voucher:f.voucher});
+    h+=`<div class="row tap" onclick="openDetail('${id}')">`;
+    if(f.slot) h+=`<div class="r-slot">${slotBadge(f.slot)}</div>`;
+    h+=`<div class="r-name">${ic}${title}</div>`;
+    const badges=`${resvBadge(f.resv)}${vchChip(f.voucher)}`;
+    if(badges) h+=`<div class="r-badges">${resvBadge(f.resv)} ${vchChip(f.voucher)}</div>`;
+    let meta=[]; if(f.name&&f.area) meta.push(`<span>${pinSvg} ${f.area}</span>`); if(f.menu) meta.push(`<span>${forkSvg} ${f.menu}</span>`);
+    if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
+    if(f.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${f.hour}</span></div>`;
+    h+=`</div>`;
+  });
+  h+="</div>";
+  document.getElementById("food-body").innerHTML=h;
+})();
+
+/* ===== PLACES (명소) ===== */
+(function(){
+  let h=""; let cur=null;
+  PLACES.forEach(p=>{
+    if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
+    const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher});
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name}</div>`;
+    const badges=`${resvBadge(p.resv)} ${vchChip(p.voucher)}`.trim();
+    if(badges) h+=`<div class="r-badges">${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
+    const tm=(p.time||"").match(/\d{1,2}:\d{2}/);
+    let meta=[]; if(p.resv==="ok" && tm) meta.push(`<span>${ticketSvg} ${tm[0]} 예약</span>`); if(p.price) meta.push(`<span>${tagSvg} ${p.price}</span>`);
+    if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
+    if(p.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${p.hour}</span></div>`;
+    h+=`</div>`;
+  });
+  h+="</div>";
+  document.getElementById("place-body").innerHTML=h;
+})();
+
+/* ===== 항공·숙소 ===== */
+(function(){
+  let h="";
+  // flight
+  h+=`<div class="group"><div class="group-h">✈️ 항공</div><div class="info-card">`;
+  h+=`<div class="ic-h">${FLIGHT.airline} ${resvBadge(FLIGHT.status)}</div>`;
+  h+=`<div class="ic-meta"><div>예약번호: ${FLIGHT.resNo}</div><div>비용: ${FLIGHT.cost}</div></div>`;
+  FLIGHT.legs.forEach(l=>{
+    h+=`<div class="flight-leg"><div class="fl-end"><div class="fl-time">${l.dep}</div><div class="fl-code">${l.depCode}</div></div>`;
+    h+=`<div class="fl-mid">${l.no}<div class="fl-line"></div>${l.date}</div>`;
+    h+=`<div class="fl-end"><div class="fl-time">${l.arr}</div><div class="fl-code">${l.arrCode}</div></div></div>`;
+  });
+  h+=`<div class="d-actions" style="margin-top:16px">`;
+  (FLIGHT.vouchers||[]).forEach(vc=>{ h+=`<button class="d-btn primary" onclick="openVoucher('${vurl(vc[1])}','${vc[0]}')">${clipSvg} ${vc[0]}</button>`; });
+  h+=`<button class="d-btn ghost" onclick="openAirInfo()">예약내역 · 수화물 규정 보기 ›</button></div>`;
+  h+=`</div></div>`;
+  // hotels — 숙소1 / 숙소2 각각 대구분
+  ACCOM.forEach((a,i)=>{
+    h+=`<div class="group"><div class="group-h">🏨 숙소${i+1}</div>`;
+    h+=`<div class="info-card"><div class="ic-h">${a.name}</div><div class="ic-sub">${a.tag}</div>`;
+    h+=`<div class="ic-meta"><div>예약번호: ${a.resNo||'-'}</div><div>비용: ${a.cost||'-'}</div></div>`;
+    h+=kvRow("위치", a.area);
+    h+=kvRow("체크인", a.checkin);
+    h+=kvRow("체크아웃", a.checkout);
+    h+=`<div class="d-actions" style="margin-top:12px">`;
+    (a.vouchers||[]).forEach(vc=>{ h+=`<button class="d-btn primary" onclick="openVoucher('${vurl(vc[1])}','${vc[0]}')">${clipSvg} ${vc[0]}</button>`; });
+    h+=`<a class="d-btn ${(a.vouchers&&a.vouchers.length)?'ghost':'primary'}" href="${a.mapHref||mapUrl(a.map)}" target="_blank" rel="noopener">지도에서 보기</a><button class="d-btn ghost" onclick="openHotelInfo(${i})">예약내역 보기 ›</button></div></div>`;
+    h+=`</div>`;
+  });
+  document.getElementById("book-body").innerHTML=h;
+})();
+
+/* ===== 서류 허브 (얇은 인덱스: 이름 + 열기) ===== */
+const DOCS = [
+  {group:"✈️ 항공", items:[
+    {label:"전자항공권 (김수진)", file:"ETKT_KIMSOOJINMS.pdf"},
+    {label:"전자항공권 (박용준)", file:"ETKT_PARKYONGJUNMR.pdf"},
+  ]},
+  {group:"🏨 숙소", items:[
+    {label:"숙소1 호텔 바우처 (Strand Palace)", file:"voucher_hotel_strand.pdf"},
+    {label:"숙소2 (Airbnb)", note:"예약번호 HMKCSB888Y"},
+  ]},
+  {group:"🚆 기차 · 바스 왕복", items:[
+    {label:"영수증 (E-receipt)", file:"E-receipt.pdf"},
+    {label:"가는 편 티켓 1", file:"GWR_1_LON-BTH_1.pdf"},
+    {label:"가는 편 티켓 2", file:"GWR_1_LON-BTH_2.pdf"},
+    {label:"오는 편 티켓 1", file:"GWR_2_BTH-LON_1.pdf"},
+    {label:"오는 편 티켓 2", file:"GWR_2_BTH-LON_2.pdf"},
+  ]},
+  {group:"🍽️ 식당", items:[
+    {label:"Hobson's Fish & Chips", file:"voucher_hobsons.png"},
+    {label:"The Ship Tavern", file:"voucher_ship_tavern.pdf"},
+    {label:"Mr Fogg's Tavern", file:"voucher_mr_foggs.pdf"},
+    {label:"The Promenade (애프터눈티)", file:"voucher_promenade.pdf"},
+    {label:"Hyde Park Garden", file:"voucher_hyde_park_garden.pdf"},
+  ]},
+  {group:"🎟️ 입장권 · 공연", items:[
+    {label:"웨스트민스터 사원", file:"voucher_westminster.pdf"},
+    {label:"세인트 폴 대성당", file:"voucher_st_pauls.pdf"},
+    {label:"테이트 모던", file:"voucher_tate_modern.pdf"},
+    {label:"자연사박물관 · 바우처", file:"voucher_natural_history.pdf"},
+    {label:"자연사박물관 · 입장 티켓", file:"ticket_natural_history.pdf"},
+    {label:"내셔널 갤러리 · 바우처", file:"voucher_national_gallery.pdf"},
+    {label:"내셔널 갤러리 · 입장 티켓", file:"ticket_national_gallery.pdf"},
+    {label:"뮤지컬 패딩턴", file:"ticket_paddington.pdf"},
+  ]},
+  {group:"🛂 ETA · 전자여행허가", items:[
+    {label:"ETA · 김수진", file:"ETA_Kim Soojin.jpeg"},
+    {label:"ETA · 박용준", file:"ETA_Park Yongjun.jpeg"},
+  ]},
+  {group:"🧳 Bounce · 마지막날 짐 보관", items:[
+    {label:"예약내역", file:"reservation_Bounce.jpeg"},
+    {label:"바우처", file:"voucher_Bounce.jpeg"},
+  ]},
+  {group:"📄 기타 서류", items:[
+    {label:"여행자보험 (카카오페이)", file:"kakaopayinscorp-20260603232946.pdf"},
+    {label:"eSIM", todo:true},
+  ]},
+];
+function renderDocs(){
+  const body=document.getElementById("docs-body"); let h="";
+  h+=`<div class="docs-intro">여행에 필요한 모든 서류를 한 곳에 모았어요. 탭하면 새 탭에서 열립니다.</div>`;
+  DOCS.forEach(g=>{
+    h+=`<div class="group"><div class="group-h">${g.group}</div>`;
+    g.items.forEach(it=>{
+      h+=`<div class="doc-row"><div class="dl">${it.label}${it.note?`<div class="ds">${it.note}</div>`:""}</div>`;
+      if(it.file) h+=`<button class="doc-open" onclick="openVoucher('${vurl(it.file)}')">${clipSvg} 열기</button>`;
+      else h+=`<span class="doc-todo">추가 예정</span>`;
+      h+=`</div>`;
+    });
+    h+=`</div>`;
+  });
+  body.innerHTML=h;
+}
+renderDocs();
+
+/* ===== NAV ===== */
+const views={plan:document.getElementById("view-plan"), food:document.getElementById("view-food"), place:document.getElementById("view-place"), book:document.getElementById("view-book"), docs:document.getElementById("view-docs"), detail:document.getElementById("view-detail")};
+function showView(v, fromDetail){
+  Object.entries(views).forEach(([k,el])=>el.classList.toggle("active", k===v));
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
+  if(!fromDetail && v!=="detail") window.scrollTo({top:0});
+}
+document.querySelectorAll("#nav button").forEach(b=>{ b.onclick=()=>{ views.detail.classList.remove("active"); resetDV(); prevView=b.dataset.view; showView(b.dataset.view); if(b.dataset.view==="plan") gotoNow(); }; });
+
+/* 인터랙티브 백 스와이프: 왼쪽 가장자리에서 끌면 화면이 손가락을 따라 밀려나고, 충분히 밀면 뒤로 */
+const DV=views.detail;
+let sX=0, sY=0, sT=0, edge=false, drag=false;
+function resetDV(){ DV.style.transition=''; DV.style.transform=''; DV.style.opacity=''; DV.style.boxShadow=''; }
+function backDetail(){
+  DV.style.transition='transform .3s cubic-bezier(.22,.61,.36,1), opacity .3s ease';
+  DV.style.transform='translateX(100%)'; DV.style.opacity='0.4';
+  setTimeout(()=>{ closeDetail(); resetDV(); }, 300);
+}
+document.addEventListener('touchstart',e=>{
+  if(!DV.classList.contains('active')||e.touches.length!==1){edge=false;return;}
+  sX=e.touches[0].clientX; sY=e.touches[0].clientY; sT=Date.now(); edge=sX<=60; drag=false;
+},{passive:true});
+document.addEventListener('touchmove',e=>{
+  if(!edge||!DV.classList.contains('active'))return;
+  const t=e.touches[0], ddx=t.clientX-sX, ddy=t.clientY-sY;
+  if(!drag){ if(Math.abs(ddx)>8 && Math.abs(ddx)>Math.abs(ddy)){ drag=true; DV.style.transition='none'; DV.style.boxShadow='-12px 0 28px rgba(0,0,0,.10)'; } else if(Math.abs(ddy)>10){ edge=false; return; } }
+  if(drag){ const x=Math.max(0,ddx); DV.style.transform='translateX('+x+'px)'; DV.style.opacity=String(1-Math.min(x/window.innerWidth,1)*0.4); if(e.cancelable)e.preventDefault(); }
+},{passive:false});
+document.addEventListener('touchend',e=>{
+  if(!drag){edge=false;return;}
+  drag=false; edge=false;
+  const t=e.changedTouches[0], dx=t.clientX-sX, dt=Date.now()-sT, w=window.innerWidth;
+  const go = dx > w*0.32 || (dx>70 && dt<350); // 멀리 끌거나 빠르게 튕기면 뒤로
+  DV.style.transition='transform .3s cubic-bezier(.22,.61,.36,1), opacity .3s ease';
+  if(go){ DV.style.transform='translateX(100%)'; DV.style.opacity='0.4'; setTimeout(()=>{ closeDetail(); resetDV(); },300); }
+  else { DV.style.transform='translateX(0)'; DV.style.opacity='1'; setTimeout(resetDV,300); }
+},{passive:true});
+
+gotoNow();
+</script>
+</body>
+</html>
