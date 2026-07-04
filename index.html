@@ -90,6 +90,10 @@
   .ev.current .card{box-shadow:0 0 0 2px rgba(255,59,48,.5); border-color:transparent;}
 
   .card{background:var(--canvas); border:1px solid var(--hairline-a); border-radius:var(--r-lg); padding:14px 16px;}
+  .card.tap{cursor:pointer; position:relative; transition:transform .12s ease;}
+  .card.tap:active{transform:scale(.99);}
+  .card.tap::after{content:"›"; position:absolute; right:14px; top:11px; color:#c7c7cc; font-size:20px; line-height:1;}
+  .card.tap .ttl{padding-right:20px;}
   .ev.move .card{background:transparent; border:none; padding:5px 15px;}
   .ev.move::before{top:10px;}
   .ev .move-head{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
@@ -599,7 +603,7 @@ DAYS.forEach(d=>{
     const ek=nkey(e.ttl); if(ek.length<3) return;
     if(e.k==="food"){
       const f=FOOD.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
-      if(f){ e.resv=f.resv; if(f.voucher) e.voucher=f.voucher; if(!e.hour && f.hour) e.hour=f.hour; }
+      if(f){ e.resv=f.resv; if(f.voucher) e.voucher=f.voucher; if(f.hour) e.hour=f.hour; e._rec=f; }
     } else if(e.k==="see" || e.k==="shop"){
       const p=PLACES.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
       if(p){
@@ -609,10 +613,16 @@ DAYS.forEach(d=>{
         if(p.price) e.price=p.price;
         const tm=(p.time||"").match(/\d{1,2}:\d{2}/); if(p.resv==="ok" && tm) e.rtime=tm[0]+" 예약";
         if(p.hour) e.hour=p.hour;
+        e._rec=p;
       }
     }
   });
 });
+
+/* 세부페이지 미리 등록 → [일정]·[식사]·[장소]가 같은 상세를 공유해서 연다 */
+const DETAILS = {};
+FOOD.forEach(f=>{ const t=f.name||f.area||"미정"; f._did=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+t, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg, voucher:f.voucher}); });
+PLACES.forEach(p=>{ p._did=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher}); });
 
 const FLIGHT = {
   airline:"대한항공", status:"ok", resNo:"FURTGR / FUR6EW", cost:"802,000원 + 140,000마일",
@@ -763,7 +773,8 @@ function dayHTML(d,i){
     if(MARK.d===i && MARK.j===j) h+=nowLineHTML();
     const meta=dayMeta[i][j]; const ongoing=meta && NOW>=meta.s && NOW<meta.e;
     let cls=(e.k==="move")?"ev move":"ev"; if(ongoing) cls+=" current";
-    h+=`<div class="${cls}" data-kind="${e.k}"><div class="card">`;
+    const did=(e.k!=="move" && e._rec && e._rec._did) ? e._rec._did : "";
+    h+=`<div class="${cls}" data-kind="${e.k}"><div class="card${did?' tap':''}"${did?` onclick="openDetail('${did}')"`:''}>`;
     if(e.k==="move"){
       h+=`<div class="move-head"><span class="time">${e.t}</span><span class="move-title">${dash(e.ttl)}</span></div>`;
       if(e.move) h+=routeHTML(i,e);
@@ -811,8 +822,7 @@ setInterval(()=>{
   if(MARK.d!==od || MARK.j!==oj){ renderPlan(); spy(); }
 }, 30000);
 
-/* ===== detail registry ===== */
-const DETAILS = {};
+/* ===== detail registry (DETAILS는 위에서 미리 선언·등록됨) ===== */
 function regDetail(obj){ const id="d"+(Object.keys(DETAILS).length); DETAILS[id]=obj; return id; }
 function kvRow(k,v){ return v ? `<div class="kv"><div class="k">${k}</div><div class="v">${v}</div></div>` : ""; }
 let prevView = "place";
@@ -888,7 +898,7 @@ function openHotelInfo(idx){
   FOOD.forEach(f=>{
     if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
     const title=f.name||f.area||"미정"; const ic=f.icon?f.icon+" ":"";
-    const id=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+title, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg, voucher:f.voucher});
+    const id=f._did;
     h+=`<div class="row tap" onclick="openDetail('${id}')">`;
     if(f.slot) h+=`<div class="r-slot">${slotBadge(f.slot)}</div>`;
     h+=`<div class="r-name">${ic}${title}</div>`;
@@ -908,7 +918,7 @@ function openHotelInfo(idx){
   let h=""; let cur=null;
   PLACES.forEach(p=>{
     if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
-    const id=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher});
+    const id=p._did;
     h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name}</div>`;
     const badges=`${resvBadge(p.resv)} ${vchChip(p.voucher)}`.trim();
     if(badges) h+=`<div class="r-badges">${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
