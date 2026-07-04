@@ -590,6 +590,30 @@ function vurl(fn){ return "vouchers/"+encodeURIComponent(fn); }
 FOOD.forEach(f=>{ if(VOUCHERS[f.name]) f.voucher=VOUCHERS[f.name]; });
 PLACES.forEach(p=>{ if(VOUCHERS[p.name]) p.voucher=VOUCHERS[p.name]; });
 
+/* ===== [일정] ↔ [식사]/[장소] 동기화 ===== */
+/* 일정 이벤트를 같은 날짜의 식당/장소 항목과 이름으로 매칭해 예약상태·바우처·예약시간·비용·운영시간을 채운다 */
+function nkey(s){ return (s||"").replace(/\([^)]*\)/g," ").replace(/[^0-9A-Za-z가-힣]/g,"").toLowerCase(); }
+function nameMatch(ek, rk){ if(rk.length<4) return false; return ek===rk || ek.includes(rk) || rk.includes(ek); }
+DAYS.forEach(d=>{
+  d.events.forEach(e=>{
+    const ek=nkey(e.ttl); if(ek.length<3) return;
+    if(e.k==="food"){
+      const f=FOOD.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
+      if(f){ e.resv=f.resv; if(f.voucher) e.voucher=f.voucher; if(!e.hour && f.hour) e.hour=f.hour; }
+    } else if(e.k==="see" || e.k==="shop"){
+      const p=PLACES.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
+      if(p){
+        e.resv=p.resv;
+        if(p.voucher) e.voucher=p.voucher;
+        if(p.note) e.note=p.note;
+        if(p.price) e.price=p.price;
+        const tm=(p.time||"").match(/\d{1,2}:\d{2}/); if(p.resv==="ok" && tm) e.rtime=tm[0]+" 예약";
+        if(p.hour) e.hour=p.hour;
+      }
+    }
+  });
+});
+
 const FLIGHT = {
   airline:"대한항공", status:"ok", resNo:"FURTGR / FUR6EW", cost:"802,000원 + 140,000마일",
   vouchers:[["항공권 (김수진)","ETKT_KIMSOOJINMS.pdf"],["항공권 (박용준)","ETKT_PARKYONGJUNMR.pdf"]],
@@ -744,10 +768,14 @@ function dayHTML(d,i){
       h+=`<div class="move-head"><span class="time">${e.t}</span><span class="move-title">${dash(e.ttl)}</span></div>`;
       if(e.move) h+=routeHTML(i,e);
     }else{
-      h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)} ${resvBadge(e.resv)}</div>`;
-      if(e.note) h+=`<div class="note">${noteSvg}<span>${e.note}</span></div>`;
-      if(e.hour) h+=`<div class="ev-hours"><span>${clockSvg} ${e.hour}</span></div>`;
-      if(e.move) h+=routeHTML(i,e);
+      h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)}</div>`;
+      const rb=resvBadge(e.resv), vc=e.voucher?vchChip(e.voucher):"";
+      if(rb||vc) h+=`<div class="r-badges">${rb} ${vc}</div>`;              // 예약완료 · 바우처
+      if(e.move) h+=routeHTML(i,e);                                          // 이동
+      if(e.note) h+=`<div class="note">${noteSvg}<span>${e.note}</span></div>`; // 비고
+      if(e.rtime) h+=`<div class="ev-hours"><span>${ticketSvg} ${e.rtime}</span></div>`; // 예약시간
+      if(e.price) h+=`<div class="ev-hours"><span>${tagSvg} ${e.price}</span></div>`;     // 비용
+      if(e.hour) h+=`<div class="ev-hours"><span>${clockSvg} ${e.hour}</span></div>`;      // 운영시간
       if(e.subs){ h+='<ul class="sub-list">'; e.subs.forEach(s=>h+=`<li>${s}</li>`); h+='</ul>'; }
       if(e.map) h+=`<div class="card-foot"><a class="maplink" href="${mapUrl(e.map)}" target="_blank" rel="noopener">지도 ›</a></div>`;
     }
