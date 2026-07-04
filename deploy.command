@@ -33,6 +33,9 @@ fi
 # 3) GitHub Pages가 파일을 임의로 가공하지 않도록
 touch .nojekyll
 
+# 3-1) 토큰을 맥 키체인에 저장 → 다음 실행부터는 다시 안 물어봄
+git config credential.helper osxkeychain 2>/dev/null || true
+
 # 4) 원격(origin) 저장소 주소 설정 (최초 1회)
 if ! git remote get-url origin >/dev/null 2>&1; then
   echo ""
@@ -58,6 +61,14 @@ else
 fi
 
 # 6) 푸시
+echo ""
+echo "🔑 로그인 안내 (처음 한 번만):"
+echo "   • Username → GitHub 사용자명만 입력 (예: acepark-star)  ※ 저장소 경로 X"
+echo "   • Password → 계정 비밀번호가 아니라 'Personal Access Token'을 붙여넣기"
+echo "     토큰 만들기: github.com → 우측상단 프로필 → Settings"
+echo "       → Developer settings → Personal access tokens → Tokens (classic)"
+echo "       → Generate new token → 'repo' 권한 체크 → 생성 후 복사해서 붙여넣기"
+echo "   (한 번 입력하면 맥 키체인에 저장돼 다음부터는 안 물어봅니다)"
 echo ""
 echo "🚀 GitHub로 업로드 중..."
 if git push -u origin main; then
