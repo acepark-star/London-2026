@@ -99,14 +99,14 @@
   .ev .move-head{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
   .ev .move-head .move-title{font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--ink-48);}
   .ev .time{font-size:13px; font-weight:600; letter-spacing:-0.08px; color:var(--ink-48); font-variant-numeric:tabular-nums;}
-  .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:3px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
-  .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:4px; display:flex; align-items:flex-start; gap:6px;}
+  .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:6px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
+  .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:8px; display:flex; align-items:flex-start; gap:6px;}
   .ev .note svg{flex:0 0 auto; margin-top:3px; opacity:.7;}
-  .ev .r-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;}
-  .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:1px;}
+  .ev .r-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;}
+  .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:2px;}
   .ev .move-line svg{flex:0 0 auto; opacity:.7;}
   .ev .kico{display:inline-flex; align-items:center; color:var(--ink-48);}
-  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:4px;}
+  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:8px;}
   .ev-hours span{display:inline-flex; align-items:center; gap:5px;}
   .card-foot{display:flex; justify-content:flex-end; margin-top:8px;}
   .card-foot .maplink{margin-top:0;}
@@ -127,7 +127,7 @@
   .sub-list li::before{content:""; position:absolute; left:4px; top:11px; width:4px; height:4px; border-radius:50%; background:var(--hairline);}
 
   /* route strip */
-  .route{margin-top:3px;}
+  .route{margin-top:6px;}
   .route-strip{display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
   .leg{display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; letter-spacing:-0.1px; color:var(--ink);}
   .leg .dur{color:var(--ink-48); font-weight:600;}
@@ -138,8 +138,8 @@
   .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
-  .rt-path{font-size:13px; color:var(--ink-48); margin-top:3px; letter-spacing:-0.1px; line-height:1.4;}
-  .rt-foot{display:flex; align-items:center; justify-content:flex-end; margin-top:4px;}
+  .rt-path{font-size:13px; color:var(--ink-48); margin-top:6px; letter-spacing:-0.1px; line-height:1.4;}
+  .rt-foot{display:flex; align-items:center; justify-content:flex-end; margin-top:8px;}
 
   /* sections (food / places / accom) */
   .group{margin-bottom:24px;}
@@ -429,7 +429,7 @@ const DAYS = [
   { n:7, date:"07.16", dow:"목", theme:"바스 당일치기", events:[
     {t:"05:00–06:20", k:"rest", ttl:"기상 / 준비"},
     {t:"06:20–07:00", k:"move", ttl:"패딩턴역 이동", move:"버스 17분 · High Street Kensington → Paddington Station"},
-    {t:"07:29–08:42", k:"flight", ico:"🚈", ttl:"바스 이동 (기차)", resv:"ok", map:"Bath Spa Railway Station"},
+    {t:"07:29–08:42", k:"flight", ico:"🚃", ttl:"바스 이동 (기차)", resv:"ok", map:"Bath Spa Railway Station"},
     {t:"08:42–10:00", k:"see", ttl:"메인 길 산책", map:"Bath city centre UK"},
     {t:"10:00–11:30", k:"see", ttl:"리젠시 티룸 / 제인오스틴 기념관", hour:"10:00–16:30", resv:"wait", map:"The Jane Austen Centre Bath"},
     {t:"11:30–12:30", k:"see", ttl:"로얄 크레스켄트 (Royal Crescent)", map:"Royal Crescent Bath"},
@@ -437,7 +437,7 @@ const DAYS = [
     {t:"14:00–16:00", k:"see", ttl:"홀번 뮤지엄 / 풀테니 다리", map:"Pulteney Bridge Bath"},
     {t:"16:00–17:00", k:"see", ttl:"펌프룸 (The Pump Room) · 저녁식사", hour:"10:00–16:00", map:"The Pump Room Bath"},
     {t:"17:00–18:00", k:"see", ttl:"애비 델리 (The Abbey Deli)", note:"프라이어파크 랜드스케이프 가든", map:"The Abbey Deli Bath"},
-    {t:"18:43–20:07", k:"flight", ico:"🚈", ttl:"패딩턴 이동 (기차)", resv:"ok"},
+    {t:"18:43–20:07", k:"flight", ico:"🚃", ttl:"패딩턴 이동 (기차)", resv:"ok"},
     {t:"20:07–20:40", k:"move", ttl:"숙소 이동"},
     {t:"20:40–21:30", k:"food", ttl:"마트 — Tesco Express", note:"Gloucester Road 역 앞", map:"Tesco Express Gloucester Road London"},
     {t:"~", k:"rest", ttl:"숙소 휴식"},
@@ -706,7 +706,7 @@ function moveLink(i,m){ return m ? (MOVE_LINKS[i+"|"+norm(m)]||null) : null; }
 
 const TUBE_RD = '<span class="rd" title="Underground"><svg width="22" height="16" viewBox="0 0 44 32" aria-hidden="true"><circle cx="22" cy="16" r="11" fill="none" stroke="#DC241F" stroke-width="6"/><rect x="3" y="12.5" width="38" height="7" fill="#10069F"/></svg></span>';
 const RAIL_RD = '<span class="rd" title="National Rail"><svg width="20" height="14" viewBox="0 0 40 28" aria-hidden="true"><rect width="40" height="28" rx="4" fill="#C00"/><path d="M6 14h22M24 14l-6-5M24 14l-6 5M34 14H14M16 14l6 5M16 14l6-5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span>';
-const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, bus:{label:"버스", icon:"🚃"}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"}, uber:{label:"우버", icon:"🚕"} };
+const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, bus:{label:"버스", icon:"🚌"}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"}, uber:{label:"우버", icon:"🚕"} };
 function parseRoute(t){
   if(!t) return null;
   const parts = t.split(" · "); const head = parts[0]; const tail = parts.slice(1).join(" · ").trim();
