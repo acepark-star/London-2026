@@ -368,9 +368,9 @@ const DAYS = [
     {t:"08:00–09:00", k:"see", ttl:"다이애건 앨리 (Goodwin's Court)", map:"Goodwins Court London"},
     {t:"09:00–10:00", k:"food", ttl:"아침 — Capilungo All Day Dining", note:"완전 간단히", hour:"일 09:00–20:00", map:"Capilungo All Day Dining London"},
     {t:"10:00–12:30", k:"shop", ttl:"해리포터 거리 (Cecil Court)", map:"Cecil Court London", subs:["코벤트가든 마켓","상점 구경","문구점","빈티지 버버리","폴스미스 매장"]},
-    {t:"12:30–13:00", k:"move", ttl:"식당 이동", move:"도보 18분 · 1.2km"},
-    {t:"13:00–14:30", k:"food", ttl:"점심 — The Ship Tavern", hour:"일 11:00–24:00", resv:"ok", map:"The Ship Tavern Holborn London"},
-    {t:"14:40–16:10", k:"see", ttl:"닐스 야드 (Neal's Yard)", move:"도보 7분 · 500m", map:"Neals Yard London"},
+    {t:"12:30–13:00", k:"move", ttl:"식당 이동", move:"도보 7분 · 550m"},
+    {t:"13:00–14:30", k:"food", ttl:"점심 — Crown & Anchor", hour:"일 12:00–22:30", resv:"ok", map:"Crown and Anchor Neals Yard London"},
+    {t:"14:40–16:10", k:"see", ttl:"닐스 야드 (Neal's Yard)", move:"도보 2분 · 120m", map:"Neals Yard London"},
     {t:"16:30–18:30", k:"food", ttl:"애프터눈티 — Centre Court-Yard (Ham Yard Hotel)", hour:"07:00–22:30", move:"도보 11분 · 750m", map:"Ham Yard Hotel Soho London"},
     {t:"18:30–19:00", k:"see", ttl:"소호", move:"도보 5분 · 350m", map:"Soho London"},
     {t:"19:00–19:30", k:"move", ttl:"런던브릿지 이동", move:"튜브 25분 · Oxford Circus → Bank"},
@@ -399,15 +399,15 @@ const DAYS = [
     {t:"07:00–07:30", k:"see", ttl:"호텔 체크아웃 / 짐 맡기기"},
     {t:"07:30–08:00", k:"move", ttl:"메릴본 이동", move:"튜브 26분 · Charing Cross → Edgware Road"},
     {t:"08:00–09:00", k:"food", ttl:"아침 — White Mulberries", note:"호텔 앞", hour:"07:00–18:00", map:"White Mulberries London"},
-    {t:"09:00–10:00", k:"see", ttl:"던트 북스 (Daunt Books Marylebone)", map:"Daunt Books Marylebone London"},
-    {t:"10:00–12:00", k:"see", ttl:"월리스 컬렉션", map:"The Wallace Collection London"},
-    {t:"12:30–14:30", k:"food", ttl:"애프터눈티 — The Promenade (The Dorchester)", note:"£95 · 15% 서비스차지", hour:"07:00–22:30", map:"The Dorchester London"},
+    {t:"09:00–10:00", k:"see", ttl:"던트 북스 (Daunt Books Marylebone)", hour:"09:00–19:30", move:"도보 13분 · 950m", map:"Daunt Books Marylebone London"},
+    {t:"10:00–12:00", k:"see", ttl:"월리스 컬렉션", hour:"10:00–17:00", move:"도보 8분 · 550m", map:"The Wallace Collection London"},
+    {t:"12:30–14:30", k:"food", ttl:"애프터눈티 — The Promenade (The Dorchester)", note:"£95 · 15% 서비스차지", hour:"07:00–22:30", move:"버스 11분 · 2·13·74번", map:"The Dorchester London"},
     {t:"14:30–15:30", k:"see", ttl:"더 콘노트 호텔 부근 동네 산책", move:"도보 8분 · 550m", map:"The Connaught Hotel London"},
-    {t:"15:30–16:10", k:"shop", ttl:"젤리캣 스토어 (Selfridges 백화점)", move:"도보 8분 · 550m", map:"Selfridges London"},
-    {t:"16:30–18:00", k:"shop", ttl:"리버티 백화점 (Liberty London)", move:"도보 12분 · 850m", map:"Liberty London"},
-    {t:"18:00–18:30", k:"move", ttl:"코벤트가든 이동", move:"버스 23분 · 139번"},
-    {t:"18:30–19:30", k:"shop", ttl:"마리아쥬 프레르 · 위타드 (Whittard)", note:"코벤트가든점 구경", map:"Mariage Freres Covent Garden London"},
-    {t:"19:30–20:00", k:"move", ttl:"숙소 이동", move:"도보 4분 · 350m"},
+    {t:"15:30–16:00", k:"shop", ttl:"젤리캣 스토어 (Selfridges 백화점)", hour:"10:00–22:00", move:"도보 8분 · 550m", map:"Selfridges London"},
+    {t:"16:00–16:30", k:"shop", ttl:"퓨마 스토어 (Puma Flagship)", hour:"10:00–21:00", move:"도보 2분 · 150m", map:"Puma Flagship Store London"},
+    {t:"16:30–17:00", k:"see", ttl:"위타드 (Whittard of Chelsea Oxford Circus)", hour:"10:00–20:00", move:"버스 3분 · 7·94·98·139·390번", map:"Whittard of Chelsea Oxford Circus London"},
+    {t:"17:00–18:00", k:"shop", ttl:"리버티 백화점 (Liberty London)", hour:"10:00–20:00", move:"도보 6분 · 400m", map:"Liberty London"},
+    {t:"19:30–20:00", k:"move", ttl:"숙소 이동", move:"버스 13분 · 139번"},
     {t:"20:00–20:30", k:"move", ttl:"짐 찾아 숙소 이동", note:"체크인 방법: 열쇠 보관함", move:"우버 23분 · 6km"},
     {t:"~", k:"rest", ttl:"숙소 휴식 (에어비앤비)"},
   ]},
@@ -475,7 +475,7 @@ const FOOD = [
   {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"차이나타운", name:"Funky Noodles", menu:"중국 음식점", hour:"12:00~22:00 (토)", resv:null, map:"Funky Noodles Chinatown London"},
   {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"소호", name:"Hobson`s Fish & Chips soho (후보·취소 예정)", menu:"피쉬앤칩스", hour:"12:00~23:00 (토)", resv:"ok", map:"Hobsons Fish and Chips Soho London"},
   {day:3, date:"07.12(일)", slot:"아침", icon:"🍽️", area:"코벤트가든", name:"Capilungo All Day Dining", menu:"이탈리안 카페", hour:"09:00~20:00 (일)", resv:null, map:"Capilungo All Day Dining London"},
-  {day:3, date:"07.12(일)", slot:"점심", icon:"🍽️", area:"코벤트가든", name:"The Ship Tavern", menu:"선데이로스트", hour:"11:00~24:00 (일)", resv:"ok", map:"The Ship Tavern Holborn London"},
+  {day:3, date:"07.12(일)", slot:"점심", icon:"🍽️", area:"닐스야드", name:"Crown & Anchor", menu:"선데이로스트", hour:"12:00~22:30 (일)", resv:"ok", map:"Crown and Anchor Neals Yard London"},
   {day:3, date:"07.12(일)", slot:"애프터눈티", icon:"🫖", area:"소호", name:"Centre Court-Yard (Ham Yard Hotel)", menu:"애프터눈티", hour:"매일 07:00~22:30", resv:"ok", map:"Ham Yard Hotel Soho London"},
   {day:3, date:"07.12(일)", slot:"저녁", icon:"🍽️", area:"타워브릿지", name:"Tower Bridge Collective (후보)", menu:"버거", hour:"08:00~22:30", resv:null, map:"Tower Bridge Collective London"},
   {day:3, date:"07.12(일)", slot:"야식", icon:"🍽️", area:"숙소 근처", name:"Nando's Covent Garden", menu:"타코", hour:"11:00~22:00", resv:null, map:"Nandos Covent Garden London"},
@@ -507,7 +507,7 @@ const PLACES = [
   {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"월리스 컬렉션 (The Wallace Collection)", price:"무료", time:"", hour:"", resv:null, via:"", note:"", map:"The Wallace Collection London"},
   {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"리버티 백화점 (Liberty London)", price:"", time:"", hour:"", resv:null, via:"", note:"튜더풍 백화점", map:"Liberty London"},
   {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"마리아쥬 프레르 (Mariage Frères)", price:"", time:"", hour:"", resv:null, via:"", note:"프랑스 홍차 매장", map:"Mariage Freres Covent Garden London"},
-  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"위타드 (Whittard of Chelsea)", price:"", time:"", hour:"", resv:null, via:"", note:"코벤트가든점 · 홍차", map:"Whittard of Chelsea Covent Garden London"},
+  {day:5, date:"07.14(화)", cat:"투어 스팟", type:"💂", name:"위타드 (Whittard of Chelsea Oxford Circus)", price:"", time:"", hour:"10:00~20:00", resv:null, via:"", note:"홍차 매장", map:"Whittard of Chelsea Oxford Circus London"},
   {day:6, date:"07.15(수)", cat:"박물관·미술관", type:"🏛️", name:"세인트 폴 대성당 (St. Paul's Cathedral)", price:"£27", time:"11:00 입장", hour:"월~토 08:30~16:30 · 수 10:00~16:30", resv:"ok", via:"NOL", note:"7/12까지 취소 가능", map:"St Pauls Cathedral London"},
   {day:6, date:"07.15(수)", cat:"박물관·미술관", type:"🏛️", name:"테이트 모던 (Tate Modern)", price:"상설 무료 / 특별전 £25", time:"12:30 입장", hour:"일~목 10:00~18:00 · 금~토 10:00~21:00", resv:"ok", via:"공식홈페이지", note:"취소 불가", map:"Tate Modern London"},
   {day:6, date:"07.15(수)", cat:"투어 스팟", type:"💂", name:"리플렉션 가든 (Reflection Garden)", price:"", time:"", hour:"", resv:null, via:"", note:"세인트폴 근처 정원", map:"Reflection Garden London"},
@@ -555,7 +555,7 @@ const FOOD_PAGES = [
   "Funky-Noodles-317807d078df81b5bac8ef2208ee86e9",
   "Hobson-s-Fish-Chips-soho-317807d078df81639fd2ecc07efb7059",
   "Capilungo-All-Day-Dining-317807d078df8167860df484abdd1458",
-  "The-Ship-Tavern-317807d078df8181beaec729001627c6",
+  "",
   "",
   "Tower-Bridge-Collective-317807d078df80bb942afa83e57419e7",
   "Nando-s-Covent-Garden-317807d078df80bea0c5dce650daa671",
@@ -581,7 +581,7 @@ FOOD.forEach((f,i)=>{ if(FOOD_PAGES[i]) f.pg = NB + FOOD_PAGES[i]; });
 // 예약 바우처 (레포 vouchers/ 폴더의 로컬 파일) — [라벨, 파일명] 배열, 항목당 여러 개 가능
 const VOUCHERS={
   "Hobson`s Fish & Chips soho":[["예약 바우처","voucher_hobsons.png"]],
-  "The Ship Tavern":[["예약 바우처","voucher_ship_tavern.pdf"]],
+  "Crown & Anchor":[["예약 바우처","voucher_Crown & Anchor.pdf"]],
   "Mr Fogg's Tavern":[["예약 바우처","voucher_mr_foggs.pdf"]],
   "The Promenade (The Dorchester)":[["예약 바우처","voucher_promenade.pdf"]],
   "Hyde Park Garden":[["예약 바우처","voucher_hyde_park_garden.pdf"]],
@@ -991,7 +991,7 @@ const DOCS = [
   ]},
   {group:"🍽️ 식당", items:[
     {label:"Hobson's Fish & Chips", file:"voucher_hobsons.png"},
-    {label:"The Ship Tavern", file:"voucher_ship_tavern.pdf"},
+    {label:"Crown & Anchor (선데이 로스트)", file:"voucher_Crown & Anchor.pdf"},
     {label:"Mr Fogg's Tavern", file:"voucher_mr_foggs.pdf"},
     {label:"The Promenade (애프터눈티)", file:"voucher_promenade.pdf"},
     {label:"Centre Court-Yard (Ham Yard Hotel · 애프터눈티)", file:"voucher_Ham_Yard_Hotel.pdf"},
@@ -1017,7 +1017,10 @@ const DOCS = [
   ]},
   {group:"📄 기타 서류", items:[
     {label:"여행자보험 (카카오페이)", file:"kakaopayinscorp-20260603232946.pdf"},
-    {label:"eSIM", todo:true},
+  ]},
+  {group:"📱 eSIM", items:[
+    {label:"핀다이렉트 (김수진)", url:"https://www.pindirectshop.com/smart-store/c927b1a9-77cd-11f1-af7f-06b46f8580e1"},
+    {label:"트립톡스토어 (박용준)", url:"https://apps.apple.com/app/id6757698984"},
   ]},
 ];
 function renderDocs(){
@@ -1028,6 +1031,7 @@ function renderDocs(){
     g.items.forEach(it=>{
       h+=`<div class="doc-row"><div class="dl">${it.label}${it.note?`<div class="ds">${it.note}</div>`:""}</div>`;
       if(it.file) h+=`<button class="doc-open" onclick="openVoucher('${vurl(it.file)}')">${clipSvg} 열기</button>`;
+      else if(it.url) h+=`<button class="doc-open" onclick="window.open('${it.url}','_blank','noopener')">등록하기 ›</button>`;
       else h+=`<span class="doc-todo">추가 예정</span>`;
       h+=`</div>`;
     });
