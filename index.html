@@ -606,7 +606,7 @@ DAYS.forEach(d=>{
        비고·운영시간·이동 = 일정탭 원본 유지(정보탭에서 덮어쓰지 않음) */
     if(e.k==="food"){
       const f=FOOD.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
-      if(f){ e.resv=f.resv; if(f.voucher) e.voucher=f.voucher; e._rec=f; }
+      if(f){ e.resv=f.resv; if(f.voucher) e.voucher=f.voucher; if(f.menu) e.menu=f.menu; e._rec=f; }
     } else if(e.k==="see" || e.k==="shop"){
       const p=PLACES.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
       if(p){
@@ -785,6 +785,7 @@ function dayHTML(d,i){
       if(rb||vc) h+=`<div class="r-badges">${rb} ${vc}</div>`;              // 예약완료 · 바우처
       if(e.move) h+=routeHTML(i,e);                                          // 이동
       if(e.note) h+=`<div class="note">${noteSvg}<span>${e.note}</span></div>`; // 비고
+      if(e.menu) h+=`<div class="ev-hours"><span>${forkSvg} ${e.menu}</span></div>`; // 메뉴(식당탭)
       if(e.rtime) h+=`<div class="ev-hours"><span>${ticketSvg} ${e.rtime}</span></div>`; // 예약시간
       if(e.price) h+=`<div class="ev-hours"><span>${tagSvg} ${e.price}</span></div>`;     // 비용
       if(e.hour) h+=`<div class="ev-hours"><span>${clockSvg} ${e.hour}</span></div>`;      // 운영시간
