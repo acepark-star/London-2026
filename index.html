@@ -133,6 +133,7 @@
   .rd{display:inline-flex; flex:0 0 auto;}
   .busnum{background:#DC241F; color:#fff; font-size:12px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap;}
   .modechip{display:inline-flex; align-items:center; gap:4px;}
+  .busno{display:inline-flex; align-items:center; justify-content:center; min-width:20px; padding:1px 6px; border-radius:5px; background:#d1141e; color:#fff; font-size:12px; font-weight:700; letter-spacing:-0.2px; line-height:1.55;}
   .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
@@ -366,7 +367,7 @@ const DAYS = [
     {t:"07:30–08:00", k:"move", ttl:"코벤트가든 이동", move:"도보 8분 · 550m"},
     {t:"08:00–09:00", k:"see", ttl:"다이애건 앨리 (Goodwin's Court)", map:"Goodwins Court London"},
     {t:"09:00–10:00", k:"food", ttl:"아침 — Capilungo All Day Dining", note:"완전 간단히", hour:"일 09:00–20:00", map:"Capilungo All Day Dining London"},
-    {t:"10:00–12:30", k:"shop", ttl:"해리포터 거리 (Cecil Court)", note:"코벤트가든 마켓·문구점·빈티지 버버리·폴스미스", map:"Cecil Court London"},
+    {t:"10:00–12:30", k:"shop", ttl:"해리포터 거리 (Cecil Court)", map:"Cecil Court London", subs:["코벤트가든 마켓","상점 구경","문구점","빈티지 버버리","폴스미스 매장"]},
     {t:"12:30–13:00", k:"move", ttl:"식당 이동", move:"도보 18분 · 1.2km"},
     {t:"13:00–14:30", k:"food", ttl:"점심 — The Ship Tavern", hour:"일 11:00–24:00", resv:"ok", map:"The Ship Tavern Holborn London"},
     {t:"14:40–16:10", k:"see", ttl:"닐스 야드 (Neal's Yard)", move:"도보 7분 · 500m", map:"Neals Yard London"},
@@ -390,7 +391,8 @@ const DAYS = [
     {t:"16:30–18:00", k:"food", ttl:"점심 — Mr Fogg's Tavern", move:"버스 24분 · 87번", hour:"월 12:00–23:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
     {t:"18:00–18:10", k:"move", ttl:"호텔 이동 (짐 놓기)", move:"도보 8분 · 600m"},
     {t:"19:00–22:00", k:"see", ttl:"뮤지컬 — 패딩턴", note:"사보이 극장 · 19:00", resv:"ok", map:"Savoy Theatre London"},
-    {t:"~", k:"rest", ttl:"숙소 휴식 · 저녁 누룽지+반찬 · 체크아웃 짐싸기"},
+    {t:"22:00–22:10", k:"move", ttl:"숙소 이동", note:"저녁 누룽지+반찬"},
+    {t:"22:10~", k:"rest", ttl:"숙소 휴식", note:"체크아웃 짐싸기"},
   ]},
   { n:5, date:"07.14", dow:"화", theme:"메릴본 · 애프터눈티", events:[
     {t:"06:00–07:00", k:"rest", ttl:"기상 / 준비"},
@@ -426,7 +428,7 @@ const DAYS = [
   { n:7, date:"07.16", dow:"목", theme:"바스 당일치기", events:[
     {t:"05:00–06:20", k:"rest", ttl:"기상 / 준비"},
     {t:"06:20–07:00", k:"move", ttl:"패딩턴역 이동", move:"버스 17분 · High Street Kensington → Paddington Station"},
-    {t:"07:29–08:42", k:"flight", ttl:"바스 이동 (기차)", note:"예약 완료", resv:"ok", map:"Bath Spa Railway Station"},
+    {t:"07:29–08:42", k:"flight", ico:"🚈", ttl:"바스 이동 (기차)", resv:"ok", map:"Bath Spa Railway Station"},
     {t:"08:42–10:00", k:"see", ttl:"메인 길 산책", map:"Bath city centre UK"},
     {t:"10:00–11:30", k:"see", ttl:"리젠시 티룸 / 제인오스틴 기념관", hour:"10:00–16:30", resv:"wait", map:"The Jane Austen Centre Bath"},
     {t:"11:30–12:30", k:"see", ttl:"로얄 크레스켄트 (Royal Crescent)", map:"Royal Crescent Bath"},
@@ -434,7 +436,7 @@ const DAYS = [
     {t:"14:00–16:00", k:"see", ttl:"홀번 뮤지엄 / 풀테니 다리", map:"Pulteney Bridge Bath"},
     {t:"16:00–17:00", k:"see", ttl:"펌프룸 (The Pump Room) · 저녁식사", hour:"10:00–16:00", map:"The Pump Room Bath"},
     {t:"17:00–18:00", k:"see", ttl:"애비 델리 (The Abbey Deli)", note:"프라이어파크 랜드스케이프 가든", map:"The Abbey Deli Bath"},
-    {t:"18:43–20:07", k:"flight", ttl:"패딩턴 이동 (기차)", note:"예약 완료", resv:"ok"},
+    {t:"18:43–20:07", k:"flight", ico:"🚈", ttl:"패딩턴 이동 (기차)", resv:"ok"},
     {t:"20:07–20:40", k:"move", ttl:"숙소 이동"},
     {t:"20:40–21:30", k:"food", ttl:"마트 — Tesco Express", note:"Gloucester Road 역 앞", map:"Tesco Express Gloucester Road London"},
     {t:"~", k:"rest", ttl:"숙소 휴식"},
@@ -720,7 +722,8 @@ function parseRoute(t){
 }
 function legHTML(l){
   const mi = MODE_INFO[l.type]||{label:l.type, icon:""};
-  return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
+  const bn = (l.type==="bus"&&l.num) ? l.num.split("·").map(n=>`<span class="busno">${n.trim()}</span>`).join("") : "";
+  return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${bn}${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
 }
 function routeHTML(i, e){
   const r = parseRoute(e.move);
@@ -728,7 +731,7 @@ function routeHTML(i, e){
   const sep = r.alt ? '<span class="rt-alt">또는</span>' : '<span class="rt-arrow">›</span>';
   const strip = r.legs.map(legHTML).join(sep);
   // 거리(도보/택시)·버스번호는 같은 줄에 인라인, 역 경로(→)만 아랫줄
-  let inline=""; if(!r.path){ if(r.num) inline=r.num+"번"; else if(r.dist) inline=r.dist; }
+  let inline=""; if(!r.path && r.dist) inline=r.dist;
   const url = moveLink(i, e.move);
   let h = '<div class="route"><div class="route-strip">'+strip+(inline?'<span class="rt-inline">· '+inline+'</span>':'')+'</div>';
   if(r.path) h += `<div class="rt-path">${r.path}</div>`;
@@ -779,8 +782,9 @@ function dayHTML(d,i){
     if(e.k==="move"){
       h+=`<div class="move-head"><span class="time">${e.t}</span><span class="move-title">${dash(e.ttl)}</span></div>`;
       if(e.move) h+=routeHTML(i,e);
+      if(e.note) h+=`<div class="note">${noteSvg}<span>${e.note}</span></div>`;
     }else{
-      h+=`<div class="time">${e.t}</div><div class="ttl">${KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":""}${dash(e.ttl)}</div>`;
+      h+=`<div class="time">${e.t}</div><div class="ttl">${e.ico?e.ico+" ":(KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":"")}${dash(e.ttl)}</div>`;
       const rb=resvBadge(e.resv), vc=e.voucher?vchChip(e.voucher):"";
       if(rb||vc) h+=`<div class="r-badges">${rb} ${vc}</div>`;              // 예약완료 · 바우처
       if(e.move) h+=routeHTML(i,e);                                          // 이동
