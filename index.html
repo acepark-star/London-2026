@@ -25,16 +25,16 @@
     --font-display:-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Display", "Inter", "Apple SD Gothic Neo", sans-serif;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{margin:0; padding:0; height:100%;}
+  html,body{margin:0; padding:0;}
   body{font-family:var(--font); background:var(--parchment); color:var(--ink);
     font-size:17px; line-height:1.47; letter-spacing:-0.374px; -webkit-font-smoothing:antialiased;
-    height:100vh; height:100dvh; display:flex; flex-direction:column; overflow:hidden;}
+    padding-bottom:calc(66px + var(--safe-b));}
   button{font-family:inherit;}
   a{color:var(--primary); text-decoration:none;}
   /* iOS standalone 상태바 영역을 #1d1d1f로 고정 */
   .sb{position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); background:#1d1d1f; z-index:200; pointer-events:none;}
 
-  header{position:relative; z-index:30; flex:0 0 auto; overflow:hidden;
+  header{position:sticky; top:0; z-index:30; overflow:hidden;
     background:#1d1d1f url('header.jpg') center/cover no-repeat;
     border-bottom:1px solid var(--hairline-a); padding:16px 20px 16px; padding-top:calc(env(safe-area-inset-top) + 16px);
     min-height:120px; display:flex; flex-direction:column; justify-content:flex-end;}
@@ -45,7 +45,7 @@
   header h1{font-family:var(--font-display); margin:5px 0 0; font-size:30px; font-weight:600; line-height:1.07; letter-spacing:-0.5px; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.35);}
   header .dates{font-size:14px; line-height:1.43; letter-spacing:-0.224px; color:rgba(255,255,255,.92); margin-top:3px; text-shadow:0 1px 3px rgba(0,0,0,.3);}
 
-  main{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 16px calc(66px + var(--safe-b)); max-width:100%; margin:0;}
+  main{padding:16px 16px 28px; max-width:100%; margin:0;}
   .view{display:none; animation:fade .28s ease;}
   .view.active{display:block;}
   @keyframes fade{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;}}
@@ -800,7 +800,7 @@ function dayHTML(d,i){
 function renderPlan(){ planBody.innerHTML = DAYS.map((d,i)=>dayHTML(d,i)).join(''); }
 renderPlan();
 
-function syncStick(){ const hh=headerEl.offsetHeight, dh=daybar.offsetHeight; daybar.style.top="0px"; document.documentElement.style.setProperty('--stick', dh+"px"); document.documentElement.style.setProperty('--spyoff', (hh+dh)+"px"); }
+function syncStick(){ const hh=headerEl.offsetHeight; daybar.style.top=hh+"px"; document.documentElement.style.setProperty('--stick',(hh+daybar.offsetHeight)+"px"); }
 // 헤더 높이가 폰트·이미지 로딩으로 늦게 확정되면 데이바 위치가 어긋나 가려지는 버그 방지: 변화를 계속 감지해 재계산
 if(window.ResizeObserver){ new ResizeObserver(syncStick).observe(headerEl); }
 window.addEventListener('load', syncStick);
@@ -812,9 +812,9 @@ function revealChip(i){ const c=daybar.children[i]; if(!c) return; const cl=c.of
 let navLock=false, navStop=null;
 function gotoDay(i){ navLock=true; setActiveChip(i); const el=document.getElementById("day-"+i); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
 let spyTick=false;
-function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--spyoff'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } if(!navLock){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); revealChip(cur); } for(let i=0;i<DAYS.length;i++){ const sec=document.getElementById("day-"+i); if(sec){ const head=sec.querySelector(".dayhead"); if(head) head.classList.toggle("stuck", i===cur); } } }); }
+function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stick'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } if(!navLock){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); revealChip(cur); } for(let i=0;i<DAYS.length;i++){ const sec=document.getElementById("day-"+i); if(sec){ const head=sec.querySelector(".dayhead"); if(head) head.classList.toggle("stuck", i===cur); } } }); }
 function onScroll(){ if(navLock){ clearTimeout(navStop); navStop=setTimeout(()=>{ navLock=false; spy(); }, 140); } spy(); }
-mainEl.addEventListener('scroll', onScroll, {passive:true});
+window.addEventListener('scroll', onScroll, {passive:true});
 window.addEventListener('resize', syncStick);
 function gotoNow(){ syncStick(); const nm=document.getElementById("nowmark"); if(nm) nm.scrollIntoView({block:"center"}); else gotoDay(MARK.d); setActiveChip(MARK.d); spy(); }
 syncStick();
@@ -1037,7 +1037,7 @@ const views={plan:document.getElementById("view-plan"), food:document.getElement
 function showView(v, fromDetail){
   Object.entries(views).forEach(([k,el])=>el.classList.toggle("active", k===v));
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
-  if(!fromDetail && v!=="detail") mainEl.scrollTo({top:0});
+  if(!fromDetail && v!=="detail") window.scrollTo({top:0});
 }
 document.querySelectorAll("#nav button").forEach(b=>{ b.onclick=()=>{ views.detail.classList.remove("active"); resetDV(); prevView=b.dataset.view; showView(b.dataset.view); if(b.dataset.view==="plan") gotoNow(); }; });
 
