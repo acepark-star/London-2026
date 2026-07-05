@@ -99,13 +99,14 @@
   .ev .move-head{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;}
   .ev .move-head .move-title{font-size:14px; font-weight:600; letter-spacing:-0.224px; color:var(--ink-48);}
   .ev .time{font-size:13px; font-weight:600; letter-spacing:-0.08px; color:var(--ink-48); font-variant-numeric:tabular-nums;}
-  .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:6px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
-  .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:8px; display:flex; align-items:flex-start; gap:6px;}
+  .ev .ttl{font-size:17px; font-weight:600; letter-spacing:-0.374px; line-height:1.24; margin:3px 0 0; display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
+  .ev .note{font-size:14px; letter-spacing:-0.224px; line-height:1.43; color:var(--ink-48); margin-top:4px; display:flex; align-items:flex-start; gap:6px;}
   .ev .note svg{flex:0 0 auto; margin-top:3px; opacity:.7;}
-  .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:2px;}
+  .ev .r-badges{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;}
+  .ev .move-line{font-size:13px; letter-spacing:-0.08px; color:var(--ink-48); display:flex; align-items:center; gap:6px; margin-top:1px;}
   .ev .move-line svg{flex:0 0 auto; opacity:.7;}
   .ev .kico{display:inline-flex; align-items:center; color:var(--ink-48);}
-  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:8px;}
+  .ev-hours{font-size:13px; color:var(--ink-48); margin-top:4px;}
   .ev-hours span{display:inline-flex; align-items:center; gap:5px;}
   .card-foot{display:flex; justify-content:flex-end; margin-top:8px;}
   .card-foot .maplink{margin-top:0;}
@@ -126,7 +127,7 @@
   .sub-list li::before{content:""; position:absolute; left:4px; top:11px; width:4px; height:4px; border-radius:50%; background:var(--hairline);}
 
   /* route strip */
-  .route{margin-top:6px;}
+  .route{margin-top:3px;}
   .route-strip{display:flex; align-items:center; gap:7px; flex-wrap:wrap;}
   .leg{display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; letter-spacing:-0.1px; color:var(--ink);}
   .leg .dur{color:var(--ink-48); font-weight:600;}
@@ -137,8 +138,8 @@
   .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
-  .rt-path{font-size:13px; color:var(--ink-48); margin-top:6px; letter-spacing:-0.1px; line-height:1.4;}
-  .rt-foot{display:flex; align-items:center; justify-content:flex-end; margin-top:8px;}
+  .rt-path{font-size:13px; color:var(--ink-48); margin-top:3px; letter-spacing:-0.1px; line-height:1.4;}
+  .rt-foot{display:flex; align-items:center; justify-content:flex-end; margin-top:4px;}
 
   /* sections (food / places / accom) */
   .group{margin-bottom:24px;}
@@ -353,8 +354,8 @@ const DAYS = [
     {t:"09:00–10:00", k:"food", ttl:"아침 — Dishoom Permit Room", note:"포토벨로마켓 근처", hour:"토 09:00–24:00", map:"Dishoom Permit Room London"},
     {t:"10:00–14:00", k:"shop", ttl:"포토벨로 마켓", note:"서점·가게 구경", map:"Portobello Road Market London", subs:["Books for Cooks","Cheeky Scone","LoveShackFancy"]},
     {t:"14:00–15:00", k:"move", ttl:"런던 시내 이동", move:"튜브 28분 · Notting Hill Gate → Tottenham Court Rd"},
-    {t:"15:00–16:30", k:"food", ttl:"점심 — Funky Noodles", note:"차이나타운", hour:"토 12:00–23:00", map:"Funky Noodles Chinatown London"},
-    {t:"16:30–17:00", k:"shop", ttl:"랄프로렌 (Ralph Lauren Flagship)", hour:"토 10:00–20:00", move:"도보 14분 · 1km", map:"Ralph Lauren Bond Street London"},
+    {t:"15:00–16:30", k:"food", ttl:"점심 — Old Town 97", hour:"토 12:00–23:00", map:"Old Town 97 Chinatown London"},
+    {t:"16:30–17:00", k:"shop", ttl:"랄프로렌 (Ralph Lauren Flagship)", note:"카페는 19:00까지 운영", hour:"토 10:00–20:00", move:"버스 11분 · 19·38번", map:"Ralph Lauren Bond Street London"},
     {t:"17:00–18:30", k:"shop", ttl:"포트넘 앤 메이슨", hour:"10:00–20:00", move:"도보 4분 · 300m", map:"Fortnum and Mason Piccadilly London"},
     {t:"18:30–19:00", k:"shop", ttl:"F1 카드샵 (Fanatics Collectibles)", note:"시간 되면: 햄리스 · M&M · 레고스토어", hour:"10:00–20:00", move:"도보 6분 · 350m", map:"Fanatics Collectibles Regent Street London"},
     {t:"19:00–20:00", k:"see", ttl:"트라팔가 광장", note:"시내 중심 구경하며 이동", move:"도보 8분 · 650m", map:"Trafalgar Square London"},
@@ -472,7 +473,7 @@ const DAYS = [
 const FOOD = [
   {day:1, date:"07.10(금)", slot:"저녁", icon:"🍽️", area:"숙소", name:"숙소", menu:"", hour:"", resv:null, map:null},
   {day:2, date:"07.11(토)", slot:"아침", icon:"🍽️", area:"노팅힐", name:"Dishoom Permit Room", menu:"인도 음식점", hour:"09:00~24:00 (토)", resv:null, map:"Dishoom Permit Room London"},
-  {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"차이나타운", name:"Funky Noodles", menu:"중국 음식점", hour:"12:00~22:00 (토)", resv:null, map:"Funky Noodles Chinatown London"},
+  {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"차이나타운", name:"Old Town 97", menu:"중국 음식점", hour:"12:00~03:30 (토)", resv:null, map:"Old Town 97 Chinatown London"},
   {day:2, date:"07.11(토)", slot:"점심", icon:"🍽️", area:"소호", name:"Hobson`s Fish & Chips soho (후보·취소 예정)", menu:"피쉬앤칩스", hour:"12:00~23:00 (토)", resv:"ok", map:"Hobsons Fish and Chips Soho London"},
   {day:3, date:"07.12(일)", slot:"아침", icon:"🍽️", area:"코벤트가든", name:"Capilungo All Day Dining", menu:"이탈리안 카페", hour:"09:00~20:00 (일)", resv:null, map:"Capilungo All Day Dining London"},
   {day:3, date:"07.12(일)", slot:"점심", icon:"🍽️", area:"닐스야드", name:"Crown & Anchor", menu:"선데이로스트", hour:"12:00~22:30 (일)", resv:"ok", map:"Crown and Anchor Neals Yard London"},
@@ -552,7 +553,7 @@ PLACES.forEach((p,i)=>{ if(PLACE_PAGES[i]) p.pg = NB + PLACE_PAGES[i]; });
 const FOOD_PAGES = [
   "",
   "Dishoom-Permit-Room-317807d078df815ea97ee311869cacce",
-  "Funky-Noodles-317807d078df81b5bac8ef2208ee86e9",
+  "",
   "Hobson-s-Fish-Chips-soho-317807d078df81639fd2ecc07efb7059",
   "Capilungo-All-Day-Dining-317807d078df8167860df484abdd1458",
   "",
@@ -705,7 +706,7 @@ function moveLink(i,m){ return m ? (MOVE_LINKS[i+"|"+norm(m)]||null) : null; }
 
 const TUBE_RD = '<span class="rd" title="Underground"><svg width="22" height="16" viewBox="0 0 44 32" aria-hidden="true"><circle cx="22" cy="16" r="11" fill="none" stroke="#DC241F" stroke-width="6"/><rect x="3" y="12.5" width="38" height="7" fill="#10069F"/></svg></span>';
 const RAIL_RD = '<span class="rd" title="National Rail"><svg width="20" height="14" viewBox="0 0 40 28" aria-hidden="true"><rect width="40" height="28" rx="4" fill="#C00"/><path d="M6 14h22M24 14l-6-5M24 14l-6 5M34 14H14M16 14l6 5M16 14l6-5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span>';
-const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, bus:{label:"버스", icon:"🚌"}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"}, uber:{label:"우버", icon:"🚕"} };
+const MODE_INFO = { tube:{label:"튜브", icon:TUBE_RD}, bus:{label:"버스", icon:"🚃"}, rail:{label:"기차", icon:RAIL_RD}, boat:{label:"보트", icon:"⛴️"}, walk:{label:"도보", icon:"🚶"}, taxi:{label:"택시", icon:"🚕"}, uber:{label:"우버", icon:"🚕"} };
 function parseRoute(t){
   if(!t) return null;
   const parts = t.split(" · "); const head = parts[0]; const tail = parts.slice(1).join(" · ").trim();
@@ -723,7 +724,7 @@ function parseRoute(t){
 function legHTML(l){
   const mi = MODE_INFO[l.type]||{label:l.type, icon:""};
   const bn = (l.type==="bus"&&l.num) ? l.num.split("·").map(n=>`<span class="busno">${n.trim()}</span>`).join("") : "";
-  return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${bn}${l.dur?'<span class="dur">'+l.dur+'</span>':''}</span>`;
+  return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}${bn}</span>`;
 }
 function routeHTML(i, e){
   const r = parseRoute(e.move);
