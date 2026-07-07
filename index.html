@@ -25,16 +25,16 @@
     --font-display:-apple-system, BlinkMacSystemFont, system-ui, "SF Pro Display", "Inter", "Apple SD Gothic Neo", sans-serif;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{margin:0; padding:0;}
+  html,body{margin:0; padding:0; height:100%;}
   body{font-family:var(--font); background:var(--parchment); color:var(--ink);
     font-size:17px; line-height:1.47; letter-spacing:-0.374px; -webkit-font-smoothing:antialiased;
-    padding-bottom:calc(66px + var(--safe-b));}
+    height:100vh; height:100dvh; display:flex; flex-direction:column; overflow:hidden;}
   button{font-family:inherit;}
   a{color:var(--primary); text-decoration:none;}
   /* iOS standalone 상태바 영역을 #1d1d1f로 고정 */
   .sb{position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); background:#1d1d1f; z-index:200; pointer-events:none;}
 
-  header{position:sticky; top:0; z-index:30; overflow:hidden;
+  header{position:relative; z-index:30; flex:0 0 auto; overflow:hidden;
     background:#1d1d1f url('header.jpg') center/cover no-repeat;
     border-bottom:1px solid var(--hairline-a); padding:16px 20px 16px; padding-top:calc(env(safe-area-inset-top) + 16px);
     min-height:120px; display:flex; flex-direction:column; justify-content:flex-end;}
@@ -45,7 +45,7 @@
   header h1{font-family:var(--font-display); margin:5px 0 0; font-size:30px; font-weight:600; line-height:1.07; letter-spacing:-0.5px; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.35);}
   header .dates{font-size:14px; line-height:1.43; letter-spacing:-0.224px; color:rgba(255,255,255,.92); margin-top:3px; text-shadow:0 1px 3px rgba(0,0,0,.3);}
 
-  main{padding:16px 16px 28px; max-width:100%; margin:0;}
+  main{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 16px 24px; max-width:100%; margin:0;}
   .view{display:none; animation:fade .28s ease;}
   .view.active{display:block;}
   @keyframes fade{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;}}
@@ -140,7 +140,7 @@
   .ei svg{width:19px; height:19px;}
   .modechip .ei svg{width:15px; height:15px;}
   .ei-pin{color:var(--primary);}
-  .ei-food{color:var(--sys-orange);}
+  .ei-food{color:#e07a00;}
   .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
@@ -257,7 +257,7 @@
   .nb hr{border:none; border-top:1px solid var(--hairline-a); margin:15px 0;}
 
   /* bottom nav (5 tabs) */
-  nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--canvas);
+  nav{position:relative; flex:0 0 auto; z-index:41; background:var(--canvas);
     border-top:1px solid var(--hairline-a); display:flex; padding-bottom:var(--safe-b);}
   nav button{flex:1; background:none; border:none; padding:8px 0 7px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--ink-48); cursor:pointer; transition:transform .12s ease;}
   nav button:active{transform:scale(.9);}
@@ -350,7 +350,7 @@ const DAYS = [
     {t:"17:20–18:30", k:"see", ttl:"입국 수속"},
     {t:"18:30–20:00", k:"move", ttl:"런던 시내 이동", move:"튜브 46분 · Heathrow Terminals → Tottenham Court Road → Charing Cross"},
     {t:"20:00–20:30", k:"see", ttl:"호텔 체크인 (Strand Palace Hotel)", map:"Strand Palace Hotel London"},
-    {t:"20:30–21:30", k:"food", ttl:"마트 — Tesco Express", map:"Tesco Express Strand London"},
+    {t:"20:30–21:30", k:"food", ico:"📍", ttl:"마트 — Tesco Express", map:"Tesco Express Strand London"},
     {t:"~", k:"rest", ttl:"숙소 휴식"},
   ]},
   { n:2, date:"07.11", dow:"토", theme:"노팅힐 · 소호", events:[
@@ -611,7 +611,7 @@ const ICON_ACTIVE = new Set(["📍","🛍️","🍽️"]); // 아이콘으로 �
 function sv(p){ return '<span class="ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg></span>'; }
 const EMOJI2SVG = {
   "✈️": sv('<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>'),
-  "🍽️": '<span class="ei ei-food"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.8 9.8 20.5 20.5" fill="none"/><ellipse cx="6.2" cy="6.2" rx="4.1" ry="2.9" transform="rotate(45 6.2 6.2)"/><path d="M3.5 20.5 18.5 5.5" fill="none"/><path d="M14.3 8.2 17.3 5.2" fill="none"/><path d="M15.8 9.7 18.8 6.7" fill="none"/></svg></span>',
+  "🍽️": '<span class="ei ei-food"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.1 13.34l2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/></svg></span>',
   "📍": '<span class="ei ei-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a8 8 0 0 0-8 8c0 5.5 6.9 11.5 7.45 11.96a.85.85 0 0 0 1.1 0C13.1 21.5 20 15.5 20 10a8 8 0 0 0-8-8Zm0 5.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Z"/></svg></span>',
   "🛍️": '<span class="ei ei-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a8 8 0 0 0-8 8c0 5.5 6.9 11.5 7.45 11.96a.85.85 0 0 0 1.1 0C13.1 21.5 20 15.5 20 10a8 8 0 0 0-8-8Zm0 5.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Z"/></svg></span>',
   "🛌": sv('<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>'),
@@ -756,7 +756,7 @@ function parseRoute(t){
 function legHTML(l){
   const mi = MODE_INFO[l.type]||{label:l.type, icon:""};
   const bn = (l.type==="bus"&&l.num) ? l.num.split("·").map(n=>`<span class="busno">${n.trim()}</span>`).join("") : "";
-  return `<span class="leg"><span class="modechip">${EI(mi.icon)} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}${bn}</span>`;
+  return `<span class="leg"><span class="modechip">${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}${bn}</span>`;
 }
 function routeHTML(i, e){
   const r = parseRoute(e.move);
@@ -838,7 +838,7 @@ function dayHTML(d,i){
 function renderPlan(){ planBody.innerHTML = DAYS.map((d,i)=>dayHTML(d,i)).join(''); }
 renderPlan();
 
-function syncStick(){ const hh=headerEl.offsetHeight; daybar.style.top=hh+"px"; document.documentElement.style.setProperty('--stick',(hh+daybar.offsetHeight)+"px"); }
+function syncStick(){ const hh=headerEl.offsetHeight, dh=daybar.offsetHeight; daybar.style.top="0px"; document.documentElement.style.setProperty('--stick', dh+"px"); document.documentElement.style.setProperty('--spyoff', (hh+dh)+"px"); }
 // 헤더 높이가 폰트·이미지 로딩으로 늦게 확정되면 데이바 위치가 어긋나 가려지는 버그 방지: 변화를 계속 감지해 재계산
 if(window.ResizeObserver){ new ResizeObserver(syncStick).observe(headerEl); }
 window.addEventListener('load', syncStick);
@@ -846,13 +846,13 @@ if(document.fonts && document.fonts.ready) document.fonts.ready.then(syncStick);
 [120,400,1000,2200].forEach(t=>setTimeout(syncStick,t));
 function setActiveChip(i){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===i)); const ch=daybar.children[i]; if(ch) ch.scrollIntoView({inline:"center", block:"nearest"}); }
 /* 활성 칩이 날짜칩 바 밖으로 나가면 가로로만 살짝 따라 스크롤(중앙정렬 X, 세로 스크롤 영향 없음) */
-function revealChip(i){ const c=daybar.children[i]; if(!c) return; const cl=c.offsetLeft, cr=cl+c.offsetWidth, vl=daybar.scrollLeft, vr=vl+daybar.clientWidth; if(cr>vr) daybar.scrollTo({left:cr-daybar.clientWidth+12, behavior:"smooth"}); else if(cl<vl) daybar.scrollTo({left:cl-12, behavior:"smooth"}); }
+function revealChip(i){ const c=daybar.children[i]; if(!c) return; const cl=c.offsetLeft, cr=cl+c.offsetWidth, vl=daybar.scrollLeft, vr=vl+daybar.clientWidth; if(cr>vr) daybar.scrollLeft=cr-daybar.clientWidth+12; else if(cl<vl) daybar.scrollLeft=cl-12; }
 let navLock=false, navStop=null;
 function gotoDay(i){ navLock=true; setActiveChip(i); const el=document.getElementById("day-"+i); if(el) el.scrollIntoView({behavior:"smooth", block:"start"}); }
 let spyTick=false;
-function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stick'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } if(!navLock){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); revealChip(cur); } for(let i=0;i<DAYS.length;i++){ const sec=document.getElementById("day-"+i); if(sec){ const head=sec.querySelector(".dayhead"); if(head) head.classList.toggle("stuck", i===cur); } } }); }
+function spy(){ if(spyTick) return; spyTick=true; requestAnimationFrame(()=>{ spyTick=false; const off=(parseInt(getComputedStyle(document.documentElement).getPropertyValue('--spyoff'))||150)+10; let cur=0; for(let i=0;i<DAYS.length;i++){ const el=document.getElementById("day-"+i); if(el && el.getBoundingClientRect().top<=off) cur=i; } if(!navLock){ [...daybar.children].forEach((c,j)=>c.classList.toggle("active", j===cur)); revealChip(cur); } for(let i=0;i<DAYS.length;i++){ const sec=document.getElementById("day-"+i); if(sec){ const head=sec.querySelector(".dayhead"); if(head) head.classList.toggle("stuck", i===cur); } } }); }
 function onScroll(){ if(navLock){ clearTimeout(navStop); navStop=setTimeout(()=>{ navLock=false; spy(); }, 140); } spy(); }
-window.addEventListener('scroll', onScroll, {passive:true});
+mainEl.addEventListener('scroll', onScroll, {passive:true});
 window.addEventListener('resize', syncStick);
 function gotoNow(){ syncStick(); const nm=document.getElementById("nowmark"); if(nm) nm.scrollIntoView({block:"center"}); else gotoDay(MARK.d); setActiveChip(MARK.d); spy(); }
 syncStick();
@@ -1078,7 +1078,7 @@ const views={plan:document.getElementById("view-plan"), food:document.getElement
 function showView(v, fromDetail){
   Object.entries(views).forEach(([k,el])=>el.classList.toggle("active", k===v));
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
-  if(!fromDetail && v!=="detail") window.scrollTo({top:0});
+  if(!fromDetail && v!=="detail") mainEl.scrollTo({top:0});
 }
 document.querySelectorAll("#nav button").forEach(b=>{ b.onclick=()=>{ views.detail.classList.remove("active"); resetDV(); prevView=b.dataset.view; showView(b.dataset.view); if(b.dataset.view==="plan") gotoNow(); }; });
 
