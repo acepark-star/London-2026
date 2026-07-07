@@ -136,12 +136,16 @@
   .modechip{display:inline-flex; align-items:center; gap:4px;}
   .busno{display:inline-flex; align-items:center; justify-content:center; min-width:20px; padding:1px 6px; border-radius:5px; background:#d1141e; color:#fff; font-size:12px; font-weight:700; letter-spacing:-0.2px; line-height:1.55;}
   /* 이모지 대체 라인 아이콘 (제목 앞·이동) — 통일 컬러 */
-  .ei{display:inline-flex; align-items:center; justify-content:center; color:var(--ink); vertical-align:middle; position:relative; top:-1.5px;}
+  .ei{display:inline-flex; align-items:center; justify-content:center; color:var(--ink); vertical-align:middle; position:relative; top:-1px;}
   .ei svg{width:19px; height:19px;}
   .modechip .ei svg{width:15px; height:15px;}
   .ei-food svg{width:16px; height:16px;}
   .ei-air{color:var(--primary);}
   .ei-air svg{width:16px; height:16px;}
+  .ei-museum{color:var(--primary);}
+  .ei-rest{color:var(--primary);}
+  .ei-tea{color:#e07a00;}
+  .ei-museum svg, .ei-rest svg, .ei-tea svg{width:15px; height:15px;}
   .ei-pin{color:var(--primary);}
   .ei-food{color:#e07a00;}
   .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
@@ -610,20 +614,20 @@ PLACES.forEach(p=>{ if(VOUCHERS[p.name]) p.voucher=VOUCHERS[p.name]; });
 /* ===== 이모지 → 라인 아이콘 세트 (제목 앞 아이콘·이동 아이콘 전용) =====
    롤백: USE_ICONS=false 로 바꾸면 원래 이모지로 즉시 되돌아감. 기존 픽토그램(시계·핀·포크 등)은 영향 없음. */
 const USE_ICONS = true;
-const ICON_ACTIVE = new Set(["📍","🛍️","🍽️","✈️"]); // 아이콘으로 바꿀 이모지만 여기 나열(나머지는 이모지 그대로). 전부 끄려면 USE_ICONS=false.
+const ICON_ACTIVE = new Set(["📍","🛍️","🍽️","✈️","🏛️","🫖","🛌"]); // 아이콘으로 바꿀 이모지만 여기 나열(나머지는 이모지 그대로). 전부 끄려면 USE_ICONS=false.
 function sv(p){ return '<span class="ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg></span>'; }
 const EMOJI2SVG = {
   "✈️": '<span class="ei ei-air"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.689,24a2.688,2.688,0,0,1-2.546-3.547L10.083,15H6.158l-1.08,1.646A2.993,2.993,0,0,1,2.569,18h0a2.556,2.556,0,0,1-2.4-3.434L1.1,12,.159,9.44A2.555,2.555,0,0,1,.46,7.1a2.811,2.811,0,0,1,4.6.247L6.155,9h3.928L8.147,3.563a2.7,2.7,0,0,1,.359-2.442,2.883,2.883,0,0,1,4.817.442L17.58,9h3.313a3.084,3.084,0,0,1,3.067,2.5A3,3,0,0,1,21,15H17.58l-4.267,7.454A2.989,2.989,0,0,1,10.689,24ZM5.618,13H11.5a1.006,1.006,0,0,1,.942,1.335l-2.41,6.773a.676.676,0,0,0,.1.605.9.9,0,0,0,1.437-.234L16.132,13.5A1,1,0,0,1,17,13h4a1,1,0,0,0,.985-1.175A1.083,1.083,0,0,0,20.893,11H17a1,1,0,0,1-.868-.5L11.577,2.539a.894.894,0,0,0-1.447-.252.684.684,0,0,0-.093.621l2.4,6.757A1.006,1.006,0,0,1,11.5,11H5.618a1,1,0,0,1-.834-.448l-1.393-2.1c-.228-.421-1.034-.637-1.29-.21a.541.541,0,0,0-.065.51l1.072,2.906a1,1,0,0,1,0,.69l-1.066,2.91A.556.556,0,0,0,2.564,16h0a1,1,0,0,0,.837-.452l1.376-2.1A1,1,0,0,1,5.618,13Z"/></svg></span>',
   "🍽️": '<span class="ei ei-food"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.333,7.238C.484,5.522-1.2,1.269,1.2.15A1.949,1.949,0,0,1,3.329.573l4.96,5.3A1,1,0,1,1,6.887,7.3L2,2.08c.119,3.777,2.343,6.6,4.841,9.439a1,1,0,0,1-1.39,1.446A24.522,24.522,0,0,1,1.333,7.238ZM18.005,16.2a1.259,1.259,0,0,0-1.09-.4,8.055,8.055,0,0,1-3.458-.29.985.985,0,0,0-.981.254c-1.494,2.256,3.274,2.113,4.312,2.08l5.483,5.839a1,1,0,0,0,1.458-1.371ZM15,14a4.99,4.99,0,0,0,3.536-1.462l5.171-5.172A1,1,0,1,0,22.293,5.95l-5.171,5.172a3,3,0,0,1-3.406.576l6.991-6.991a1,1,0,1,0-1.414-1.414L12.3,10.284a3,3,0,0,1,.576-3.406L18.05,1.707A1,1,0,0,0,16.636.293L11.464,5.464a5.01,5.01,0,0,0-.635,6.293L.293,22.293a1,1,0,0,0,1.414,1.414L12.243,13.171A5,5,0,0,0,15,14Z"/></svg></span>',
   "📍": '<span class="ei ei-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a8 8 0 0 0-8 8c0 5.5 6.9 11.5 7.45 11.96a.85.85 0 0 0 1.1 0C13.1 21.5 20 15.5 20 10a8 8 0 0 0-8-8Zm0 5.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Z"/></svg></span>',
   "🛍️": '<span class="ei ei-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a8 8 0 0 0-8 8c0 5.5 6.9 11.5 7.45 11.96a.85.85 0 0 0 1.1 0C13.1 21.5 20 15.5 20 10a8 8 0 0 0-8-8Zm0 5.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Z"/></svg></span>',
-  "🛌": sv('<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>'),
-  "🏛️": sv('<path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="m4 11 8-7 8 7Z"/>'),
+  "🛌": '<span class="ei ei-rest"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,6H13A4.987,4.987,0,0,0,8.584,8.705,3.464,3.464,0,0,0,6.5,8,3.5,3.5,0,0,0,3,11.5,3.464,3.464,0,0,0,3.351,13H2V3A1,1,0,0,0,0,3V21a1,1,0,0,0,2,0V19H22v2a1,1,0,0,0,2,0V11A5.006,5.006,0,0,0,19,6Zm-9,5a3,3,0,0,1,3-3h6a3,3,0,0,1,3,3v2H10Zm-5,.5A1.5,1.5,0,1,1,6.5,13,1.5,1.5,0,0,1,5,11.5ZM2,17V15H22v2Z"/></svg></span>',
+  "🏛️": '<span class="ei ei-museum"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m24 23a1 1 0 0 1 -1 1h-22a1 1 0 0 1 0-2h22a1 1 0 0 1 1 1zm-23.709-14.448a2.443 2.443 0 0 1 .153-2.566 4.716 4.716 0 0 1 1.668-1.5l7.501-3.904a5.174 5.174 0 0 1 4.774 0l7.5 3.907a4.716 4.716 0 0 1 1.668 1.5 2.443 2.443 0 0 1 .153 2.566 2.713 2.713 0 0 1 -2.416 1.445h-.292v8h1a1 1 0 0 1 0 2h-20a1 1 0 0 1 0-2h1v-8h-.292a2.713 2.713 0 0 1 -2.417-1.448zm4.709 9.448h3v-8h-3zm5-8v8h4v-8zm9 0h-3v8h3zm-16.937-2.375a.717.717 0 0 0 .645.375h18.584a.717.717 0 0 0 .645-.375.452.452 0 0 0 -.024-.5 2.7 2.7 0 0 0 -.949-.864l-7.5-3.907a3.176 3.176 0 0 0 -2.926 0l-7.5 3.907a2.712 2.712 0 0 0 -.949.865.452.452 0 0 0 -.026.499z"/></svg></span>',
   "🎩": sv('<path d="M4 21h16"/><path d="M5 21 4 8h16l-1 13"/><path d="M8 8V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/>'),
   "💂🏻‍♂️": sv('<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/>'),
   "💂": sv('<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/>'),
   "🛁": sv('<path d="M4 12V6a2 2 0 0 1 4 0v1"/><path d="M2 12h20"/><path d="M4 12v4a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-4"/><path d="M6 19l-1 2"/><path d="M18 19l1 2"/>'),
-  "🫖": sv('<path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v6a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5Z"/><path d="M6 4v2"/><path d="M10 4v2"/><path d="M14 4v2"/>'),
+  "🫖": '<span class="ei ei-tea"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20,10h-.115A3.1,3.1,0,0,0,17,6L3,6c-5.451.372-2,8.651-.589,10.912A6.877,6.877,0,0,0,8.216,20h3.567a6.875,6.875,0,0,0,5.742-3H20C24.814,16.907,25.759,9.822,20,10Zm-8.217,8H8.216a4.881,4.881,0,0,1-4.131-2.179C3.541,15.3.494,8,3,8L17,8a.973.973,0,0,1,.729.325,1.028,1.028,0,0,1,.261.8C17.427,13.384,16.368,17.811,11.783,18ZM20,15H18.588a16.82,16.82,0,0,0,.954-3c1.209-.081,2.546.216,2.458,1.143A1.984,1.984,0,0,1,20,15ZM9.025,3V1a1,1,0,0,1,2,0V3A1,1,0,0,1,9.025,3Zm4,0V1a1,1,0,0,1,2,0V3A1,1,0,0,1,13.025,3Zm-8,0V1a1,1,0,0,1,2,0V3A1,1,0,0,1,5.025,3ZM20,23a1,1,0,0,1-1,1H1a1,1,0,0,1,0-2H19A1,1,0,0,1,20,23Z"/></svg></span>',
   "🏠": sv('<path d="m3 10.5 9-7.5 9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/>'),
   "🚃": sv('<rect x="4" y="3" width="16" height="14" rx="2"/><path d="M4 11h16"/><path d="m8 17-2 4"/><path d="m16 17 2 4"/>'),
   "🚌": sv('<path d="M6 4h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M4 11h16"/><path d="M7 18v2"/><path d="M17 18v2"/>'),
