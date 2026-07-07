@@ -135,6 +135,12 @@
   .busnum{background:#DC241F; color:#fff; font-size:12px; font-weight:800; padding:2px 8px; border-radius:6px; white-space:nowrap;}
   .modechip{display:inline-flex; align-items:center; gap:4px;}
   .busno{display:inline-flex; align-items:center; justify-content:center; min-width:20px; padding:1px 6px; border-radius:5px; background:#d1141e; color:#fff; font-size:12px; font-weight:700; letter-spacing:-0.2px; line-height:1.55;}
+  /* 이모지 대체 라인 아이콘 (제목 앞·이동) — 통일 컬러 */
+  .ei{display:inline-flex; align-items:center; justify-content:center; color:var(--ink); vertical-align:-0.18em;}
+  .ei svg{width:19px; height:19px;}
+  .modechip .ei svg{width:15px; height:15px;}
+  .ei-pin{color:var(--primary);}
+  .ei-food{color:var(--sys-orange);}
   .rt-inline{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-arrow{color:var(--ink-48); font-size:13px; font-weight:600;}
   .rt-alt{color:var(--ink-48); font-size:12px; font-weight:600; padding:0 2px;}
@@ -592,11 +598,37 @@ const VOUCHERS={
   "세인트 폴 대성당 (St. Paul's Cathedral)":[["입장권","voucher_st_pauls.pdf"]],
   "테이트 모던 (Tate Modern)":[["입장권","voucher_tate_modern.pdf"]],
   "자연사박물관 (Natural History Museum)":[["예약 바우처","voucher_natural_history.pdf"],["입장 티켓","ticket_natural_history.pdf"]],
-  "내셔널 갤러리 (The National Gallery)":[["예약 바우처","voucher_national_gallery.pdf"],["입장 티켓","ticket_national_gallery.pdf"]],
+  "내셔널 갤러리 (The National Gallery)":[["예약 바우처","voucher_national_gallery.pdf"]],
 };
 function vurl(fn){ return "vouchers/"+encodeURIComponent(fn); }
 FOOD.forEach(f=>{ if(VOUCHERS[f.name]) f.voucher=VOUCHERS[f.name]; });
 PLACES.forEach(p=>{ if(VOUCHERS[p.name]) p.voucher=VOUCHERS[p.name]; });
+
+/* ===== 이모지 → 라인 아이콘 세트 (제목 앞 아이콘·이동 아이콘 전용) =====
+   롤백: USE_ICONS=false 로 바꾸면 원래 이모지로 즉시 되돌아감. 기존 픽토그램(시계·핀·포크 등)은 영향 없음. */
+const USE_ICONS = true;
+const ICON_ACTIVE = new Set(["📍","🛍️","🍽️"]); // 아이콘으로 바꿀 이모지만 여기 나열(나머지는 이모지 그대로). 전부 끄려면 USE_ICONS=false.
+function sv(p){ return '<span class="ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg></span>'; }
+const EMOJI2SVG = {
+  "✈️": sv('<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>'),
+  "🍽️": '<span class="ei ei-food"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.8 9.8 20.5 20.5" fill="none"/><ellipse cx="6.2" cy="6.2" rx="4.1" ry="2.9" transform="rotate(45 6.2 6.2)"/><path d="M3.5 20.5 18.5 5.5" fill="none"/><path d="M14.3 8.2 17.3 5.2" fill="none"/><path d="M15.8 9.7 18.8 6.7" fill="none"/></svg></span>',
+  "📍": '<span class="ei ei-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a8 8 0 0 0-8 8c0 5.5 6.9 11.5 7.45 11.96a.85.85 0 0 0 1.1 0C13.1 21.5 20 15.5 20 10a8 8 0 0 0-8-8Zm0 5.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Z"/></svg></span>',
+  "🛍️": '<span class="ei ei-pin"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a8 8 0 0 0-8 8c0 5.5 6.9 11.5 7.45 11.96a.85.85 0 0 0 1.1 0C13.1 21.5 20 15.5 20 10a8 8 0 0 0-8-8Zm0 5.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Z"/></svg></span>',
+  "🛌": sv('<path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>'),
+  "🏛️": sv('<path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="m4 11 8-7 8 7Z"/>'),
+  "🎩": sv('<path d="M4 21h16"/><path d="M5 21 4 8h16l-1 13"/><path d="M8 8V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/>'),
+  "💂🏻‍♂️": sv('<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/>'),
+  "💂": sv('<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22V4"/>'),
+  "🛁": sv('<path d="M4 12V6a2 2 0 0 1 4 0v1"/><path d="M2 12h20"/><path d="M4 12v4a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-4"/><path d="M6 19l-1 2"/><path d="M18 19l1 2"/>'),
+  "🫖": sv('<path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v6a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5Z"/><path d="M6 4v2"/><path d="M10 4v2"/><path d="M14 4v2"/>'),
+  "🏠": sv('<path d="m3 10.5 9-7.5 9 7.5"/><path d="M5 9v11h14V9"/><path d="M10 20v-6h4v6"/>'),
+  "🚃": sv('<rect x="4" y="3" width="16" height="14" rx="2"/><path d="M4 11h16"/><path d="m8 17-2 4"/><path d="m16 17 2 4"/>'),
+  "🚌": sv('<path d="M6 4h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M4 11h16"/><path d="M7 18v2"/><path d="M17 18v2"/>'),
+  "⛴️": sv('<path d="m3 18 2-8h14l2 8"/><path d="M3 18c1.5 1.5 3.5 1.5 5 0s3.5-1.5 5 0 3.5 1.5 5 0"/><path d="M9 10V6h6"/>'),
+  "🚶": sv('<circle cx="12" cy="4" r="1.6"/><path d="m9 21 2-8 3 2 1 5"/><path d="M7 13l3-4 3 1"/>'),
+  "🚕": sv('<path d="M5 17H3v-4l2-4h14l2 4v4h-2"/><path d="M7 17h10"/><circle cx="7.5" cy="17" r="1.8"/><circle cx="16.5" cy="17" r="1.8"/><path d="M9 9V6h6v3"/>')
+};
+function EI(s){ if(!USE_ICONS||!s) return s; let out=s; ICON_ACTIVE.forEach(k=>{ if(EMOJI2SVG[k] && out.indexOf(k)>=0) out=out.split(k).join(EMOJI2SVG[k]); }); return out; }
 
 /* ===== [일정] ↔ [식사]/[장소] 동기화 ===== */
 /* 일정 이벤트를 같은 날짜의 식당/장소 항목과 이름으로 매칭해 예약상태·바우처·예약시간·비용·운영시간을 채운다 */
@@ -625,8 +657,8 @@ DAYS.forEach(d=>{
 
 /* 세부페이지 미리 등록 → [일정]·[식사]·[장소]가 같은 상세를 공유해서 연다 */
 const DETAILS = {};
-FOOD.forEach(f=>{ const t=f.name||f.area||"미정"; f._did=regDetail({cat:"식당 · "+f.slot, title:(f.icon?f.icon+" ":"")+t, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg, voucher:f.voucher}); });
-PLACES.forEach(p=>{ p._did=regDetail({cat:p.cat, title:p.type+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher}); });
+FOOD.forEach(f=>{ const t=f.name||f.area||"미정"; f._did=regDetail({cat:"식당 · "+f.slot, title:(f.icon?EI(f.icon)+" ":"")+t, dayLabel:f.day+"일차 "+f.date, slot:f.slot, area:(f.name&&f.area)?f.area:"", menu:f.menu, hour:f.hour, resv:f.resv, map:f.map, pg:f.pg, voucher:f.voucher}); });
+PLACES.forEach(p=>{ p._did=regDetail({cat:p.cat, title:EI(p.type)+" "+p.name, dayLabel:p.day+"일차 "+p.date, resv:p.resv, time:p.time, hour:p.hour, price:p.price, via:p.via, note:p.note, map:p.map, pg:p.pg, voucher:p.voucher}); });
 
 const FLIGHT = {
   airline:"대한항공", status:"ok", resNo:"FURTGR / FUR6EW", cost:"802,000원 + 140,000마일",
@@ -724,7 +756,7 @@ function parseRoute(t){
 function legHTML(l){
   const mi = MODE_INFO[l.type]||{label:l.type, icon:""};
   const bn = (l.type==="bus"&&l.num) ? l.num.split("·").map(n=>`<span class="busno">${n.trim()}</span>`).join("") : "";
-  return `<span class="leg"><span class="modechip">${mi.icon} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}${bn}</span>`;
+  return `<span class="leg"><span class="modechip">${EI(mi.icon)} ${mi.label}</span>${l.dur?'<span class="dur">'+l.dur+'</span>':''}${bn}</span>`;
 }
 function routeHTML(i, e){
   const r = parseRoute(e.move);
@@ -785,7 +817,7 @@ function dayHTML(d,i){
       if(e.move) h+=routeHTML(i,e);
       if(e.note) h+=`<div class="note">${noteSvg}<span>${e.note}</span></div>`;
     }else{
-      h+=`<div class="time">${e.t}</div><div class="ttl">${e.ico?e.ico+" ":(KIND_EMOJI[e.k]?KIND_EMOJI[e.k]+" ":"")}${dash(e.ttl)}</div>`;
+      h+=`<div class="time">${e.t}</div><div class="ttl">${e.ico?EI(e.ico)+" ":(KIND_EMOJI[e.k]?EI(KIND_EMOJI[e.k])+" ":"")}${dash(e.ttl)}</div>`;
       const rb=resvBadge(e.resv), vc=e.voucher?vchChip(e.voucher):"";
       if(rb||vc) h+=`<div class="r-badges">${rb} ${vc}</div>`;              // 예약완료 · 바우처
       if(e.move) h+=routeHTML(i,e);                                          // 이동
@@ -906,7 +938,7 @@ function openHotelInfo(idx){
   let h=""; let cur=null;
   FOOD.forEach(f=>{
     if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
-    const title=f.name||f.area||"미정"; const ic=f.icon?f.icon+" ":"";
+    const title=f.name||f.area||"미정"; const ic=f.icon?EI(f.icon)+" ":"";
     const id=f._did;
     h+=`<div class="row tap" onclick="openDetail('${id}')">`;
     if(f.slot) h+=`<div class="r-slot">${slotBadge(f.slot)}</div>`;
@@ -928,7 +960,7 @@ function openHotelInfo(idx){
   PLACES.forEach(p=>{
     if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
     const id=p._did;
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${p.type} ${p.name}</div>`;
+    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${EI(p.type)} ${p.name}</div>`;
     const badges=`${resvBadge(p.resv)} ${vchChip(p.voucher)}`.trim();
     if(badges) h+=`<div class="r-badges">${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
     const tm=(p.time||"").match(/\d{1,2}:\d{2}/);
@@ -1005,7 +1037,6 @@ const DOCS = [
     {label:"자연사박물관 · 바우처", file:"voucher_natural_history.pdf"},
     {label:"자연사박물관 · 입장 티켓", file:"ticket_natural_history.pdf"},
     {label:"내셔널 갤러리 · 바우처", file:"voucher_national_gallery.pdf"},
-    {label:"내셔널 갤러리 · 입장 티켓", file:"ticket_national_gallery.pdf"},
     {label:"뮤지컬 패딩턴", file:"ticket_paddington.pdf"},
   ]},
   {group:"🛂 ETA · 전자여행허가", items:[
