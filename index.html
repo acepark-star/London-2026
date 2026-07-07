@@ -28,13 +28,13 @@
   html,body{margin:0; padding:0; height:100%;}
   body{font-family:var(--font); background:var(--parchment); color:var(--ink);
     font-size:17px; line-height:1.47; letter-spacing:-0.374px; -webkit-font-smoothing:antialiased;
-    height:100vh; height:100dvh; display:flex; flex-direction:column; overflow:hidden;}
+    overflow:hidden;}
   button{font-family:inherit;}
   a{color:var(--primary); text-decoration:none;}
   /* iOS standalone 상태바 영역을 #1d1d1f로 고정 */
   .sb{position:fixed; top:0; left:0; right:0; height:env(safe-area-inset-top); background:#1d1d1f; z-index:200; pointer-events:none;}
 
-  header{position:relative; z-index:30; flex:0 0 auto; overflow:hidden;
+  header{position:fixed; top:0; left:0; right:0; z-index:30; overflow:hidden;
     background:#1d1d1f url('header.jpg') center/cover no-repeat;
     border-bottom:1px solid var(--hairline-a); padding:16px 20px 16px; padding-top:calc(env(safe-area-inset-top) + 16px);
     min-height:120px; display:flex; flex-direction:column; justify-content:flex-end;}
@@ -45,7 +45,7 @@
   header h1{font-family:var(--font-display); margin:5px 0 0; font-size:30px; font-weight:600; line-height:1.07; letter-spacing:-0.5px; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.35);}
   header .dates{font-size:14px; line-height:1.43; letter-spacing:-0.224px; color:rgba(255,255,255,.92); margin-top:3px; text-shadow:0 1px 3px rgba(0,0,0,.3);}
 
-  main{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 16px 24px; max-width:100%; margin:0;}
+  main{position:fixed; left:0; right:0; top:120px; bottom:66px; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px 16px 24px; max-width:100%; margin:0;}
   .view{display:none; animation:fade .28s ease;}
   .view.active{display:block;}
   @keyframes fade{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;}}
@@ -257,7 +257,7 @@
   .nb hr{border:none; border-top:1px solid var(--hairline-a); margin:15px 0;}
 
   /* bottom nav (5 tabs) */
-  nav{position:relative; flex:0 0 auto; z-index:41; background:var(--canvas);
+  nav{position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--canvas);
     border-top:1px solid var(--hairline-a); display:flex; padding-bottom:var(--safe-b);}
   nav button{flex:1; background:none; border:none; padding:8px 0 7px; display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--ink-48); cursor:pointer; transition:transform .12s ease;}
   nav button:active{transform:scale(.9);}
@@ -801,7 +801,7 @@ function nowLineHTML(){ return `<div class="nowline" id="nowmark"><span class="n
 
 /* ===== PLAN (전체 연속 스크롤) ===== */
 const daybar=document.getElementById("daybar"); const planBody=document.getElementById("plan-body");
-const headerEl=document.querySelector("header"); const mainEl=document.querySelector("main");
+const headerEl=document.querySelector("header"); const mainEl=document.querySelector("main"); const navEl=document.getElementById("nav");
 DAYS.forEach((d,i)=>{ const c=document.createElement("div"); c.className="chip"; c.innerHTML=`<b>${d.n}일</b><small>${d.date}</small>`; c.onclick=()=>gotoDay(i); daybar.appendChild(c); });
 
 function dayHTML(d,i){
@@ -838,7 +838,7 @@ function dayHTML(d,i){
 function renderPlan(){ planBody.innerHTML = DAYS.map((d,i)=>dayHTML(d,i)).join(''); }
 renderPlan();
 
-function syncStick(){ const hh=headerEl.offsetHeight, dh=daybar.offsetHeight; daybar.style.top="0px"; document.documentElement.style.setProperty('--stick', dh+"px"); document.documentElement.style.setProperty('--spyoff', (hh+dh)+"px"); }
+function syncStick(){ const hh=headerEl.offsetHeight, dh=daybar.offsetHeight, nh=navEl?navEl.offsetHeight:66; mainEl.style.top=hh+"px"; mainEl.style.bottom=nh+"px"; daybar.style.top="0px"; document.documentElement.style.setProperty('--stick', dh+"px"); document.documentElement.style.setProperty('--spyoff', (hh+dh)+"px"); }
 // 헤더 높이가 폰트·이미지 로딩으로 늦게 확정되면 데이바 위치가 어긋나 가려지는 버그 방지: 변화를 계속 감지해 재계산
 if(window.ResizeObserver){ new ResizeObserver(syncStick).observe(headerEl); }
 window.addEventListener('load', syncStick);
