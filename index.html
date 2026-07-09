@@ -207,10 +207,9 @@
   .ai-img{width:100%; border:1px solid var(--hairline-a); border-radius:var(--r-md); display:block; margin-bottom:8px; background:#fff; cursor:zoom-in;}
   .ai-empty{color:var(--ink-48); font-size:14px; padding:10px 2px;}
   /* image lightbox */
-  .lb{position:fixed; inset:0; z-index:300; background:rgba(0,0,0,.94); display:none; overflow:auto; -webkit-overflow-scrolling:touch;}
-  .lb.open{display:flex; align-items:flex-start; justify-content:center;}
-  .lb img{max-width:100%; height:auto; margin:auto; cursor:zoom-in; padding:env(safe-area-inset-top) 0 40px;}
-  .lb img.zoom{max-width:none; width:200%; cursor:zoom-out; padding-top:env(safe-area-inset-top);}
+  .lb{position:fixed; inset:0; z-index:300; background:rgba(0,0,0,.94); display:none; overflow:hidden; touch-action:none;}
+  .lb.open{display:flex; align-items:center; justify-content:center;}
+  .lb img{max-width:100%; max-height:100%; height:auto; touch-action:none; transform-origin:center center; will-change:transform; -webkit-user-select:none; user-select:none; -webkit-user-drag:none;}
   .lb-close{position:fixed; top:max(12px,calc(env(safe-area-inset-top) + 4px)); right:14px; z-index:301; color:#fff; font-size:22px; line-height:38px; text-align:center; background:rgba(0,0,0,.45); border:none; width:38px; height:38px; border-radius:50%; cursor:pointer;}
   .kv{display:flex; gap:10px; padding:16px 0; border-top:1px solid var(--hairline-a); font-size:14.5px; line-height:1.5;}
   .kv:first-of-type{margin-top:0;}
@@ -329,7 +328,7 @@
   </button>
 </nav>
 
-<div id="lb" class="lb" onclick="lbTap(event)"><button class="lb-close" aria-label="닫기">×</button><img id="lbimg" alt=""></div>
+<div id="lb" class="lb"><button class="lb-close" aria-label="닫기" onclick="event.stopPropagation(); closeLBox();">×</button><img id="lbimg" alt=""></div>
 
 
 <script>
@@ -976,8 +975,37 @@ function openDetail(id){
   views.detail.scrollTop=0;
 }
 function curTab(){ for(const k of ['plan','resv','book','docs','etc']){ if(views[k].classList.contains('active')) return k; } return prevView||'plan'; }
-function openLB(src){ const lb=document.getElementById('lb'), im=document.getElementById('lbimg'); im.className=''; im.src=src; lb.classList.add('open'); lb.scrollTop=0; }
-function lbTap(e){ const im=document.getElementById('lbimg'); if(e.target===im){ im.classList.toggle('zoom'); document.getElementById('lb').scrollTop=0; return; } document.getElementById('lb').classList.remove('open'); }
+/* 이미지 라이트박스: 두 손가락 핀치 확대 + 한 손가락 이동, 탭으로 축소/닫기 (viewport가 user-scalable=no라 직접 구현) */
+function closeLBox(){ document.getElementById('lb').classList.remove('open'); }
+(function(){
+  const lb=document.getElementById('lb'), im=document.getElementById('lbimg');
+  let scale=1, x=0, y=0;              // 현재 변환
+  let mode=0;                         // 0 없음, 1 이동, 2 핀치
+  let sDist=0, sScale=1, sx=0, sy=0, sCX=0, sCY=0, moved=false, t0=0;
+  function apply(){ im.style.transform='translate('+x+'px,'+y+'px) scale('+scale+')'; }
+  function reset(){ scale=1; x=0; y=0; apply(); }
+  function hyp(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
+  window.openLB=function(src){ im.src=src; reset(); lb.classList.add('open'); };
+  lb.addEventListener('touchstart', function(e){
+    t0=Date.now(); moved=false;
+    if(e.touches.length===2){ mode=2; sDist=hyp(e.touches)||1; sScale=scale; sx=x; sy=y; }
+    else if(e.touches.length===1){ const t=e.touches[0]; sCX=t.clientX; sCY=t.clientY; sx=x; sy=y; mode=(scale>1)?1:0; }
+  }, {passive:false});
+  lb.addEventListener('touchmove', function(e){
+    if(mode===2 && e.touches.length===2){ e.preventDefault(); let ns=sScale*(hyp(e.touches)/sDist); ns=Math.max(1,Math.min(5,ns)); scale=ns; if(scale<=1){x=0;y=0;} apply(); moved=true; }
+    else if(mode===1 && e.touches.length===1){ e.preventDefault(); const t=e.touches[0]; x=sx+(t.clientX-sCX); y=sy+(t.clientY-sCY); if(Math.abs(t.clientX-sCX)>8||Math.abs(t.clientY-sCY)>8) moved=true; apply(); }
+    else if(e.touches.length===1){ const t=e.touches[0]; if(Math.abs(t.clientX-sCX)>10||Math.abs(t.clientY-sCY)>10) moved=true; }
+  }, {passive:false});
+  lb.addEventListener('touchend', function(e){
+    if(e.touches.length>0) return;
+    if(scale<=1.02){ reset(); }
+    const tap = !moved && (Date.now()-t0)<300;
+    if(tap){ if(scale>1.02){ reset(); } else if(!e.target.classList.contains('lb-close')){ closeLBox(); } }
+    mode=0;
+  }, {passive:true});
+  /* 데스크톱: 배경 클릭 시 닫기 */
+  lb.addEventListener('click', function(e){ if(e.target!==im && !e.target.classList.contains('lb-close') && scale<=1.02) closeLBox(); });
+})();
 function openVoucher(url, label){ window.open(url, '_blank', 'noopener'); }
 function closeDetail(){ views.detail.classList.remove("active"); }
 function openAirInfo(){
@@ -1135,7 +1163,6 @@ const DOCS = [
 ];
 function renderDocs(){
   const body=document.getElementById("docs-body"); let h="";
-  h+=`<div class="docs-intro">여행에 필요한 모든 서류를 한 곳에 모았어요. 탭하면 새 탭에서 열립니다.</div>`;
   DOCS.forEach(g=>{
     h+=`<div class="group"><div class="group-h">${EI(g.group)}</div>`;
     g.items.forEach(it=>{
@@ -1163,7 +1190,7 @@ const ETC=[
   {icon:ETC_ICON.cam, label:"영상 촬영", imgs:["vouchers/etc_video1.png","vouchers/etc_video2.png"]},
 ];
 (function(){
-  let h=`<div class="docs-intro">이미지를 탭하면 크게 볼 수 있어요. (탭하면 확대)</div>`;
+  let h="";
   ETC.forEach(g=>{
     h+=`<div class="group"><div class="group-h">${g.icon} ${g.label}</div>`;
     g.imgs.forEach(src=>{ h+=`<img class="ai-img" src="${src}" alt="${g.label}" loading="lazy" onclick="openLB(this.src)">`; });
