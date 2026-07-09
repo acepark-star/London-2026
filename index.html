@@ -975,31 +975,46 @@ function openDetail(id){
   views.detail.scrollTop=0;
 }
 function curTab(){ for(const k of ['plan','resv','book','docs','etc']){ if(views[k].classList.contains('active')) return k; } return prevView||'plan'; }
-/* 이미지 라이트박스: 두 손가락 핀치 확대 + 한 손가락 이동, 탭으로 축소/닫기 (viewport가 user-scalable=no라 직접 구현) */
-function closeLBox(){ document.getElementById('lb').classList.remove('open'); }
+/* 이미지 라이트박스: 두 손가락 핀치 확대 + 한 손가락 이동 + (확대 안 된 상태)밀어서 닫기 (viewport가 user-scalable=no라 직접 구현) */
+function closeLBox(){ const lb=document.getElementById('lb'), im=document.getElementById('lbimg'); lb.classList.remove('open'); lb.style.transition=''; lb.style.background=''; im.style.transition=''; im.style.transform=''; }
 (function(){
   const lb=document.getElementById('lb'), im=document.getElementById('lbimg');
   let scale=1, x=0, y=0;              // 현재 변환
-  let mode=0;                         // 0 없음, 1 이동, 2 핀치
-  let sDist=0, sScale=1, sx=0, sy=0, sCX=0, sCY=0, moved=false, t0=0;
+  let mode=0;                         // 0 없음, 1 이동(확대시), 2 핀치, 3 밀어서 닫기
+  let sDist=0, sScale=1, sx=0, sy=0, sCX=0, sCY=0, dX=0, dY=0, moved=false, t0=0;
   function apply(){ im.style.transform='translate('+x+'px,'+y+'px) scale('+scale+')'; }
-  function reset(){ scale=1; x=0; y=0; apply(); }
+  function reset(){ scale=1; x=0; y=0; im.style.transition=''; lb.style.transition=''; lb.style.background=''; apply(); }
   function hyp(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
   window.openLB=function(src){ im.src=src; reset(); lb.classList.add('open'); };
   lb.addEventListener('touchstart', function(e){
-    t0=Date.now(); moved=false;
+    t0=Date.now(); moved=false; dX=0; dY=0; im.style.transition=''; lb.style.transition='';
     if(e.touches.length===2){ mode=2; sDist=hyp(e.touches)||1; sScale=scale; sx=x; sy=y; }
-    else if(e.touches.length===1){ const t=e.touches[0]; sCX=t.clientX; sCY=t.clientY; sx=x; sy=y; mode=(scale>1)?1:0; }
+    else if(e.touches.length===1){ const t=e.touches[0]; sCX=t.clientX; sCY=t.clientY; sx=x; sy=y; mode=(scale>1.02)?1:3; }
   }, {passive:false});
   lb.addEventListener('touchmove', function(e){
     if(mode===2 && e.touches.length===2){ e.preventDefault(); let ns=sScale*(hyp(e.touches)/sDist); ns=Math.max(1,Math.min(5,ns)); scale=ns; if(scale<=1){x=0;y=0;} apply(); moved=true; }
     else if(mode===1 && e.touches.length===1){ e.preventDefault(); const t=e.touches[0]; x=sx+(t.clientX-sCX); y=sy+(t.clientY-sCY); if(Math.abs(t.clientX-sCX)>8||Math.abs(t.clientY-sCY)>8) moved=true; apply(); }
-    else if(e.touches.length===1){ const t=e.touches[0]; if(Math.abs(t.clientX-sCX)>10||Math.abs(t.clientY-sCY)>10) moved=true; }
+    else if(mode===3 && e.touches.length===1){ e.preventDefault(); const t=e.touches[0]; dX=t.clientX-sCX; dY=t.clientY-sCY; if(Math.hypot(dX,dY)>8) moved=true; x=dX; y=dY; apply(); const f=Math.min(Math.hypot(dX,dY)/520,0.85); lb.style.background='rgba(0,0,0,'+(0.94*(1-f))+')'; }
   }, {passive:false});
   lb.addEventListener('touchend', function(e){
     if(e.touches.length>0) return;
+    const dt=Date.now()-t0;
+    if(mode===3){
+      if(moved){
+        const dist=Math.hypot(dX,dY);
+        if(dist>120 || (dt<300 && dist>70)){        // 충분히 밀면 → 밀린 방향으로 날아가며 닫힘
+          im.style.transition='transform .22s ease'; x=dX*2.4; y=dY*2.4; apply();
+          lb.style.transition='background .22s ease'; lb.style.background='rgba(0,0,0,0)';
+          setTimeout(closeLBox, 210);
+        } else {                                     // 아니면 제자리로
+          im.style.transition='transform .22s ease'; lb.style.transition='background .22s ease'; x=0; y=0; apply(); lb.style.background='';
+          setTimeout(function(){ im.style.transition=''; lb.style.transition=''; }, 230);
+        }
+      } else { closeLBox(); }                        // 탭 → 닫기
+      mode=0; return;
+    }
     if(scale<=1.02){ reset(); }
-    const tap = !moved && (Date.now()-t0)<300;
+    const tap = !moved && dt<300;
     if(tap){ if(scale>1.02){ reset(); } else if(!e.target.classList.contains('lb-close')){ closeLBox(); } }
     mode=0;
   }, {passive:true});
