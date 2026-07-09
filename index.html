@@ -145,6 +145,10 @@
   .ei-stay svg{width:16px; height:16px;}
   .ei-air{color:var(--primary);}
   .ei-air svg{width:16px; height:16px;}
+  .ei-train{color:var(--primary);}
+  .ei-train svg{width:15px; height:15px;}
+  .ei-doc{color:var(--primary);}
+  .ei-doc svg{width:15px; height:15px;}
   .ei-museum{color:var(--primary);}
   .ei-rest{color:var(--ink-48);}
   .ei-tea{color:#e07a00;}
@@ -661,7 +665,7 @@ PLACES.forEach(p=>{ if(VOUCHERS[p.name]) p.voucher=VOUCHERS[p.name]; });
 /* ===== 이모지 → 라인 아이콘 세트 (제목 앞 아이콘·이동 아이콘 전용) =====
    롤백: USE_ICONS=false 로 바꾸면 원래 이모지로 즉시 되돌아감. 기존 픽토그램(시계·핀·포크 등)은 영향 없음. */
 const USE_ICONS = true;
-const ICON_ACTIVE = new Set(["📍","🛍️","🍽️","✈️","🏛️","🫖","🛌","🎩","💂","💂🏻‍♂️","🛁","🏨"]); // 아이콘으로 바꿀 이모지만 여기 나열(나머지는 이모지 그대로). 전부 끄려면 USE_ICONS=false.
+const ICON_ACTIVE = new Set(["📍","🛍️","🍽️","✈️","🏛️","🫖","🛌","🎩","💂","💂🏻‍♂️","🛁","🏨","🚆","🎟️","🛂","🧳","📄","📱"]); // 아이콘으로 바꿀 이모지만 여기 나열(나머지는 이모지 그대로). 전부 끄려면 USE_ICONS=false.
 function sv(p){ return '<span class="ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg></span>'; }
 const EMOJI2SVG = {
   "🏨": '<span class="ei ei-stay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m16.5,10h-2c-1.93,0-3.5,1.57-3.5,3.5v.5h-5v-3c0-.552-.448-1-1-1s-1,.448-1,1v12c0,.552.448,1,1,1s1-.448,1-1h12c0,.552.447,1,1,1s1-.448,1-1v-9.5c0-1.93-1.57-3.5-3.5-3.5Zm-3.5,3.5c0-.827.673-1.5,1.5-1.5h2c.827,0,1.5.673,1.5,1.5v.5h-5v-.5Zm-7,2.5h12v1h-3.5c-1.93,0-3.5,1.57-3.5,3.5v.5h-5v-5Zm7,5v-.5c0-.827.673-1.5,1.5-1.5h3.5v2h-5Zm-4.5-8c-.828,0-1.5-.672-1.5-1.5s.672-1.5,1.5-1.5,1.5.672,1.5,1.5-.672,1.5-1.5,1.5Zm1.5,5.5c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Zm14-8.776v13.276c0,.552-.447,1-1,1s-1-.448-1-1v-13.276c0-.999-.494-1.929-1.322-2.487l-7-4.724c-1.02-.688-2.336-.688-3.356,0L3.322,7.237c-.828.559-1.322,1.488-1.322,2.487v13.276c0,.552-.448,1-1,1s-1-.448-1-1v-13.276c0-1.665.824-3.214,2.203-4.145L9.203.855c1.699-1.146,3.895-1.146,5.594,0l7,4.724c1.379.931,2.203,2.48,2.203,4.145Z"/></svg></span>',
@@ -684,6 +688,9 @@ const EMOJI2SVG = {
   "🚕": sv('<path d="M5 17H3v-4l2-4h14l2 4v4h-2"/><path d="M7 17h10"/><circle cx="7.5" cy="17" r="1.8"/><circle cx="16.5" cy="17" r="1.8"/><path d="M9 9V6h6v3"/>')
 };
 function EI(s){ if(!USE_ICONS||!s) return s; let out=s; ICON_ACTIVE.forEach(k=>{ if(EMOJI2SVG[k] && out.indexOf(k)>=0) out=out.split(k).join(EMOJI2SVG[k]); }); return out; }
+/* [서류] 탭 아이콘: 🚆=기차(train-side), 🎟️·🛂·🧳·📄·📱=문서(document) — 첨부 SVG, 15px 파랑 */
+EMOJI2SVG["🚆"]='<span class="ei ei-train"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.99,15H1a1,1,0,0,0,0,2H19.99a4,4,0,0,0,3.825-5.193A13.939,13.939,0,0,0,10.455,2H1A1,1,0,0,0,1,4H4V7H1A1,1,0,0,0,1,9H20.213a12.048,12.048,0,0,1,1.694,3.406,1.969,1.969,0,0,1-.3,1.773A1.992,1.992,0,0,1,19.99,15ZM9,7H6V4H9Zm2,0V4.022A11.952,11.952,0,0,1,18.407,7Z"/><path d="M23,20H1a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z"/></svg></span>';
+(function(){var d='<span class="ei ei-doc"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m17 14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1zm-4 3h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2zm9-6.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z"/></svg></span>';["🎟️","🛂","🧳","📄","📱"].forEach(function(k){EMOJI2SVG[k]=d;});})();
 /* 제목 끝의 "(...)" 괄호 영역을 한 덩어리로 묶어, 줄이 길면 통째로 다음 줄로 넘어가게 함 */
 function tw(s){ return (s||"").replace(/\s*(\([^)]+\))\s*$/, ' <span class="np">$1</span>'); }
 
