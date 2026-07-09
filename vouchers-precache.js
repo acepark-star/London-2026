@@ -1,0 +1,28 @@
+// 자동 생성 파일 — 배포 스크립트가 vouchers/ 폴더를 읽어 갱신합니다. 직접 수정하지 마세요.
+self.VOUCHER_FILES = [
+  "E-receipt.pdf",
+  "ETA_Kim Soojin.jpeg",
+  "ETA_Park Yongjun.jpeg",
+  "ETKT_KIMSOOJINMS.pdf",
+  "ETKT_PARKYONGJUNMR.pdf",
+  "GWR_1_LON-BTH_1.pdf",
+  "GWR_1_LON-BTH_2.pdf",
+  "GWR_2_BTH-LON_1 2.pdf",
+  "GWR_2_BTH-LON_2.pdf",
+  "kakaopayinscorp-20260603232946.pdf",
+  "reservation_Bounce.jpeg",
+  "ticket_natural_history.pdf",
+  "ticket_paddington.pdf",
+  "voucher_Bounce.jpeg",
+  "voucher_Crown & Anchor.pdf",
+  "voucher_Ham_Yard_Hotel.pdf",
+  "voucher_hotel_strand.pdf",
+  "voucher_hyde_park_garden.pdf",
+  "voucher_mr_foggs.pdf",
+  "voucher_national_gallery.pdf",
+  "voucher_natural_history.pdf",
+  "voucher_promenade.pdf",
+  "voucher_st_pauls.pdf",
+  "voucher_tate_modern.pdf",
+  "voucher_westminster.pdf"
+];

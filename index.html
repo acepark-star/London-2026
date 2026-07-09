@@ -9,9 +9,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <title>런던 여행 · 2026.07</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
 <style>
   :root{
     --primary:#0066cc; --primary-focus:#0071e3; --primary-on-dark:#2997ff;
@@ -1143,6 +1141,14 @@ document.addEventListener('touchend',e=>{
 },{passive:true});
 
 gotoNow();
+</script>
+<script>
+/* 오프라인 캐시 등록 — 온라인일 때 한 번 열면 앱·바우처가 캐시되어 기내에서도 열림 */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('service-worker.js').catch(function(){});
+  });
+}
 </script>
 </body>
 </html>
