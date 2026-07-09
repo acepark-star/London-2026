@@ -3,7 +3,7 @@
    - 오프라인(기내 등)에서도 홈 화면 아이콘으로 열림
    - 앱 내용을 바꿔 재배포하면 VERSION 이 자동으로 올라가 사용자 기기가 다시 캐시함
    - 바우처 목록은 vouchers-precache.js 에서 불러옴 (배포 스크립트가 vouchers/ 폴더로 자동 생성) */
-const VERSION = 'london-2026-v3';
+const VERSION = 'london-2026-v4';
 
 // 배포 스크립트가 만드는 바우처 파일명 목록(원본 이름). 없거나 실패하면 빈 목록.
 try { importScripts('vouchers-precache.js'); } catch (e) { self.VOUCHER_FILES = []; }

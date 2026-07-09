@@ -291,8 +291,7 @@
 
 <main>
   <section id="view-plan" class="view active"><div class="daybar" id="daybar"></div><div id="plan-body"></div></section>
-  <section id="view-food" class="view"><div id="food-body"></div></section>
-  <section id="view-place" class="view"><div id="place-body"></div></section>
+  <section id="view-resv" class="view"><div id="resv-body"></div></section>
   <section id="view-book" class="view"><div id="book-body"></div></section>
   <section id="view-docs" class="view"><div id="docs-body"></div></section>
   <section id="view-detail" class="view"><div id="detail-body"></div></section>
@@ -303,13 +302,9 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
     <span class="lbl">일정</span>
   </button>
-  <button data-view="food">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v20"/><path d="M4 2v5a3 3 0 0 0 6 0V2"/><path d="M17 2c-1.6 1.4-2.4 3.8-2.4 6.5 0 2.2 0.9 3.5 2.4 3.5v10"/></svg>
-    <span class="lbl">식당</span>
-  </button>
-  <button data-view="place">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l10-4 10 4-10 4z"/><path d="M6 9.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3V9.5"/></svg>
-    <span class="lbl">장소</span>
+  <button data-view="resv">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z"/><path d="M14 4v16"/></svg>
+    <span class="lbl">예약</span>
   </button>
   <button data-view="book">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
@@ -374,6 +369,7 @@ const DAYS = [
     {t:"10:00–14:00", k:"shop", ttl:"포토벨로 마켓", note:"서점·가게 구경", map:"Portobello Road Market London", subs:["Books for Cooks","Cheeky Scone","LoveShackFancy"]},
     {t:"14:00–15:00", k:"move", ttl:"런던 시내 이동", move:"튜브 28분 · Notting Hill Gate → Tottenham Court Rd"},
     {t:"15:00–16:30", k:"food", ttl:"점심 — Old Town 97", hour:"토 12:00–23:00", map:"Old Town 97 Chinatown London"},
+    {t:"점심", k:"food", ttl:"점심 (후보) — Hobson's Fish & Chips soho", note:"피쉬앤칩스 · 취소 예정", ref:"Hobson`s Fish & Chips soho (후보·취소 예정)", map:"Hobsons Fish and Chips Soho London"},
     {t:"16:30–17:00", k:"shop", ttl:"랄프로렌 (Ralph Lauren Flagship)", note:"카페는 19:00까지 운영", hour:"토 10:00–20:00", move:"버스 11분 · 19·38번", map:"Ralph Lauren Bond Street London"},
     {t:"17:00–18:30", k:"shop", ttl:"포트넘 앤 메이슨", hour:"10:00–20:00", move:"도보 4분 · 300m", map:"Fortnum and Mason Piccadilly London"},
     {t:"18:30–19:00", k:"shop", ttl:"F1 카드샵 (Fanatics Collectibles)", note:"시간 되면: 햄리스 · M&M · 레고스토어", hour:"10:00–20:00", move:"도보 6분 · 350m", map:"Fanatics Collectibles Regent Street London"},
@@ -401,7 +397,9 @@ const DAYS = [
     {t:"19:00–19:30", k:"move", ttl:"런던브릿지 이동", move:"튜브 25분 · Oxford Circus → Bank"},
     {t:"19:30–21:00", k:"see", ttl:"런던브릿지 야경", note:"일몰 21:12 (작년 기준)", map:"London Bridge London"},
     {t:"21:00–21:30", k:"move", ttl:"숙소 이동", move:"버스 19분 · 15번"},
-    {t:"21:30–22:30", k:"food", ttl:"야식 (배고프면)", note:"Nando's Covent Garden / Vasiniko (피자)", map:"Nandos Covent Garden London"},
+    {t:"저녁", k:"food", ttl:"저녁 (후보) — Tower Bridge Collective", note:"버거 · 후보", ref:"Tower Bridge Collective (후보)", map:"Tower Bridge Collective London"},
+    {t:"21:30–22:30", k:"food", ttl:"야식 — Nando's Covent Garden", note:"배고프면", ref:"Nando's Covent Garden", map:"Nandos Covent Garden London"},
+    {t:"21:30–22:30", k:"food", ttl:"야식 — Vasiniko", note:"피자", ref:"Vasiniko", map:"Vasiniko London"},
     {t:"~", k:"rest", ttl:"숙소 휴식"},
   ]},
   { n:4, date:"07.13", dow:"월", theme:"빅벤 · 웨스트민스터", events:[
@@ -414,6 +412,7 @@ const DAYS = [
     {t:"14:00–14:30", k:"move", ttl:"테이트 브리튼 이동", move:"도보 15분 · 1.1km"},
     {t:"14:30–16:00", k:"see", ttl:"테이트 브리튼", hour:"매일 10:00–18:00", resv:"free", map:"Tate Britain London"},
     {t:"16:30–18:00", k:"food", ttl:"점심 — Mr Fogg's Tavern", move:"버스 24분 · 87번", hour:"월 12:00–23:30", resv:"ok", map:"Mr Foggs Tavern Covent Garden London"},
+    {t:"점심", k:"food", ttl:"점심 (후보) — Fatto a Mano Covent Garden", note:"피자 · 후보", ref:"Fatto a Mano Covent Garden (후보)", map:"Fatto a Mano Covent Garden London"},
     {t:"18:00–18:10", k:"move", ttl:"호텔 이동 (짐 놓기)", move:"도보 8분 · 600m"},
     {t:"19:00–22:00", k:"see", ttl:"뮤지컬 — 패딩턴", note:"사보이 극장 · 19:00", resv:"ok", map:"Savoy Theatre London"},
     {t:"22:00–22:10", k:"move", ttl:"숙소 이동", note:"저녁 누룽지+반찬"},
@@ -443,7 +442,7 @@ const DAYS = [
     {t:"11:00–12:00", k:"see", ttl:"세인트 폴 대성당", hour:"월–토 08:30–16:30", resv:"ok", map:"St Pauls Cathedral London"},
     {t:"12:30–14:00", k:"see", ttl:"테이트 모던", hour:"일–목 10:00–18:00", resv:"ok", map:"Tate Modern London"},
     {t:"14:30–15:00", k:"see", ttl:"리플렉션 가든 (Reflection Garden)", move:"도보 11분 · 850m", map:"Reflection Garden London"},
-    {t:"15:00–16:00", k:"food", ttl:"점심 — Five Guys St. Paul's", hour:"10:00–23:30", move:"도보 15분 · 1km", map:"Five Guys St Pauls London"},
+    {t:"15:00–16:00", k:"food", ttl:"점심 — Five Guys St. Paul's", ref:"Five Guys Burgers and Fries St. Paul's", hour:"10:00–23:30", move:"도보 15분 · 1km", map:"Five Guys St Pauls London"},
     {t:"16:30–18:00", k:"shop", ttl:"Fortnum & Mason at The Royal Exchange", note:"또는 Tea shop", hour:"10:00–19:00", move:"도보 5분 · 300m", map:"Fortnum Mason Royal Exchange London"},
     {t:"18:30–19:30", k:"see", ttl:"루드게이트 힐 (Ludgate Hill)", note:"근처 루프탑 올라가서 사진", move:"도보 15분 · 1km", map:"Ludgate Hill London"},
     {t:"20:00–21:30", k:"see", ttl:"F1 Arcade London", note:"예약 필요", hour:"12:00–01:00", move:"버스 13분 · 8·25번", map:"F1 Arcade London"},
@@ -455,11 +454,14 @@ const DAYS = [
     {t:"06:20–07:00", k:"move", ttl:"패딩턴역 이동", move:"버스 17분 · High Street Kensington → Paddington Station"},
     {t:"07:29–08:42", k:"flight", ico:"🚃", ttl:"바스 이동 (기차)", resv:"ok", map:"Bath Spa Railway Station"},
     {t:"08:42–10:00", k:"see", ttl:"메인 길 산책", map:"Bath city centre UK"},
-    {t:"10:00–11:30", k:"see", ttl:"리젠시 티룸 / 제인오스틴 기념관", hour:"10:00–16:30", resv:"wait", map:"The Jane Austen Centre Bath"},
-    {t:"11:30–12:30", k:"see", ttl:"로얄 크레스켄트 (Royal Crescent)", map:"Royal Crescent Bath"},
-    {t:"13:00–14:00", k:"food", ttl:"점심 — Sally Lunn's (Historic Eating House)", hour:"매일 10:00–21:00", map:"Sally Lunns Bath"},
-    {t:"14:00–16:00", k:"see", ttl:"홀번 뮤지엄 / 풀테니 다리", map:"Pulteney Bridge Bath"},
-    {t:"16:00–17:00", k:"see", ttl:"펌프룸 (The Pump Room) · 저녁식사", hour:"10:00–16:00", map:"The Pump Room Bath"},
+    {t:"10:00–10:45", k:"see", ttl:"리젠시 티룸 (Regency Tea Room)", ref:"리젠시 티룸 (Regency Tea Room)", hour:"매일 10:00–16:30", map:"Regency Tea Room Bath"},
+    {t:"10:45–11:30", k:"see", ttl:"제인오스틴 기념관 (The Jane Austen Centre)", ref:"제인오스틴 기념관 (The Jane Austen Centre)", map:"The Jane Austen Centre Bath"},
+    {t:"11:30–12:30", k:"see", ttl:"로얄 크레스켄트 (Royal Crescent)", ref:"로얄 크레스켄트 (Royal Crescent)", map:"Royal Crescent Bath"},
+    {t:"13:00–14:00", k:"food", ttl:"점심 — Sally Lunn's (Historic Eating House)", ref:"Sally Lunn's Historic Eating House & Museum", hour:"매일 10:00–21:00", map:"Sally Lunns Bath"},
+    {t:"14:00–15:00", k:"see", ttl:"홀번 뮤지엄 (The Holburne Museum)", ref:"홀번 뮤지엄 (The Holburne Museum)", map:"The Holburne Museum Bath"},
+    {t:"15:00–16:00", k:"see", ttl:"풀테니 다리 (Pulteney Bridge)", ref:"풀테니 다리 (Pulteney Bridge)", map:"Pulteney Bridge Bath"},
+    {t:"16:00–17:00", k:"see", ttl:"펌프룸 (The Pump Room Restaurant)", ref:"펌프룸 (The Pump Room Restaurant)", hour:"10:00–16:00", map:"The Pump Room Bath"},
+    {t:"16:00–17:00", k:"food", ttl:"저녁식사 (펌프룸)", ref:"저녁식사 (펌프룸)", map:"The Pump Room Bath"},
     {t:"17:00–18:00", k:"see", ttl:"애비 델리 (The Abbey Deli)", note:"프라이어파크 랜드스케이프 가든", map:"The Abbey Deli Bath"},
     {t:"18:43–20:07", k:"flight", ico:"🚃", ttl:"패딩턴 이동 (기차)", resv:"ok"},
     {t:"20:07–20:40", k:"move", ttl:"숙소 이동"},
@@ -660,19 +662,25 @@ function EI(s){ if(!USE_ICONS||!s) return s; let out=s; ICON_ACTIVE.forEach(k=>{
 function tw(s){ return (s||"").replace(/\s*(\([^)]+\))\s*$/, ' <span class="np">$1</span>'); }
 
 /* ===== [일정] ↔ [식사]/[장소] 동기화 ===== */
-/* 일정 이벤트를 같은 날짜의 식당/장소 항목과 이름으로 매칭해 예약상태·바우처·예약시간·비용·운영시간을 채운다 */
-function nkey(s){ return (s||"").replace(/\([^)]*\)/g," ").replace(/[^0-9A-Za-z가-힣]/g,"").toLowerCase(); }
-function nameMatch(ek, rk){ if(rk.length<4) return false; return ek===rk || ek.includes(rk) || rk.includes(ek); }
+/* 일정 이벤트를 같은 날짜의 식당/장소 레코드와 연결(e._rec)해 예약상태·바우처·예약시간·비용을 채우고
+   상세페이지(_did)를 공유한다. 연결은 (1) e.ref(정확한 name 명시) 우선, (2) 이름 자동매칭 순. */
+const SLOT_PREFIX=/^(아침|점심|저녁|야식|브런치|애프터눈티)\s*[—–\-]\s*/;
+function nkey(s){ return (s||"").replace(SLOT_PREFIX,"").toLowerCase().replace(/[^0-9a-z가-힣]/g,""); }
+function keyMatch(ek, rk){ if(!ek||!rk) return false; if(ek===rk) return true; const a=ek.length<=rk.length?ek:rk, b=ek.length<=rk.length?rk:ek; return a.length>=3 && b.includes(a); }
+function findRec(arr, day, e){
+  if(e.ref) return arr.find(x=>x.day===day && x.name===e.ref) || null;
+  const ek=nkey(e.ttl); if(ek.length<3) return null;
+  return arr.find(x=>x.day===day && keyMatch(ek, nkey(x.name))) || null;
+}
 DAYS.forEach(d=>{
   d.events.forEach(e=>{
-    const ek=nkey(e.ttl); if(ek.length<3) return;
-    /* 뱃지(예약상태·바우처)·예약시간·비용 = 정보탭(식사/장소)에서 가져옴.
-       비고·운영시간·이동 = 일정탭 원본 유지(정보탭에서 덮어쓰지 않음) */
+    /* 뱃지(예약상태·바우처)·예약시간·비용 = 레코드에서 가져옴.
+       비고·운영시간·이동 = 일정탭 원본 유지(레코드가 덮어쓰지 않음) */
     if(e.k==="food"){
-      const f=FOOD.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
+      const f=findRec(FOOD, d.n, e);
       if(f){ e.resv=f.resv; if(f.voucher) e.voucher=f.voucher; if(f.menu) e.menu=f.menu; e._rec=f; }
     } else if(e.k==="see" || e.k==="shop"){
-      const p=PLACES.find(x=>x.day===d.n && nameMatch(ek, nkey(x.name)));
+      const p=findRec(PLACES, d.n, e);
       if(p){
         e.resv=p.resv;
         if(p.voucher) e.voucher=p.voucher;
@@ -895,7 +903,7 @@ setInterval(()=>{
 /* ===== detail registry (DETAILS는 위에서 미리 선언·등록됨) ===== */
 function regDetail(obj){ const id="d"+(Object.keys(DETAILS).length); DETAILS[id]=obj; return id; }
 function kvRow(k,v){ return v ? `<div class="kv"><div class="k">${k}</div><div class="v">${v}</div></div>` : ""; }
-let prevView = "place";
+let prevView = "plan";
 function openDetail(id){
   const o=DETAILS[id]; if(!o) return;
   let h=`<button class="back" onclick="backDetail()">‹ 뒤로</button>`;
@@ -923,7 +931,7 @@ function openDetail(id){
   views.detail.classList.add("active");
   views.detail.scrollTop=0;
 }
-function curTab(){ for(const k of ['plan','food','place','book','docs']){ if(views[k].classList.contains('active')) return k; } return prevView||'place'; }
+function curTab(){ for(const k of ['plan','resv','book','docs']){ if(views[k].classList.contains('active')) return k; } return prevView||'plan'; }
 function openLB(src){ const lb=document.getElementById('lb'), im=document.getElementById('lbimg'); im.className=''; im.src=src; lb.classList.add('open'); lb.scrollTop=0; }
 function lbTap(e){ const im=document.getElementById('lbimg'); if(e.target===im){ im.classList.toggle('zoom'); document.getElementById('lb').scrollTop=0; return; } document.getElementById('lb').classList.remove('open'); }
 function openVoucher(url, label){ window.open(url, '_blank', 'noopener'); }
@@ -962,44 +970,41 @@ function openHotelInfo(idx){
   prevView=curTab(); views.detail.classList.add("active"); views.detail.scrollTop=0;
 }
 
-/* ===== FOOD ===== */
+/* ===== [예약] (식사+장소 중 예약값 있는 것만: 예약완료·예약필요·예약불필요) =====
+   투어스팟 등 예약 언급이 없는(resv:null) 항목은 제외. 상세는 일정과 동일한 것을 공유. */
 (function(){
+  const RES={ok:1,wait:1,free:1};
+  const items=[];
+  FOOD.forEach(f=>{ if(RES[f.resv]) items.push({t:"food", day:f.day, date:f.date, rec:f}); });
+  PLACES.forEach(p=>{ if(RES[p.resv]) items.push({t:"place", day:p.day, date:p.date, rec:p}); });
+  items.sort((a,b)=>a.day-b.day); // 같은 날 안에서는 식사 → 장소 순(삽입 순서 유지, 안정 정렬)
   let h=""; let cur=null;
-  FOOD.forEach(f=>{
-    if(f.day!==cur){ if(cur!==null) h+="</div>"; cur=f.day; h+=`<div class="group"><div class="group-h">${f.day}일차 · ${f.date}</div>`; }
-    const title=f.name||f.area||"미정"; const ic=f.icon?EI(f.icon)+" ":"";
-    const id=f._did;
-    h+=`<div class="row tap" onclick="openDetail('${id}')">`;
-    if(f.slot) h+=`<div class="r-slot">${slotBadge(f.slot)}</div>`;
-    h+=`<div class="r-name">${ic}${tw(title)}</div>`;
-    const badges=`${resvBadge(f.resv)}${vchChip(f.voucher)}`;
-    if(badges) h+=`<div class="r-badges">${resvBadge(f.resv)} ${vchChip(f.voucher)}</div>`;
-    let meta=[]; if(f.name&&f.area) meta.push(`<span>${pinSvg} ${f.area}</span>`); if(f.menu) meta.push(`<span>${forkSvg} ${f.menu}</span>`);
-    if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
-    if(f.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${f.hour}</span></div>`;
-    h+=`</div>`;
+  items.forEach(it=>{
+    if(it.day!==cur){ if(cur!==null) h+="</div>"; cur=it.day; h+=`<div class="group"><div class="group-h">${it.day}일차 · ${it.date}</div>`; }
+    const id=it.rec._did;
+    if(it.t==="food"){
+      const f=it.rec; const title=f.name||f.area||"미정"; const ic=f.icon?EI(f.icon)+" ":"";
+      h+=`<div class="row tap" onclick="openDetail('${id}')">`;
+      if(f.slot) h+=`<div class="r-slot">${slotBadge(f.slot)}</div>`;
+      h+=`<div class="r-name">${ic}${tw(title)}</div>`;
+      h+=`<div class="r-badges">${resvBadge(f.resv)} ${vchChip(f.voucher)}</div>`;
+      let meta=[]; if(f.name&&f.area) meta.push(`<span>${pinSvg} ${f.area}</span>`); if(f.menu) meta.push(`<span>${forkSvg} ${f.menu}</span>`);
+      if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
+      if(f.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${f.hour}</span></div>`;
+      h+=`</div>`;
+    } else {
+      const p=it.rec;
+      h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${EI(p.type)} ${tw(p.name)}</div>`;
+      h+=`<div class="r-badges">${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
+      const tm=(p.time||"").match(/\d{1,2}:\d{2}/);
+      let meta=[]; if(p.resv==="ok" && tm) meta.push(`<span>${ticketSvg} ${tm[0]} 예약</span>`); if(p.price) meta.push(`<span>${tagSvg} ${p.price}</span>`);
+      if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
+      if(p.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${p.hour}</span></div>`;
+      h+=`</div>`;
+    }
   });
-  h+="</div>";
-  document.getElementById("food-body").innerHTML=h;
-})();
-
-/* ===== PLACES (명소) ===== */
-(function(){
-  let h=""; let cur=null;
-  PLACES.forEach(p=>{
-    if(p.day!==cur){ if(cur!==null) h+="</div>"; cur=p.day; h+=`<div class="group"><div class="group-h">${p.day}일차 · ${p.date}</div>`; }
-    const id=p._did;
-    h+=`<div class="row tap" onclick="openDetail('${id}')"><div class="r-name">${EI(p.type)} ${tw(p.name)}</div>`;
-    const badges=`${resvBadge(p.resv)} ${vchChip(p.voucher)}`.trim();
-    if(badges) h+=`<div class="r-badges">${resvBadge(p.resv)} ${vchChip(p.voucher)}</div>`;
-    const tm=(p.time||"").match(/\d{1,2}:\d{2}/);
-    let meta=[]; if(p.resv==="ok" && tm) meta.push(`<span>${ticketSvg} ${tm[0]} 예약</span>`); if(p.price) meta.push(`<span>${tagSvg} ${p.price}</span>`);
-    if(meta.length) h+=`<div class="r-meta">${meta.join("")}</div>`;
-    if(p.hour) h+=`<div class="r-meta"><span>${clockSvg} 운영 ${p.hour}</span></div>`;
-    h+=`</div>`;
-  });
-  h+="</div>";
-  document.getElementById("place-body").innerHTML=h;
+  if(cur!==null) h+="</div>";
+  document.getElementById("resv-body").innerHTML=h;
 })();
 
 /* ===== 항공·숙소 ===== */
@@ -1103,7 +1108,7 @@ function renderDocs(){
 renderDocs();
 
 /* ===== NAV ===== */
-const views={plan:document.getElementById("view-plan"), food:document.getElementById("view-food"), place:document.getElementById("view-place"), book:document.getElementById("view-book"), docs:document.getElementById("view-docs"), detail:document.getElementById("view-detail")};
+const views={plan:document.getElementById("view-plan"), resv:document.getElementById("view-resv"), book:document.getElementById("view-book"), docs:document.getElementById("view-docs"), detail:document.getElementById("view-detail")};
 function showView(v, fromDetail){
   Object.entries(views).forEach(([k,el])=>el.classList.toggle("active", k===v));
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
